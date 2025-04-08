@@ -97,6 +97,7 @@ export default function CategoryListHero() {
     )
     return (
         <div className="max-w-8xl mx-auto md:px-12">
+            
             {/* For MObile View */}
 
             {/* <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-lg shadow-sm md:hidden">
