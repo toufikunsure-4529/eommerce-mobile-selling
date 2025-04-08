@@ -1,0 +1,53 @@
+{
+  "name": "e-commarce",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@heroicons/react": "^2.2.0",
+    "@mui/icons-material": "^6.4.4",
+    "@mui/material": "^6.4.4",
+    "@nextui-org/react": "^2.6.11",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-navigation-menu": "^1.2.5",
+    "@radix-ui/react-slot": "^1.1.2",
+    "canvas-confetti": "^1.9.3",
+    "chart.js": "^4.4.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "firebase": "^11.3.0",
+    "firebase-admin": "^13.1.0",
+    "framer-motion": "^12.4.2",
+    "jquery": "^3.7.1",
+    "lucide-react": "^0.475.0",
+    "next": "^15.1.7",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.54.2",
+    "react-hot-toast": "^2.5.1",
+    "react-icons": "^5.4.0",
+    "react-quill": "^2.0.0",
+    "react-slick": "^0.30.3",
+    "react-toastify": "^11.0.3",
+    "recharts": "^2.15.1",
+    "slick-carousel": "^1.8.1",
+    "swr": "^2.3.2",
+    "tailwind-merge": "^3.2.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.7",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  }
+}
