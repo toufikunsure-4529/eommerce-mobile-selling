@@ -41,9 +41,9 @@ const sliderSettings = {
     arrows: false,
     centerMode: true,
     centerPadding: "16px",
-    autoplay: true,           // Enable auto-sliding
-    autoplaySpeed: 3000,      // Time in milliseconds (3000ms = 3 seconds)
-    pauseOnHover: true,       // Optional: pauses autoplay when hovering
+    autoplay: true,          
+    autoplaySpeed: 3000,
+    pauseOnHover: true, 
     responsive: [
         { breakpoint: 480, settings: { slidesToShow: 1.2 } },
         { breakpoint: 640, settings: { slidesToShow: 1.5 } },
