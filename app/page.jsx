@@ -39,7 +39,7 @@ export default async function Home() {
       featuredImageURL: "/product-img.png",
       shortDescription: "6.8-inch AMOLED display, 200MP camera",
       isBestSelling: true,    // Popular brand + good discount
-      isLatest: false    // S23 series released early 2023
+      isLatest: true    // S23 series released early 2023
     },
     {
       id: 2,
@@ -72,7 +72,7 @@ export default async function Home() {
       featuredImageURL: "/product-img2.jpg",
       shortDescription: "6.7-inch AMOLED, Snapdragon 8 Gen 2, 5000mAh battery.",
       isBestSelling: true,   // Niche brand
-      isLatest: false    // Released early 2023
+      isLatest: true    // Released early 2023
     },
     {
       id: 5,
@@ -83,7 +83,18 @@ export default async function Home() {
       featuredImageURL: "/product-img2.jpg",
       shortDescription: "6.73-inch AMOLED, Snapdragon 8 Gen 2, Leica cameras.",
       isBestSelling: true,   // Less known in some markets
-      isLatest: false    // Released early 2023
+      isLatest: true    // Released early 2023
+    },
+    {
+      id: 6,
+      title: "Xiaomi 13 Pro",
+      price: 899,
+      salePrice: 849,
+      brand: "Xiaomi",
+      featuredImageURL: "/product-img2.jpg",
+      shortDescription: "6.73-inch AMOLED, Snapdragon 8 Gen 2, Leica cameras.",
+      isBestSelling: true,   // Less known in some markets
+      isLatest: true    // Released early 2023
     },
   ];
 

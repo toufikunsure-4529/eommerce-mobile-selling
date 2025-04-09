@@ -24,12 +24,14 @@ export default function ContactUs() {
     };
 
     return (
-        <section className="bg-gradient-to-b from-green-100 via-yellow-50 to-gray-100 text-gray-800 py-16 px-6 mt-16" id="contact">
-            <div className="max-w-5xl mx-auto bg-white p-10 rounded-2xl shadow-lg border border-gray-200">
-                <h2 className="text-4xl font-bold text-center text-green-700 mb-6">Contact Us</h2>
+        <section className="max-w-8xl bg-gray-100 py-14 px-4 md:px-8 lg:px-20 " id="contact">
+            <div className="mx-auto">
+                <h2 className="text-5xl font-bold text-center text-grat-900 mb-6">Contact Us</h2>
                 <p className="text-center text-gray-600 mb-10">
-                    Have a project in mind? Let’s collaborate and build something great together!
-                </p>
+                    Any question or remarks? Just write us a message!                </p>
+            </div>
+            <div className=" px-6 py-8 md:px-20 mx-auto bg-white rounded mb-10 shadow-sm border border-gray-200">
+
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     {/* Contact Info & Map */}
@@ -42,15 +44,7 @@ export default function ContactUs() {
                             <Mail className="text-yellow-600" size={24} />
                             <p className="text-gray-700">contact@example.com</p>
                         </div>
-                        <div className="w-full h-60 rounded-lg overflow-hidden shadow-lg">
-                            <iframe
-                                width="100%"
-                                height="100%"
-                                className="rounded-lg"
-                                src="https://maps.google.com/maps?q=kolkata&output=embed"
-                                style={{ filter: "grayscale(0) contrast(1.2) opacity(100%)" }}
-                            ></iframe>
-                        </div>
+
                     </div>
 
                     {/* Contact Form */}
@@ -111,6 +105,17 @@ export default function ContactUs() {
                         </form>
                     </div>
                 </div>
+
+
+            </div>
+            <div className="w-full h-[500px] rounded-lg overflow-hidden shadow-lg">
+                <iframe
+                    width="100%"
+                    height="100%"
+                    className="rounded-lg"
+                    src="https://maps.google.com/maps?q=kolkata&output=embed"
+                    style={{ filter: "grayscale(0) contrast(1.2) opacity(100%)" }}
+                ></iframe>
             </div>
         </section>
     );

@@ -48,24 +48,31 @@ export default function Login() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 ">
-      {/* Left side for desktop */}
-      <div className="hidden md:flex w-1/2 bg-black text-white justify-center items-center ">
-        <h1 className="text-4xl font-bold">Welcome Back!</h1>
-      </div>
+    <div className="flex min-h-screen bg-gray-100 ">
 
-      {/* Right side - Login Form */}
-      <div className="w-full md:w-1/2 flex justify-center items-center p-6">
-        <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-lg ">
-          <h2 className="text-2xl font-semibold text-black mb-6 text-center">Login</h2>
-          <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
+
+      {/* Left side - Login Form */}
+      <div className="w-full md:w-1/2 flex justify-center items-center">
+        <div className="w-full  max-w-md py-12 bg-white p-12 rounded-lg shadow-sm border border-[#000000] border-opacity-10 ">
+          <h2 className="text-3xl font-semibold text-black mb-6 text-center">Login</h2>
+          <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
+
+
+            {/* Sign in with Google */}
+            <SignInWithGoogleComponents signInButtonText="Sign in with Google" />
+            {/* Divider */}
+            <div className="flex items-center my-4">
+              <div className="flex-grow border-t border-gray-300"></div>
+              <span className="px-4 text-gray-500">OR</span>
+              <div className="flex-grow border-t border-gray-300"></div>
+            </div>
             {/* Email Field */}
             <div>
               <label className="block text-sm font-medium text-black">Email</label>
               <input
                 type="email"
                 {...register('email', { required: 'Email is required' })}
-                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-400"
+                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-100"
               />
               {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
             </div>
@@ -76,7 +83,7 @@ export default function Login() {
               <input
                 type="password"
                 {...register('password', { required: 'Password is required' })}
-                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-400"
+                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-100"
               />
               {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
             </div>
@@ -90,31 +97,41 @@ export default function Login() {
             {/* Login Button */}
             <Button
               type="submit"
-              className={`w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition shadow-md  ${isLoading ? "bg-gray-400 cursor-not-allowed" : ""}`}
+              className={`w-full bg-[#FF0D0D] text-white py-6 rounded-md hover:bg-red-500 transition shadow-md  ${isLoading ? "bg-gray-400 cursor-not-allowed" : ""}`}
               isDisabled={isLoading}
             >
               Login
               {isLoading && <CircularProgress size={20} thickness={7} color="primary" />}
 
             </Button>
-            {/* Divider */}
-            <div className="flex items-center my-4">
-              <div className="flex-grow border-t border-gray-300"></div>
-              <span className="px-4 text-gray-500">OR</span>
-              <div className="flex-grow border-t border-gray-300"></div>
-            </div>
 
-            {/* Sign in with Google */}
-            <SignInWithGoogleComponents />
           </form>
         </div>
       </div>
+
+      {/* Right side for desktop - Improved version */}
+      <div
+        className="hidden md:flex w-1/2 bg-cover bg-center justify-center items-center relative"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(login-bg.png)'
+        }}
+      >
+        <div className="text-center px-8">
+          <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-2xl">
+            Welcome Back!
+          </h1>
+          <p className="text-xl text-white opacity-90 drop-shadow-2xl">
+            We're so excited to see you again!
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }
 
 
-function SignInWithGoogleComponents() {
+export function SignInWithGoogleComponents({ signInButtonText = "Sign in with Google" }) {
   const [loading, setIsLoading] = useState(false)
   const handleLogin = async () => {
     setIsLoading(true);
@@ -142,13 +159,13 @@ function SignInWithGoogleComponents() {
 
   return (<Button
     type="button"
-    className={`w-full flex items-center justify-center border  py-3 rounded-lg font-semibold text-gray-700 hover:bg-gray-200 transition-all shadow-md ${loading ? "bg-gray-200 cursor-not-allowed" : ""}`}
+    className={`w-full flex items-center justify-center border  py-5 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all  ${loading ? "bg-gray-200 cursor-not-allowed" : ""}`}
     onClick={handleLogin}
     isDisabled={loading}
 
   >
 
-    <FcGoogle className="text-2xl mr-2" /> Sign in with Google
+    <FcGoogle className="text-2xl mr-2" /> {signInButtonText}
     {loading && <CircularProgress size={20} thickness={7} color="primary" />
     }
 

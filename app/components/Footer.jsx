@@ -12,7 +12,7 @@ const companyLinks = [
 const featureLinks = [
     { label: "What’s Included", href: "#" },
     { label: "How It Works", href: "#" },
-    { label: "Contact", href: "#" },
+    { label: "Contact", href: "/contact" },
 ];
 
 const socialLinks = [

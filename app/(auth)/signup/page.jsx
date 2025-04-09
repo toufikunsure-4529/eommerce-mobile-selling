@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { SignInWithGoogleComponents } from '../login/page';
 
 export default function Signup() {
     const { user } = useAuth();
@@ -57,24 +58,32 @@ export default function Signup() {
     };
 
     return (
-        <div className="flex h-screen bg-gray-100">
-            {/* Left side for desktop */}
-            <div className="hidden md:flex w-1/2 bg-black text-white justify-center items-center">
-                <h1 className="text-4xl font-bold">Join Us Today!</h1>
-            </div>
+        <div className="flex min-h-screen bg-gray-100">
 
-            {/* Right side - Signup Form */}
-            <div className="w-full md:w-3/4 lg:w-2/3 flex justify-center items-center p-6">
-                <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg">
-                    <h2 className="text-2xl font-semibold text-black mb-6 text-center">Sign Up</h2>
-                    <form onSubmit={handleSubmit(handleSignup)} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            {/* Left side - Signup Form */}
+            <div className="w-full md:w-1/2 flex justify-center items-center p-6">
+                <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-lg">
+                    <h2 className="text-3xl font-semibold text-black mb-6 text-center">Sign Up</h2>
+                    <div className='max-w-md mx-auto'>
+                        {/* Sign in with Google */}
+                        <SignInWithGoogleComponents signInButtonText="Sign up with Google" />
+                        {/* Divider */}
+                        <div className="flex items-center my-4">
+                            <div className="flex-grow border-t border-gray-300"></div>
+                            <span className="px-4 text-gray-500">OR</span>
+                            <div className="flex-grow border-t border-gray-300"></div>
+                        </div>
+                    </div>
+                    <form onSubmit={handleSubmit(handleSignup)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                         {/* Name Field */}
                         <div>
                             <label className="block text-sm font-medium text-black">Full Name</label>
                             <input
                                 type="text"
                                 {...register('name', { required: 'Name is required' })}
-                                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-400"
+                                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-100"
                             />
                             {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
                         </div>
@@ -85,7 +94,7 @@ export default function Signup() {
                             <input
                                 type="tel"
                                 {...register('mobile', { required: 'Mobile number is required' })}
-                                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-400"
+                                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-100"
                             />
                             {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile.message}</p>}
                         </div>
@@ -96,7 +105,7 @@ export default function Signup() {
                             <input
                                 type="email"
                                 {...register('email', { required: 'Email is required' })}
-                                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-400"
+                                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-100"
                             />
                             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
                         </div>
@@ -107,13 +116,13 @@ export default function Signup() {
                             <input
                                 type="password"
                                 {...register('password', { required: 'Password is required' })}
-                                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-400"
+                                className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-100"
                             />
                             {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
                         </div>
 
                         {/* Gender Field */}
-                        <div>
+                        {/* <div>
                             <label className="block text-sm font-medium text-black">Gender</label>
                             <select
                                 {...register('gender', { required: 'Gender is required' })}
@@ -125,10 +134,10 @@ export default function Signup() {
                                 <option value="other">Other</option>
                             </select>
                             {errors.gender && <p className="text-red-500 text-sm">{errors.gender.message}</p>}
-                        </div>
+                        </div> */}
 
                         {/* Country Field */}
-                        <div>
+                        {/* <div>
                             <label className="block text-sm font-medium text-black">Country</label>
                             <input
                                 type="text"
@@ -136,7 +145,7 @@ export default function Signup() {
                                 className="w-full mt-1 p-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-gray-400"
                             />
                             {errors.country && <p className="text-red-500 text-sm">{errors.country.message}</p>}
-                        </div>
+                        </div> */}
 
                         {/* Agreement Checkbox */}
                         <div className="md:col-span-2 flex items-center">
@@ -144,8 +153,9 @@ export default function Signup() {
                                 type="checkbox"
                                 {...register('agree', { required: 'You must agree to sign up' })}
                                 className="mr-2"
+                                id='agree'
                             />
-                            <label className="text-sm text-black">I agree to the signup policy</label>
+                            <label htmlFor='agree' className="text-sm text-black">I agree to the signup policy</label>
                         </div>
                         {errors.agree && <p className="text-red-500 text-sm md:col-span-2">{errors.agree.message}</p>}
 
@@ -153,7 +163,7 @@ export default function Signup() {
                         <Button
                             type="submit"
                             isDisabled={isLoading}
-                            className={`md:col-span-2 w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition shadow-md ${isLoading ? "bg-gray-400 cursor-not-allowed" : ""}`}
+                            className={`md:col-span-2 w-full bg-[#FF0D0D] text-white py-2 rounded-md hover:bg-red-500 transition shadow-md ${isLoading ? "bg-gray-400 cursor-not-allowed" : ""}`}
                         >
                             Sign Up
                             {isLoading && <CircularProgress size={20} thickness={7} color="primary" />
@@ -164,6 +174,24 @@ export default function Signup() {
                     <div className="text-sm text-black text-center mt-4">
                         Already have an account? <Link href="/login" className="hover:underline">Login</Link>
                     </div>
+                </div>
+            </div>
+
+
+            {/* Right side for desktop - Improved version */}
+            <div
+                className="hidden md:flex w-1/2 bg-cover bg-center justify-center items-center relative"
+                style={{
+                    backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(login-bg.png)'
+                }}
+            >
+                <div className="text-center px-8">
+                    <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-2xl">
+                        Welcome Back!
+                    </h1>
+                    <p className="text-xl text-white opacity-90 drop-shadow-2xl">
+                        We're so excited to see you again!
+                    </p>
                 </div>
             </div>
         </div>

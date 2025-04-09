@@ -10,22 +10,104 @@ import {
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
-import { X, Menu } from "lucide-react"
-import { Button } from "@nextui-org/react"
+import { ChevronRight } from "lucide-react"
 import Link from "next/link"
-
 
 const categoryData = [
     {
         name: "Battery",
         brands: [
-            { name: "Samsung", series: [{ name: "Galaxy S Series", models: ["S23 Battery", "S22 Battery", "S21 Battery"] }] },
-            { name: "Apple", series: [{ name: "iPhone Series", models: ["iPhone 15 Battery", "iPhone 14 Battery"] }] },
+            {
+                name: "Samsung",
+                series: [
+                    {
+                        name: "Galaxy S Series",
+                        models: [
+                            "S23 Battery",
+                            "S22 Battery",
+                            "S21 Battery",
+                            "S20 Battery",
+                            "S10 Battery",
+                            "S9 Battery",
+                            "S8 Battery",
+                            "S7 Battery",
+                            "S6 Battery",
+                            "S5 Battery",
+                            "S4 Battery",
+                            "S3 Battery",
+                        ],
+                    },
+                    {
+                        name: "Galaxy A Series",
+                        models: ["A54 Battery", "A53 Battery", "A52 Battery", "A51 Battery", "A50 Battery"],
+                    },
+                    { name: "Galaxy Note Series", models: ["Note 20 Battery", "Note 10 Battery", "Note 9 Battery"] },
+                    { name: "Galaxy Z Series", models: ["Z Fold 5 Battery", "Z Flip 5 Battery"] },
+                ],
+            },
+            {
+                name: "Apple",
+                series: [
+                    {
+                        name: "iPhone Series",
+                        models: [
+                            "iPhone 15 Battery",
+                            "iPhone 14 Battery",
+                            "iPhone 13 Battery",
+                            "iPhone 12 Battery",
+                            "iPhone 11 Battery",
+                            "iPhone X Battery",
+                            "iPhone 8 Battery",
+                            "iPhone 7 Battery",
+                            "iPhone 6 Battery",
+                            "iPhone SE Battery",
+                        ],
+                    },
+                    { name: "iPad Series", models: ["iPad Pro Battery", "iPad Air Battery", "iPad Mini Battery"] },
+                ],
+            },
             {
                 name: "Xiaomi",
                 series: [
-                    { name: "Redmi Series", models: ["Redmi Note 12 Battery", "Redmi 11 Battery"] },
-                    { name: "Mi Series", models: ["Mi 12 Battery", "Mi 11 Battery"] },
+                    {
+                        name: "Redmi Series",
+                        models: [
+                            "Redmi Note 12 Battery",
+                            "Redmi Note 11 Battery",
+                            "Redmi Note 10 Battery",
+                            "Redmi Note 9 Battery",
+                            "Redmi Note 8 Battery",
+                            "Redmi 12 Battery",
+                            "Redmi 11 Battery",
+                            "Redmi 10 Battery",
+                            "Redmi 9 Battery",
+                            "Redmi 8 Battery",
+                        ],
+                    },
+                    {
+                        name: "Mi Series",
+                        models: ["Mi 12 Battery", "Mi 11 Battery", "Mi 10 Battery", "Mi 9 Battery", "Mi 8 Battery"],
+                    },
+                    { name: "POCO Series", models: ["POCO F5 Battery", "POCO X5 Battery", "POCO M5 Battery"] },
+                ],
+            },
+            {
+                name: "Google",
+                series: [
+                    {
+                        name: "Pixel Series",
+                        models: ["Pixel 8 Battery", "Pixel 7 Battery", "Pixel 6 Battery", "Pixel 5 Battery", "Pixel 4 Battery"],
+                    },
+                ],
+            },
+            {
+                name: "OnePlus",
+                series: [
+                    {
+                        name: "Number Series",
+                        models: ["OnePlus 11 Battery", "OnePlus 10 Battery", "OnePlus 9 Battery", "OnePlus 8 Battery"],
+                    },
+                    { name: "Nord Series", models: ["Nord 3 Battery", "Nord 2 Battery", "Nord CE Battery"] },
                 ],
             },
         ],
@@ -33,332 +115,354 @@ const categoryData = [
     {
         name: "Sim Tray",
         brands: [
-            { name: "Samsung", series: [{ name: "Galaxy S Series", models: ["S23 Sim Tray", "S22 Sim Tray"] }] },
-            { name: "Apple", series: [{ name: "iPhone Series", models: ["iPhone 15 Sim Tray", "iPhone 14 Sim Tray"] }] },
+            {
+                name: "Samsung",
+                series: [
+                    { name: "Galaxy S Series", models: ["S23 Sim Tray", "S22 Sim Tray", "S21 Sim Tray", "S20 Sim Tray"] },
+                    { name: "Galaxy A Series", models: ["A54 Sim Tray", "A53 Sim Tray", "A52 Sim Tray"] },
+                ],
+            },
+            {
+                name: "Apple",
+                series: [
+                    {
+                        name: "iPhone Series",
+                        models: ["iPhone 15 Sim Tray", "iPhone 14 Sim Tray", "iPhone 13 Sim Tray", "iPhone 12 Sim Tray"],
+                    },
+                ],
+            },
+            {
+                name: "Xiaomi",
+                series: [
+                    { name: "Redmi Series", models: ["Redmi Note 12 Sim Tray", "Redmi Note 11 Sim Tray"] },
+                    { name: "Mi Series", models: ["Mi 12 Sim Tray", "Mi 11 Sim Tray"] },
+                ],
+            },
         ],
     },
     {
         name: "Charging Port",
         brands: [
-            { name: "Samsung", series: [{ name: "Galaxy A Series", models: ["A55 Charging Port", "A53 Charging Port"] }] },
+            {
+                name: "Samsung",
+                series: [
+                    {
+                        name: "Galaxy A Series",
+                        models: ["A55 Charging Port", "A54 Charging Port", "A53 Charging Port", "A52 Charging Port"],
+                    },
+                    { name: "Galaxy S Series", models: ["S23 Charging Port", "S22 Charging Port", "S21 Charging Port"] },
+                ],
+            },
             {
                 name: "Google",
-                series: [{ name: "Pixel Series", models: ["Pixel 8 Charging Port", "Pixel 7 Charging Port"] }],
+                series: [
+                    { name: "Pixel Series", models: ["Pixel 8 Charging Port", "Pixel 7 Charging Port", "Pixel 6 Charging Port"] },
+                ],
+            },
+            {
+                name: "Apple",
+                series: [
+                    {
+                        name: "iPhone Series",
+                        models: ["iPhone 15 Charging Port", "iPhone 14 Charging Port", "iPhone 13 Charging Port"],
+                    },
+                ],
             },
         ],
     },
     {
-        name: "Charging Port 2",
+        name: "Display",
         brands: [
-            { name: "Samsung", series: [{ name: "Galaxy A Series", models: ["A54 Charging Port", "A53 Charging Port"] }] },
             {
-                name: "Google",
-                series: [{ name: "Pixel Series", models: ["Pixel 8 Charging Port", "Pixel 7 Charging Port"] }],
+                name: "Samsung",
+                series: [
+                    { name: "Galaxy S Series", models: ["S23 Display", "S22 Display", "S21 Display", "S20 Display"] },
+                    { name: "Galaxy A Series", models: ["A54 Display", "A53 Display", "A52 Display"] },
+                    { name: "Galaxy Note Series", models: ["Note 20 Display", "Note 10 Display"] },
+                ],
+            },
+            {
+                name: "Apple",
+                series: [
+                    {
+                        name: "iPhone Series",
+                        models: ["iPhone 15 Display", "iPhone 14 Display", "iPhone 13 Display", "iPhone 12 Display"],
+                    },
+                ],
+            },
+            {
+                name: "Xiaomi",
+                series: [
+                    { name: "Redmi Series", models: ["Redmi Note 12 Display", "Redmi Note 11 Display"] },
+                    { name: "Mi Series", models: ["Mi 12 Display", "Mi 11 Display"] },
+                ],
             },
         ],
     },
     {
-        name: "Charging Port 3",
+        name: "Back Glass",
         brands: [
-            { name: "Samsung", series: [{ name: "Galaxy A Series", models: ["A54 Charging Port", "A53 Charging Port"] }] },
             {
-                name: "Google",
-                series: [{ name: "Pixel Series", models: ["Pixel 8 Charging Port", "Pixel 7 Charging Port"] }],
+                name: "Samsung",
+                series: [
+                    { name: "Galaxy S Series", models: ["S23 Back Glass", "S22 Back Glass", "S21 Back Glass", "S20 Back Glass"] },
+                    { name: "Galaxy Note Series", models: ["Note 20 Back Glass", "Note 10 Back Glass"] },
+                ],
+            },
+            {
+                name: "Apple",
+                series: [
+                    {
+                        name: "iPhone Series",
+                        models: ["iPhone 15 Back Glass", "iPhone 14 Back Glass", "iPhone 13 Back Glass", "iPhone 12 Back Glass"],
+                    },
+                ],
             },
         ],
     },
     {
-        name: "Charging Port 4",
+        name: "Camera Lens",
         brands: [
-            { name: "Samsung", series: [{ name: "Galaxy A Series", models: ["A54 Charging Port", "A53 Charging Port"] }] },
             {
-                name: "Google",
-                series: [{ name: "Pixel Series", models: ["Pixel 8 Charging Port", "Pixel 7 Charging Port"] }],
+                name: "Samsung",
+                series: [
+                    { name: "Galaxy S Series", models: ["S23 Camera Lens", "S22 Camera Lens", "S21 Camera Lens"] },
+                    { name: "Galaxy A Series", models: ["A54 Camera Lens", "A53 Camera Lens"] },
+                ],
             },
+            {
+                name: "Apple",
+                series: [
+                    {
+                        name: "iPhone Series",
+                        models: ["iPhone 15 Camera Lens", "iPhone 14 Camera Lens", "iPhone 13 Camera Lens"],
+                    },
+                ],
+            },
+            { name: "Google", series: [{ name: "Pixel Series", models: ["Pixel 8 Camera Lens", "Pixel 7 Camera Lens"] }] },
         ],
     },
     {
-        name: "Charging Port 5",
+        name: "Motherboard",
         brands: [
-            { name: "Samsung", series: [{ name: "Galaxy A Series", models: ["A54 Charging Port", "A53 Charging Port"] }, { name: "Galaxy b Series", models: ["A54 Charging Port", "A53 Charging Port"] }, { name: "Galaxy cSeries", models: ["A54 Charging Port", "A53 Charging Port"] }] },
             {
-                name: "Google",
-                series: [{ name: "Pixel Series", models: ["Pixel 8 Charging Port", "Pixel 7 Charging Port"] }],
+                name: "Samsung",
+                series: [
+                    { name: "Galaxy S Series", models: ["S23 Motherboard", "S22 Motherboard", "S21 Motherboard"] },
+                    { name: "Galaxy A Series", models: ["A54 Motherboard", "A53 Motherboard"] },
+                    { name: "Galaxy Note Series", models: ["Note 20 Motherboard", "Note 10 Motherboard"] },
+                ],
+            },
+            {
+                name: "Apple",
+                series: [
+                    {
+                        name: "iPhone Series",
+                        models: ["iPhone 15 Motherboard", "iPhone 14 Motherboard", "iPhone 13 Motherboard"],
+                    },
+                ],
             },
         ],
     },
 ]
+
 export default function CategoryListHero() {
-    // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-    const [activeCategory, setActiveCategory] = useState(categoryData[0].name)
-    const [activeBrand, setActiveBrand] = useState(`${categoryData[0].name}-${categoryData[0].brands[0].name}`)
-    const [activeSeries, setActiveSeries] = useState(
-        `${categoryData[0].name}-${categoryData[0].brands[0].name}-${categoryData[0].brands[0].series[0].name}`
-    )
+    const [activeCategory, setActiveCategory] = useState(null)
+    const [activeBrand, setActiveBrand] = useState(null)
+    const [activeSeries, setActiveSeries] = useState(null)
+    const [showAllModels, setShowAllModels] = useState({})
+
+    const toggleShowAllModels = (seriesKey) => {
+        setShowAllModels((prev) => ({
+            ...prev,
+            [seriesKey]: !prev[seriesKey],
+        }))
+    }
+
+    // Find active category, brand, and series objects
+    const getActiveCategory = () =>
+        activeCategory ? categoryData.find((cat) => cat.name === activeCategory) : null
+
+    const getActiveBrand = () => {
+        const category = getActiveCategory()
+        if (!category || !activeBrand) return null
+        return category.brands.find((brand) => brand.name === activeBrand)
+    }
+
+    const getActiveSeries = () => {
+        const brand = getActiveBrand()
+        if (!brand || !activeSeries) return null
+        return brand.series.find((series) => series.name === activeSeries)
+    }
+
+    const handleCategoryHover = (categoryName) => {
+        setActiveCategory(categoryName)
+        setActiveBrand(null)
+        setActiveSeries(null)
+    }
+
+    const handleBrandHover = (brandName) => {
+        setActiveBrand(brandName)
+        setActiveSeries(null)
+    }
+
+    const handleSeriesHover = (seriesName) => {
+        setActiveSeries(seriesName)
+    }
+
     return (
         <div className="max-w-8xl mx-auto md:px-12">
-            
-            {/* For MObile View */}
-
-            {/* <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-lg shadow-sm md:hidden">
-                <Button
-                    isIconOnly
-                    onClick={() => setIsMobileMenuOpen(true)}
-                    className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                >
-                    <Menu size={24} className="text-gray-700" />
-                </Button>
-                <h3 className="text-lg font-semibold text-gray-800">Categories</h3>
-            </div> */}
-
             {/* Desktop View */}
-            <div className="hidden md:block bg-white p-4">
+            <div className="hidden lg:block bg-white p-4">
                 <NavigationMenu>
-                    <NavigationMenuList className="flex flex-wrap justify-content-center align-items-center gap-2 ">
+                    <NavigationMenuList className="flex flex-wrap justify-content-center align-items-center gap-2">
                         {categoryData.map((category) => (
                             <NavigationMenuItem key={category.name}>
                                 <NavigationMenuTrigger
                                     className={cn(
                                         "bg-white hover:bg-gray-100 text-gray-700 font-semibold px-4 py-2 rounded-md transition-all",
-
                                     )}
-                                    onMouseEnter={() => {
-                                        setActiveCategory(category.name)
-                                        setActiveBrand(`${category.name}-${category.brands[0].name}`)
-                                        setActiveSeries(`${category.name}-${category.brands[0].name}-${category.brands[0].series[0].name}`)
-                                    }}
+                                    onMouseEnter={() => handleCategoryHover(category.name)}
                                 >
                                     {category.name}
                                 </NavigationMenuTrigger>
-                                <NavigationMenuContent >                                    <div className="grid grid-cols-[220px_1fr] w-[700px] gap-4 p-6 bg-white shadow-inner">
-                                    <div className="border-r border-gray-200 pr-4">
-                                        <h3 className="font-semibold text-gray-800 mb-3">Brands</h3>
-                                        <ul className="space-y-2">
-                                            {category.brands.map((brand) => (
-                                                <li
-                                                    key={brand.name}
-                                                    className={cn(
-                                                        "cursor-pointer hover:text-primary hover:bg-gray-50 p-2 rounded transition-all",
-                                                        activeBrand === `${category.name}-${brand.name}` && "text-primary bg-gray-50 font-medium"
-                                                    )}
-                                                    onMouseEnter={() => {
-                                                        setActiveBrand(`${category.name}-${brand.name}`)
-                                                        setActiveSeries(`${category.name}-${brand.name}-${brand.series[0].name}`)
-                                                    }}
-                                                >
-                                                    {brand.name}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    <div className="grid grid-cols-[220px_1fr] gap-4">
-                                        <div className="border-r border-gray-200 pr-4">
-                                            <h3 className="font-semibold text-gray-800 mb-3">Series</h3>
-                                            <ul className="space-y-2">
-                                                {category.brands.map((brand) =>
-                                                    activeBrand === `${category.name}-${brand.name}` &&
-                                                    brand.series.map((series) => (
+                                <NavigationMenuContent>
+                                    <div className="w-[900px] p-6 bg-white shadow-inner">
+                                        <div className="grid grid-cols-[220px_1fr] gap-6">
+                                            {/* Brands Column - Always visible when category is hovered */}
+                                            <div className="border-r border-gray-200 pr-4">
+                                                <h3 className="font-semibold text-gray-800 mb-3">Brands</h3>
+                                                <ul className="space-y-2">
+                                                    {getActiveCategory()?.brands.map((brand) => (
                                                         <li
-                                                            key={series.name}
+                                                            key={brand.name}
                                                             className={cn(
-                                                                "cursor-pointer hover:text-primary hover:bg-gray-50 p-2 rounded transition-all",
-                                                                activeSeries === `${category.name}-${brand.name}-${series.name}` &&
-                                                                "text-primary bg-gray-50 font-medium"
+                                                                "cursor-pointer hover:text-primary hover:bg-gray-50 p-2 rounded transition-all flex items-center justify-between",
+                                                                activeBrand === brand.name && "text-primary bg-gray-50 font-medium",
                                                             )}
-                                                            onMouseEnter={() =>
-                                                                setActiveSeries(`${category.name}-${brand.name}-${series.name}`)
-                                                            }
+                                                            onMouseEnter={() => handleBrandHover(brand.name)}
                                                         >
-                                                            {series.name}
+                                                            <span>{brand.name}</span>
+                                                            <ChevronRight size={16} className="text-gray-400" />
                                                         </li>
-                                                    ))
+                                                    ))}
+                                                </ul>
+                                            </div>
+
+                                            {/* Series and Models Column */}
+                                            <div>
+                                                {/* Show brand overview when no brand is selected */}
+                                                {!activeBrand && (
+                                                    <div className="flex items-center justify-center h-full">
+                                                        <p className="text-gray-500">Select a brand to view models</p>
+                                                    </div>
                                                 )}
-                                            </ul>
-                                        </div>
-                                        <div>
-                                            <h3 className="font-semibold text-gray-800 mb-3">Models</h3>
-                                            <ul className="space-y-2">
-                                                {category.brands.map((brand) =>
-                                                    brand.series.map((series) =>
-                                                        activeSeries === `${category.name}-${brand.name}-${series.name}` &&
-                                                        series.models.map((model) => (
-                                                            <li
-                                                                key={model}
-                                                                className="hover:text-primary hover:bg-gray-50 p-2 rounded transition-all"
-                                                            >
-                                                                <NavigationMenuLink asChild>
-                                                                    <Link legacyBehavior passHref
-                                                                        href={`/products/${model.replace(/\s+/g, "-").toLowerCase()}`}
-                                                                        className="block text-gray-600"
+
+                                                {/* Show series and models when brand is selected */}
+                                                {activeBrand && (
+                                                    <>
+                                                        {/* Series List */}
+                                                        <div className="mb-4">
+                                                            <h3 className="font-semibold text-gray-800 mb-3">Series</h3>
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {getActiveBrand()?.series.map((series) => (
+                                                                    <div
+                                                                        key={series.name}
+                                                                        className={cn(
+                                                                            "cursor-pointer px-3 py-1 rounded transition-all border",
+                                                                            activeSeries === series.name
+                                                                                ? "bg-primary text-white border-primary"
+                                                                                : "bg-gray-50 text-gray-700 border-gray-200 hover:border-primary"
+                                                                        )}
+                                                                        onMouseEnter={() => handleSeriesHover(series.name)}
                                                                     >
-                                                                        {model}
-                                                                    </Link>
-                                                                </NavigationMenuLink>
-                                                            </li>
-                                                        ))
-                                                    )
+                                                                        {series.name}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Models Section */}
+                                                        <div className="border-t border-gray-200 pt-4">
+                                                            <h3 className="font-semibold text-gray-800 mb-3">
+                                                                {activeSeries
+                                                                    ? `${getActiveBrand()?.name} - ${activeSeries} Models`
+                                                                    : `${getActiveBrand()?.name} Models`}
+                                                            </h3>
+
+                                                            <div className="grid grid-cols-3 gap-2">
+                                                                {activeSeries
+                                                                    ? // Show models for active series
+                                                                    getActiveSeries()?.models
+                                                                        .slice(0, showAllModels[activeSeries] ? undefined : 10)
+                                                                        .map((model) => (
+                                                                            <div
+                                                                                key={model}
+                                                                                className="hover:text-primary hover:bg-gray-50 p-2 rounded transition-all"
+                                                                            >
+                                                                                <NavigationMenuLink asChild>
+                                                                                    <Link
+                                                                                        legacyBehavior
+                                                                                        passHref
+                                                                                        href={`/products/${model.replace(/\s+/g, "-").toLowerCase()}`}
+                                                                                        className="block text-gray-600"
+                                                                                    >
+                                                                                        {model}
+                                                                                    </Link>
+                                                                                </NavigationMenuLink>
+                                                                            </div>
+                                                                        ))
+                                                                    : // Show all models from all series (limited to 3 per series)
+                                                                    getActiveBrand()?.series.flatMap((series) =>
+                                                                        series.models.slice(0, 3).map((model) => (
+                                                                            <div
+                                                                                key={`${series.name}-${model}`}
+                                                                                className="hover:text-primary hover:bg-gray-50 p-2 rounded transition-all"
+                                                                            >
+                                                                                <NavigationMenuLink asChild>
+                                                                                    <Link
+                                                                                        legacyBehavior
+                                                                                        passHref
+                                                                                        href={`/products/${model.replace(/\s+/g, "-").toLowerCase()}`}
+                                                                                        className="block text-gray-600"
+                                                                                    >
+                                                                                        {model}
+                                                                                    </Link>
+                                                                                </NavigationMenuLink>
+                                                                            </div>
+                                                                        ))
+                                                                    )}
+                                                            </div>
+
+                                                            {/* View More Button for active series */}
+                                                            {activeSeries &&
+                                                                getActiveSeries()?.models.length > 10 && (
+                                                                    <button
+                                                                        className="mt-3 text-primary flex items-center hover:underline"
+                                                                        onClick={() => toggleShowAllModels(activeSeries)}
+                                                                    >
+                                                                        {showAllModels[activeSeries] ? "Show Less" : "View More"}
+                                                                        <ChevronRight
+                                                                            size={16}
+                                                                            className={cn(
+                                                                                "ml-1 transition-transform",
+                                                                                showAllModels[activeSeries] && "rotate-90"
+                                                                            )}
+                                                                        />
+                                                                    </button>
+                                                                )}
+                                                        </div>
+                                                    </>
                                                 )}
-                                            </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
                         ))}
                     </NavigationMenuList>
                 </NavigationMenu>
             </div>
-
-            {/* Mobile Sidebar */}
-            {/* {isMobileMenuOpen && (
-                <div className="fixed inset-0 z-[1001] md:hidden">
-                    <div
-                        className="fixed inset-0 bg-black/50 transition-opacity duration-300 ease-in-out opacity-100"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                    />
-
-                    <div
-                        className={`fixed left-0 top-0 h-full w-80 bg-white shadow-xl p-6 overflow-y-auto 
-                        transition-transform duration-300 ease-in transform 
-                        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
-                    >
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-gray-800">Categories</h3>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                                <X className="h-6 w-6" />
-                            </Button>
-                        </div>
-                        <MobileNavigation
-                            categoryData={categoryData}
-                            activeCategory={activeCategory}
-                            setActiveCategory={setActiveCategory}
-                            activeBrand={activeBrand}
-                            setActiveBrand={setActiveBrand}
-                            activeSeries={activeSeries}
-                            setActiveSeries={setActiveSeries}
-                        />
-                    </div>
-                </div>
-            )} */}
-
         </div>
     )
 }
-
-// Mobile Navigation Component (unchanged)
-// function MobileNavigation({
-//     categoryData,
-//     activeCategory,
-//     setActiveCategory,
-//     activeBrand,
-//     setActiveBrand,
-//     activeSeries,
-//     setActiveSeries
-// }) {
-//     return (
-//         <div className="space-y-4">
-//             {categoryData.map((category) => (
-//                 <div key={category.name} className="border-b border-gray-200 pb-4">
-//                     <button
-//                         className={cn(
-//                             "w-full text-left p-3 font-semibold flex justify-between items-center rounded-lg",
-//                             activeCategory === category.name ? "bg-gray-100 text-primary" : "text-gray-700"
-//                         )}
-//                         onClick={() => {
-//                             setActiveCategory(category.name)
-//                             setActiveBrand(`${category.name}-${category.brands[0].name}`)
-//                             setActiveSeries(`${category.name}-${category.brands[0].name}-${category.brands[0].series[0].name}`)
-//                         }}
-//                     >
-//                         {category.name}
-//                         <svg
-//                             className={`h-5 w-5 transition-transform ${activeCategory === category.name ? "rotate-180" : ""}`}
-//                             fill="none"
-//                             viewBox="0 0 24 24"
-//                             stroke="currentColor"
-//                         >
-//                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-//                         </svg>
-//                     </button>
-
-//                     {activeCategory === category.name && (
-//                         <div className="mt-3 space-y-3 pl-4">
-//                             {category.brands.map((brand) => (
-//                                 <div key={brand.name}>
-//                                     <button
-//                                         className={cn(
-//                                             "w-full text-left p-2 flex justify-between items-center rounded-md",
-//                                             activeBrand === `${category.name}-${brand.name}` ? "bg-gray-100 text-primary" : "text-gray-600"
-//                                         )}
-//                                         onClick={() => {
-//                                             setActiveBrand(`${category.name}-${brand.name}`)
-//                                             setActiveSeries(`${category.name}-${brand.name}-${brand.series[0].name}`)
-//                                         }}
-//                                     >
-//                                         {brand.name}
-//                                         <svg
-//                                             className={`h-4 w-4 transition-transform ${activeBrand === `${category.name}-${brand.name}` ? "rotate-180" : ""}`}
-//                                             fill="none"
-//                                             viewBox="0 0 24 24"
-//                                             stroke="currentColor"
-//                                         >
-//                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-//                                         </svg>
-//                                     </button>
-
-//                                     {activeBrand === `${category.name}-${brand.name}` && (
-//                                         <div className="mt-2 space-y-2 pl-4">
-//                                             {brand.series.map((series) => (
-//                                                 <div key={series.name}>
-//                                                     <button
-//                                                         className={cn(
-//                                                             "w-full text-left p-2 flex justify-between items-center rounded-md",
-//                                                             activeSeries === `${category.name}-${brand.name}-${series.name}` ?
-//                                                                 "bg-gray-100 text-primary" : "text-gray-600"
-//                                                         )}
-//                                                         onClick={() =>
-//                                                             setActiveSeries(`${category.name}-${brand.name}-${series.name}`)
-//                                                         }
-//                                                     >
-//                                                         {series.name}
-//                                                         <svg
-//                                                             className={`h-4 w-4 transition-transform ${activeSeries === `${category.name}-${brand.name}-${series.name}` ? "rotate-180" : ""}`}
-//                                                             fill="none"
-//                                                             viewBox="0 0 24 24"
-//                                                             stroke="currentColor"
-//                                                         >
-//                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-//                                                         </svg>
-//                                                     </button>
-
-//                                                     {activeSeries === `${category.name}-${brand.name}-${series.name}` && (
-//                                                         <ul className="mt-2 space-y-1 pl-4">
-//                                                             {series.models.map((model) => (
-//                                                                 <li key={model}>
-//                                                                     <a
-//                                                                         href={`/products/${model.replace(/\s+/g, "-").toLowerCase()}`}
-//                                                                         className="block p-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md transition-all"
-//                                                                     >
-//                                                                         {model}
-//                                                                     </a>
-//                                                                 </li>
-//                                                             ))}
-//                                                         </ul>
-//                                                     )}
-//                                                 </div>
-//                                             ))}
-//                                         </div>
-//                                     )}
-//                                 </div>
-//                             ))}
-//                         </div>
-//                     )}
-//                 </div>
-//             ))}
-//         </div>
-//     )
-// }
