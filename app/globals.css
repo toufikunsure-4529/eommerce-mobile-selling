@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 ::selection {
-  background-color: #ecd645;
+  background-color: rgb(93, 214, 93);
 }
 
 .custom-scrollbar {

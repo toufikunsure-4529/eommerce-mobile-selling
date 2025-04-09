@@ -110,7 +110,7 @@ export default async function Home() {
         <CategoryListHero />
         <FeaturedProductSlider featuredProducts={featuredProducts} />
         <Collections collections={collections} />
-        <Categories categories={categories} />
+        {/* <Categories categories={categories} /> */}
         <Accessories />
         <WhyUsSection />
         <ProductSection title="Best Selling" products={bestSellingProducts} />
