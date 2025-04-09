@@ -48,11 +48,11 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100 ">
+    <div className="flex md:min-h-screen bg-gray-100 ">
 
 
       {/* Left side - Login Form */}
-      <div className="w-full md:w-1/2 flex justify-center items-center">
+      <div className="w-full md:w-1/2 flex justify-center items-center p-6">
         <div className="w-full  max-w-md py-12 bg-white p-12 rounded-lg shadow-sm border border-[#000000] border-opacity-10 ">
           <h2 className="text-3xl font-semibold text-black mb-6 text-center">Login</h2>
           <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">

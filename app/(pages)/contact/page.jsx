@@ -1,114 +1,141 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { Mail, Phone, User, MessageCircle, Send } from "lucide-react";
 
 export default function ContactUs() {
     const {
         register,
         handleSubmit,
-        reset,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm();
 
-    const onSubmit = async (data) => {
-        try {
-            console.log("Form Data:", data);
-            toast.success("Thanks for contacting us!");
-            reset();
-        } catch (error) {
-            console.error(error.message);
-            toast.error("Something went wrong. Please try again.");
-        }
+    const onSubmit = (data) => {
+        console.log("Form Data:", data);
     };
 
     return (
-        <section className="max-w-8xl bg-gray-100 py-14 px-4 md:px-8 lg:px-20 " id="contact">
-            <div className="mx-auto">
-                <h2 className="text-5xl font-bold text-center text-grat-900 mb-6">Contact Us</h2>
-                <p className="text-center text-gray-600 mb-10">
-                    Any question or remarks? Just write us a message!                </p>
+        <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-100 min-h-screen">
+            <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-800">Contact Us</h2>
             </div>
-            <div className=" px-6 py-8 md:px-20 mx-auto bg-white rounded mb-10 shadow-sm border border-gray-200">
-
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    {/* Contact Info & Map */}
-                    <div className="space-y-6">
-                        <div className="flex items-center gap-4 bg-green-100 p-4 rounded-lg">
-                            <Phone className="text-green-600" size={24} />
-                            <p className="text-gray-700">+123 456 7890</p>
-                        </div>
-                        <div className="flex items-center gap-4 bg-yellow-100 p-4 rounded-lg">
-                            <Mail className="text-yellow-600" size={24} />
-                            <p className="text-gray-700">contact@example.com</p>
-                        </div>
-
-                    </div>
-
-                    {/* Contact Form */}
-                    <div>
-                        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-                            <div className="relative">
-                                <User className="absolute top-3 left-4 text-gray-500" size={20} />
-                                <input
-                                    type="text"
-                                    {...register("name", { required: "Name is required" })}
-                                    placeholder="Your Name"
-                                    className="w-full bg-gray-100 text-gray-800 pl-12 pr-4 py-3 rounded-lg focus:ring-2 focus:ring-green-400 border border-gray-300"
-                                />
-                                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
-                            </div>
-
-                            <div className="relative">
-                                <Mail className="absolute top-3 left-4 text-gray-500" size={20} />
-                                <input
-                                    type="email"
-                                    {...register("email", { required: "Email is required" })}
-                                    placeholder="Your Email"
-                                    className="w-full bg-gray-100 text-gray-800 pl-12 pr-4 py-3 rounded-lg focus:ring-2 focus:ring-yellow-400 border border-gray-300"
-                                />
-                                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-                            </div>
-
-                            <div className="relative">
-                                <Phone className="absolute top-3 left-4 text-gray-500" size={20} />
-                                <input
-                                    type="text"
-                                    {...register("phone", { required: "Phone is required" })}
-                                    placeholder="Your Phone"
-                                    className="w-full bg-gray-100 text-gray-800 pl-12 pr-4 py-3 rounded-lg focus:ring-2 focus:ring-green-400 border border-gray-300"
-                                />
-                                {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
-                            </div>
-
-                            <div className="relative">
-                                <MessageCircle className="absolute top-3 left-4 text-gray-500" size={20} />
-                                <textarea
-                                    {...register("message", { required: "Message is required" })}
-                                    rows="4"
-                                    placeholder="Your Message"
-                                    className="w-full bg-gray-100 text-gray-800 pl-12 pr-4 py-3 rounded-lg focus:ring-2 focus:ring-yellow-400 border border-gray-300"
-                                ></textarea>
-                                {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-lg transition duration-300"
-                            >
-                                {isSubmitting ? "Submitting..." : "Send Message"}
-                                <Send size={20} />
-                            </button>
-                        </form>
-                    </div>
+            <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-md overflow-hidden flex flex-col lg:flex-row mb-10">
+                {/* Left */}
+                <div
+                    className="text-white p-8 w-full lg:w-1/3 bg-cover bg-center"
+                    style={{ backgroundImage: 'url(/contact-bg.png)' }}
+                >                    <h3 className="text-xl font-bold mb-2">Contact Information</h3>
+                    <p className="mb-6">Say something to start a live chat!</p>
+                    <ul className="space-y-4 text-sm">
+                        <li className="flex items-center gap-2">
+                            <span>📞</span> +1012 3456 789
+                        </li>
+                        <li className="flex items-center gap-2">
+                            <span>📧</span> demo@gmail.com
+                        </li>
+                        <li className="flex items-start gap-2">
+                            <span>📍</span>
+                            132 Dartmouth Street Boston, Massachusetts 02156 United States
+                        </li>
+                    </ul>
                 </div>
 
+                {/* Right */}
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="w-full lg:w-2/3 p-8 space-y-6"
+                >
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="block mb-1 font-medium text-gray-700">
+                                First Name
+                            </label>
+                            <input
+                                type="text"
+                                {...register("firstName", { required: "First name is required" })}
+                                className="w-full border-b border-gray-400 focus:outline-none focus:border-red-500 py-1"
+                            />
+                            {errors.firstName && (
+                                <p className="text-red-600 text-sm">{errors.firstName.message}</p>
+                            )}
+                        </div>
+                        <div>
+                            <label className="block mb-1 font-medium text-gray-700">
+                                Last Name
+                            </label>
+                            <input
+                                type="text"
+                                {...register("lastName", { required: "Last name is required" })}
+                                className="w-full border-b border-gray-400 focus:outline-none focus:border-red-500 py-1"
+                            />
+                            {errors.lastName && (
+                                <p className="text-red-600 text-sm">{errors.lastName.message}</p>
+                            )}
+                        </div>
+                    </div>
 
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="block mb-1 font-medium text-gray-700">Email</label>
+                            <input
+                                type="email"
+                                {...register("email", {
+                                    required: "Email is required",
+                                    pattern: {
+                                        value: /^\S+@\S+$/i,
+                                        message: "Invalid email address",
+                                    },
+                                })}
+                                className="w-full border-b border-gray-400 focus:outline-none focus:border-red-500 py-1"
+                            />
+                            {errors.email && (
+                                <p className="text-red-600 text-sm">{errors.email.message}</p>
+                            )}
+                        </div>
+                        <div>
+                            <label className="block mb-1 font-medium text-gray-700">
+                                Phone Number
+                            </label>
+                            <input
+                                type="tel"
+                                {...register("phone", {
+                                    required: "Phone number is required",
+                                    pattern: {
+                                        value: /^[0-9\s+-]+$/,
+                                        message: "Invalid phone number",
+                                    },
+                                })}
+                                className="w-full border-b border-gray-400 focus:outline-none focus:border-red-500 py-1"
+                            />
+                            {errors.phone && (
+                                <p className="text-red-600 text-sm">{errors.phone.message}</p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block mb-1 font-medium text-gray-700">Message</label>
+                        <textarea
+                            {...register("message", { required: "Message is required" })}
+                            rows="4"
+                            placeholder="Write your message.."
+                            className="w-full border-b border-gray-400 focus:outline-none focus:border-red-500 py-1"
+                        />
+                        {errors.message && (
+                            <p className="text-red-600 text-sm">{errors.message.message}</p>
+                        )}
+                    </div>
+
+                    <div className="text-right">
+                        <button
+                            type="submit"
+                            className="bg-red-600 text-white font-medium px-6 py-2 rounded hover:bg-red-700 transition"
+                        >
+                            Send Message
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div className="w-full h-[500px] rounded-lg overflow-hidden shadow-lg">
+            <div className="max-w-5xl mx-auto h-[500px] rounded-lg overflow-hidden shadow-lg">
                 <iframe
                     width="100%"
                     height="100%"

@@ -58,7 +58,7 @@ export default function Signup() {
     };
 
     return (
-        <div className="flex min-h-screen bg-gray-100">
+        <div className="flex md:min-h-screen bg-gray-100">
 
 
             {/* Left side - Signup Form */}

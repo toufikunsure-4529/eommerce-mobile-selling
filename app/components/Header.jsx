@@ -356,7 +356,7 @@ const Header = () => {
                     <span>Login</span>
                   </Button>
                 </Link>
-                <Link href="/register">
+                <Link href="/signup">
                   <Button variant="light" className="w-full justify-start gap-3 py-3 text-left">
                     <User size={20} />
                     <span>Register</span>
@@ -391,6 +391,11 @@ const Header = () => {
               <Button variant="light" className="w-full justify-start gap-3 py-3" onClick={closeMobileMenu}>
                 <span>
                   <Link href="/contact">Support</Link>
+                </span>
+              </Button>
+              <Button variant="light" className="w-full justify-start gap-3 py-3" onClick={closeMobileMenu}>
+                <span>
+                  <Link href="/category">All Categories</Link>
                 </span>
               </Button>
             </div>

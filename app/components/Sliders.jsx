@@ -43,7 +43,7 @@ export default function HeroSectionSlider() {
             <Slider {...settings}>
                 {heroSlides.map((slide) => (
                     <div key={slide.id}>
-                        <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[450px]">
+                        <div className="relative w-full h-[400px] sm:h-[500px] md:h-[500px] lg:h-[450px]">
                             {/* Background Image with Overlay */}
                             <div
                                 className="absolute inset-0 bg-cover bg-center"
@@ -80,16 +80,38 @@ export default function HeroSectionSlider() {
 
             {/* Custom Dots Styling */}
             <style jsx global>{`
-        .slick-dots {
-            bottom: 10px !important;
-        }
-        .slick-dots li button:before {
-            color: #000 !important;
-            font-size: 12px !important;
-        }
-        .slick-dots li.slick-active button:before {
-            color: #FF0101 !important;
-        }
+     .slick-dots {
+                    bottom: 20px !important;
+                    padding: 0 20px;
+                    
+                }
+                .slick-dots li {
+                    margin: 0 6px;
+                }
+                .slick-dots li button:before {
+                    color: white !important;
+                    opacity: 0.7;
+                    font-size: 10px !important;
+                    transition: all 0.3s;
+                    
+                }
+                .slick-dots li.slick-active button:before {
+                    color: #fff !important;
+                    opacity: 1;
+                    font-size: 12px !important;
+                    
+                }
+                @media (max-width: 640px) {
+                    .slick-dots {
+                        bottom: 15px !important;
+                    }
+                    .slick-dots li button:before {
+                        font-size: 8px !important;
+                    }
+                    .slick-dots li.slick-active button:before {
+                        font-size: 10px !important;
+                    }
+                }
     `}</style>
         </div>
     );
