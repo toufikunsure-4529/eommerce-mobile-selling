@@ -16,27 +16,42 @@ export default function ContactUs() {
     return (
         <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-100 min-h-screen">
             <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-800">Contact Us</h2>
+                <h2 className="md:text-5xl mb-5 font-bold text-gray-800">Contact Us</h2>
+                <p>Any question or remarks? Just write us a message!</p>
             </div>
-            <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-md overflow-hidden flex flex-col lg:flex-row mb-10">
+            <div className="max-w-5xl p-2 mx-auto bg-white rounded-xl shadow-md overflow-hidden flex flex-col md:flex-row mb-10">
                 {/* Left */}
                 <div
-                    className="text-white p-8 w-full lg:w-1/3 bg-cover bg-center"
+                    className="text-white p-8 w-full lg:w-1/2 bg-cover bg-center flex flex-col justify-between rounded-lg"
                     style={{ backgroundImage: 'url(/contact-bg.png)' }}
-                >                    <h3 className="text-xl font-bold mb-2">Contact Information</h3>
-                    <p className="mb-6">Say something to start a live chat!</p>
-                    <ul className="space-y-4 text-sm">
-                        <li className="flex items-center gap-2">
-                            <span>📞</span> +1012 3456 789
+                >
+                    <div>
+                        <h3 className="text-2xl font-bold mb-2">Contact Information</h3>
+                        <p className="mb-6 text-sm text-gray-300">Say something to start a live chat!</p>
+                    </div>
+                    <ul className="space-y-10 text-[16px] text-gray-100">
+                        <li className="flex items-center gap-4">
+                            <span className="w-6 h-6 flex-shrink-0">
+                                <img src="/call-icon.svg" alt="call" className="w-full h-full object-contain" />
+                            </span>
+                            <span className="text-base">+1012 3456 789</span>
                         </li>
-                        <li className="flex items-center gap-2">
-                            <span>📧</span> demo@gmail.com
+                        <li className="flex items-center gap-4">
+                            <span className="w-6 h-6 flex-shrink-0">
+                                <img src="/email-icon.svg" alt="email" className="w-full h-full object-contain" />
+                            </span>
+                            <span className="text-base">demo@gmail.com</span>
                         </li>
-                        <li className="flex items-start gap-2">
-                            <span>📍</span>
-                            132 Dartmouth Street Boston, Massachusetts 02156 United States
+                        <li className="flex items-start gap-4">
+                            <span className="w-6 h-6 mt-1 flex-shrink-0">
+                                <img src="/map.svg" alt="map" className="w-full h-full object-contain" />
+                            </span>
+                            <span className="text-base leading-relaxed">
+                                132 Dartmouth Street<br />Boston, Massachusetts 02156<br />United States
+                            </span>
                         </li>
                     </ul>
+
                 </div>
 
                 {/* Right */}
@@ -52,6 +67,7 @@ export default function ContactUs() {
                             <input
                                 type="text"
                                 {...register("firstName", { required: "First name is required" })}
+                                placeholder="John"
                                 className="w-full border-b border-gray-400 focus:outline-none focus:border-red-500 py-1"
                             />
                             {errors.firstName && (
@@ -64,6 +80,7 @@ export default function ContactUs() {
                             </label>
                             <input
                                 type="text"
+                                placeholder="Doe"
                                 {...register("lastName", { required: "Last name is required" })}
                                 className="w-full border-b border-gray-400 focus:outline-none focus:border-red-500 py-1"
                             />
@@ -78,6 +95,7 @@ export default function ContactUs() {
                             <label className="block mb-1 font-medium text-gray-700">Email</label>
                             <input
                                 type="email"
+                                placeholder="john@example.com"
                                 {...register("email", {
                                     required: "Email is required",
                                     pattern: {
@@ -97,6 +115,7 @@ export default function ContactUs() {
                             </label>
                             <input
                                 type="tel"
+                                placeholder="+91 123456789"
                                 {...register("phone", {
                                     required: "Phone number is required",
                                     pattern: {
@@ -135,7 +154,7 @@ export default function ContactUs() {
                     </div>
                 </form>
             </div>
-            <div className="max-w-5xl mx-auto h-[500px] rounded-lg overflow-hidden shadow-lg">
+            <div className="max-w-7xl mx-auto h-[500px]  rounded-lg overflow-hidden shadow-lg">
                 <iframe
                     width="100%"
                     height="100%"

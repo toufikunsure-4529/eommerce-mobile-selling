@@ -10,7 +10,7 @@ async function RelatedProducts({ categoryId }) {
             price: 1199,
             salePrice: 1099, // Discounted price
             brand: "Samsung",
-            featuredImageURL: "/laptop.webp",
+            featuredImageURL: "/product-img2.jpg",
             shortDescription: "6.8-inch AMOLED display, 200MP camera, 5000mAh battery.",
         },
         {
@@ -19,7 +19,7 @@ async function RelatedProducts({ categoryId }) {
             price: 1299,
             salePrice: 1249, // Discounted price
             brand: "Apple",
-            featuredImageURL: "/laptop.webp",
+            featuredImageURL: "/product-img2.jpg",
             shortDescription: "6.7-inch Super Retina XDR, A17 Pro chip, Titanium body.",
         },
         {
@@ -28,7 +28,7 @@ async function RelatedProducts({ categoryId }) {
             price: 999,
             salePrice: 949, // Discounted price
             brand: "Google",
-            featuredImageURL: "/laptop.webp",
+            featuredImageURL: "/product-img2.jpg",
             shortDescription: "6.7-inch LTPO OLED, Tensor G3 chip, 50MP triple camera.",
         },
         {
@@ -37,7 +37,7 @@ async function RelatedProducts({ categoryId }) {
             price: 799,
             salePrice: 749, // Discounted price
             brand: "OnePlus",
-            featuredImageURL: "/laptop.webp",
+            featuredImageURL: "/product-img2.jpg",
             shortDescription: "6.7-inch AMOLED, Snapdragon 8 Gen 2, 5000mAh battery.",
         },
         {
@@ -46,7 +46,7 @@ async function RelatedProducts({ categoryId }) {
             price: 899,
             salePrice: 849, // Discounted price
             brand: "Xiaomi",
-            featuredImageURL: "/laptop.webp",
+            featuredImageURL: "/product-img2.jpg",
             shortDescription: "6.73-inch AMOLED, Snapdragon 8 Gen 2, Leica cameras.",
         },
     ];
@@ -58,8 +58,8 @@ async function RelatedProducts({ categoryId }) {
                 <h2 className="text-xl font-bold text-gray-900 uppercase">Related Products</h2>
                 <div className="w-24 h-1 bg-green-500 mx-auto mt-2 rounded-full"></div>
             </div>
-            <div className="max-w-6xl w-full mt-10">
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="max-w-8xl w-full mt-10 px-8">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
                     {mockProducts?.map((item) => (
                         <ProductCard product={item} key={item.id} />
                     ))}

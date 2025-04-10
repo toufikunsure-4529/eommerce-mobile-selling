@@ -12,7 +12,7 @@ function layout({ children }) {
             <Header />
             <AuthContextProvider>
                 <UserChecking>
-                    <section className="min-h-screen mt-20">{children}</section>
+                    <section className="min-h-screen">{children}</section>
 
                 </UserChecking>
 
@@ -29,7 +29,7 @@ function UserChecking({ children }) {
 
     if (isLoading) {
         return (
-            <div className="h-screen w-full flex flex-col justify-center items-center bg-gray-100">
+            <div className="md:h-screen w-full flex flex-col justify-center items-center bg-gray-100">
                 <CircularProgress size={50} thickness={4} color="primary" />
                 <p className="mt-4 text-gray-600 font-medium">Checking authentication...</p>
             </div>

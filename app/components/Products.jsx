@@ -86,8 +86,8 @@ export function ProductCard({ product }) {
         >
             <div className="relative w-full ">
                 <img
-                    src={product.featuredImageURL}
-                    alt={product.title}
+                    src={product?.featuredImageURL}
+                    alt={product?.title}
                     className="w-full h-48 object-cover object-center"
                 />
                 <div className="absolute top-1 right-1">
@@ -99,21 +99,21 @@ export function ProductCard({ product }) {
             <div className="p-4 flex flex-col flex-grow gap-2">
                 <Link href={`/products/${product?.id}`}>
                     <h3 className="text-base font-semibold text-gray-900 line-clamp-2 hover:text-blue-500 transition-colors delay-100">
-                        {product.title}
+                        {product?.title}
                     </h3>
-                    <p className="text-xs text-gray-500 line-clamp-2">{product.shortDescription}</p>
+                    <p className="text-xs text-gray-500 line-clamp-2">{product?.shortDescription}</p>
 
                     <Suspense>
                         <RatingReview product={product} />
                     </Suspense>
                     <div className="flex justify-between items-center  mt-3">
                         <div className="flex gap-2 justify-center items-center">
-                            <h2 className="text-md md:text-lg font-bold text-gray-900">₹{product.salePrice}</h2>
-                            <span className="text-xs md:text-sm font-semibold text-[#4E4D4D] line-through">₹{product.price}</span>
+                            <h2 className="text-md md:text-lg font-bold text-gray-900">₹{product?.salePrice}</h2>
+                            <span className="text-[14px] md:text-sm font-semibold text-[#4E4D4D] line-through">₹{product?.price}</span>
                         </div>
-                        {product.salePrice < product.price && (
-                            <span className="bg-[#FFE5E5] text-[#FF0101] text-[12px] md:text-xs font-semibold px-2 py-1 rounded">
-                                {Math.round(((product.price - product.salePrice) / product.price) * 100)}% OFF
+                        {product?.salePrice < product?.price && (
+                            <span className="bg-[#FFE5E5] text-[#FF0101] text-[10px] md:text-xs font-semibold px-2 py-1 rounded">
+                                {Math.round(((product?.price - product?.salePrice) / product?.price) * 100)}% OFF
                             </span>
                         )}
                     </div>

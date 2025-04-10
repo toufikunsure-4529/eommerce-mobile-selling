@@ -21,12 +21,14 @@ export async function generateMetadata({ params }) {
 }
 
 
+
+
 export default async function Page({ params }) {
     const { productId } = params;
     const product = await getProduct({ id: productId });
 
     return (
-        <main className="p-5 md:p-10 mt-10 max-w-6xl mx-auto">
+        <main className="p-5 md:px-10 mt-10 max-w-8xl mx-auto">
             {/* Photo & Details Section */}
             <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Left: Product Images */}

@@ -10,12 +10,13 @@ import {
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
-import { ChevronRight } from "lucide-react"
 import Link from "next/link"
+import { ChevronRight } from "lucide-react"
 
 const categoryData = [
     {
         name: "Battery",
+        icon: "/icon/battery.svg",
         brands: [
             {
                 name: "Samsung",
@@ -114,6 +115,7 @@ const categoryData = [
     },
     {
         name: "Sim Tray",
+        icon: "/icon/sim-tray.svg",
         brands: [
             {
                 name: "Samsung",
@@ -142,6 +144,7 @@ const categoryData = [
     },
     {
         name: "Charging Port",
+        icon: "/icon/charging-cable.svg",
         brands: [
             {
                 name: "Samsung",
@@ -172,6 +175,7 @@ const categoryData = [
     },
     {
         name: "Display",
+        icon: "/icon/display.svg",
         brands: [
             {
                 name: "Samsung",
@@ -201,6 +205,7 @@ const categoryData = [
     },
     {
         name: "Back Glass",
+        icon: "/icon/display.svg",
         brands: [
             {
                 name: "Samsung",
@@ -222,6 +227,7 @@ const categoryData = [
     },
     {
         name: "Camera Lens",
+        icon: "/icon/display.svg",
         brands: [
             {
                 name: "Samsung",
@@ -244,6 +250,7 @@ const categoryData = [
     },
     {
         name: "Motherboard",
+        icon: "/icon/display.svg",
         brands: [
             {
                 name: "Samsung",
@@ -313,21 +320,23 @@ export default function CategoryListHero() {
     return (
         <div className="max-w-8xl mx-auto md:px-12">
             {/* Desktop View */}
-            <div className="hidden lg:block bg-white p-4">
+            <div className="hidden lg:block bg-white p-4 rounded-lg shadow-sm">
                 <NavigationMenu>
-                    <NavigationMenuList className="flex flex-wrap justify-content-center align-items-center gap-2">
+                    <NavigationMenuList className="flex flex-wrap justify-center items-center gap-2">
                         {categoryData.map((category) => (
                             <NavigationMenuItem key={category.name}>
                                 <NavigationMenuTrigger
                                     className={cn(
-                                        "bg-white hover:bg-gray-100 text-gray-700 font-semibold px-4 py-2 rounded-md transition-all",
+                                        "bg-white hover:bg-gray-100 text-gray-700 font-semibold px-4 py-2 rounded-md transition-all flex items-center gap-2",
                                     )}
                                     onMouseEnter={() => handleCategoryHover(category.name)}
                                 >
-                                    {category.name}
+                                    <img src={category.icon} alt={category.name} className="h-10" />
+                                    <span> {category.name}</span>
                                 </NavigationMenuTrigger>
+
                                 <NavigationMenuContent>
-                                    <div className="w-[900px] p-6 bg-white shadow-inner">
+                                    <div className="w-[900px] p-6 bg-white shadow-lg rounded-b-lg">
                                         <div className="grid grid-cols-[220px_1fr] gap-6">
                                             {/* Brands Column - Always visible when category is hovered */}
                                             <div className="border-r border-gray-200 pr-4">
@@ -342,7 +351,12 @@ export default function CategoryListHero() {
                                                             )}
                                                             onMouseEnter={() => handleBrandHover(brand.name)}
                                                         >
-                                                            <span>{brand.name}</span>
+                                                            <span className="flex items-center">
+                                                                <span className="w-6 h-6 bg-gray-100 rounded-full mr-2 flex items-center justify-center">
+                                                                    {brand.name[0]}
+                                                                </span>
+                                                                {brand.name}
+                                                            </span>
                                                             <ChevronRight size={16} className="text-gray-400" />
                                                         </li>
                                                     ))}
@@ -354,7 +368,17 @@ export default function CategoryListHero() {
                                                 {/* Show brand overview when no brand is selected */}
                                                 {!activeBrand && (
                                                     <div className="flex items-center justify-center h-full">
-                                                        <p className="text-gray-500">Select a brand to view models</p>
+                                                        <div className="text-center">
+                                                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                                                <img src={getActiveCategory()?.icon} alt="icon" />
+                                                            </div>
+                                                            <h3 className="font-semibold text-lg text-gray-800 mb-1">
+                                                                {getActiveCategory()?.name}
+                                                            </h3>
+                                                            <p className="text-gray-500 max-w-xs">
+                                                                Select a brand to view available parts and models
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 )}
 
@@ -369,7 +393,7 @@ export default function CategoryListHero() {
                                                                     <div
                                                                         key={series.name}
                                                                         className={cn(
-                                                                            "cursor-pointer px-3 py-1 rounded transition-all border",
+                                                                            "cursor-pointer px-3 py-1 rounded transition-all border flex items-center",
                                                                             activeSeries === series.name
                                                                                 ? "bg-primary text-white border-primary"
                                                                                 : "bg-gray-50 text-gray-700 border-gray-200 hover:border-primary"
@@ -405,7 +429,7 @@ export default function CategoryListHero() {
                                                                                         legacyBehavior
                                                                                         passHref
                                                                                         href={`/products/${model.replace(/\s+/g, "-").toLowerCase()}`}
-                                                                                        className="block text-gray-600"
+                                                                                        className="block text-gray-600 hover:text-primary"
                                                                                     >
                                                                                         {model}
                                                                                     </Link>
@@ -424,7 +448,7 @@ export default function CategoryListHero() {
                                                                                         legacyBehavior
                                                                                         passHref
                                                                                         href={`/products/${model.replace(/\s+/g, "-").toLowerCase()}`}
-                                                                                        className="block text-gray-600"
+                                                                                        className="block text-gray-600 hover:text-primary"
                                                                                     >
                                                                                         {model}
                                                                                     </Link>

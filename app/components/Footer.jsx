@@ -6,7 +6,7 @@ const companyLinks = [
     { label: "Home Page", href: "#" },
     { label: "Collection", href: "#" },
     { label: "Categories", href: "#" },
-    { label: "About us", href: "#" },
+    { label: "About us", href: "/about" },
 ];
 
 const featureLinks = [
