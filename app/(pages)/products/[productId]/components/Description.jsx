@@ -1,26 +1,31 @@
-
-
 function Description({ product }) {
+  const defaultDescription = `Got a broken display in your Samsung Galaxy S10 Plus? Buy the complete LCD with Touch Screen for Samsung Galaxy S10 Plus - Black and replace the broken, cracked, or scratched screen in your handset. 100% Perfect fit with high manufacturing quality. With minimal technical know-how required, it is the easiest display to replace for your handset. 
+The replacement combo LCD with touch for Samsung Galaxy S10 Plus comes with a manufacturing defect warranty, and the shipping is done in secure packing to ensure you get the product in perfect shape.`;
+
+  const descriptionPoints = [
+    "Easiest part type available for Samsung Galaxy S10 Plus to replace with minimal technical knowledge required.",
+    "High-quality product with 100% perfect fit.",
+    "Complete display combo with LCD screen and digitizer touch screen.",
+    "Brand-new product with manufacturing defect warranty.",
+  ];
+
   return (
-    <>
-      <section className="mt-10 bg-gray-100 p-6 rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">Product Description</h2>
-        <p className="text-gray-700">{product?.description || `The Apple MacBook Air M1 (2020) is a revolutionary laptop designed to elevate your productivity and creativity. Powered by the groundbreaking Apple M1 chip, this device features an 8-core GPU and 16GB of RAM, delivering exceptional speed and performance for demanding applications, from graphic design to video editing.
-
-
-
-The 256GB SSD provides fast storage and quick access to your files, ensuring that your workflow remains uninterrupted. The stunning 13.3-inch Retina display offers vibrant colors and sharp details, making everything from watching movies to working on projects a delight. With True Tone technology, the display adjusts to your environment for a more natural viewing experience.
-
-
-
-The MacBook Air M1 boasts an impressive battery life of up to 18 hours, allowing you to work, browse, and stream without constantly worrying about charging. The fanless design ensures silent operation, making it perfect for use in quiet environments.
-
-
-
-With macOS Big Sur, you'll enjoy a seamless user experience with access to a wide range of applications optimized for the M1 chip. The laptop also features a FaceTime HD camera, Touch ID for secure authentication, and multiple Thunderbolt 3 ports for versatile connectivity.`}</p>
-      </section>
-    </>
-  )
+    <section className="w-full py-10 px-4">
+      <div className="max-w-8xl mx-auto bg-gray-100 p-6 md:p-10 ">
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6 border-b border-gray-400">
+          Product Details
+        </h2>
+        <p className="text-gray-600  text-sm  md:text-lg leading-relaxed mb-6 mt-2 ">
+          {product?.description || defaultDescription}
+        </p>
+        <ul className="list-disc list-inside text-gray-600 space-y-3 text-base md:text-md">
+          {descriptionPoints.map((point, index) => (
+            <li key={index}>{point}</li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
 }
 
-export default Description
+export default Description;

@@ -50,7 +50,7 @@ function AddToCartButton({ productId, type }) {
                 onClick={handleClick}
                 isLoading={isLoading}
                 isDisabled={isLoading}
-                className="bg-red-500 hover:bg-red-600 text-white px-5 py-5 rounded-md text-sm md:text-base transition"
+                className="bg-black hover:bg-gray-600 text-white px-5 py-5 rounded-md text-sm md:text-base transition-all duration-200 ease-out"
             >
                 {!isAdded && <AddShoppingCartIcon fontSize="small" />}
                 {isAdded && <ShoppingCartIcon fontSize="small" />}

@@ -18,16 +18,16 @@ function AddReview({ productId }) {
     const maxChars = 300;
 
     const handleSubmit = async () => {
-        if (message.length > maxChars) return; // Prevent submission if over limit
+        if (message.length > maxChars || !message.trim()) return;
         setIsLoading(true);
         try {
             if (!user) {
-                throw new Error("Please Log In First");
+                throw new Error("Please sign in to leave a review");
             }
 
             await addReview({
-                displayName: userData?.displayName,
-                message: message,
+                displayName: userData?.displayName || "Anonymous",
+                message: message.trim(),
                 photoURL: userData?.photoURL,
                 productId: productId,
                 rating: rating,
@@ -35,9 +35,10 @@ function AddReview({ productId }) {
             });
 
             setMessage("");
-            toast.success("Thanks For Your Review");
+            setRating(4);
+            toast.success("Thank you for your review!");
         } catch (error) {
-            toast.error(error?.message);
+            toast.error(error?.message || "Failed to submit review");
         }
         setIsLoading(false);
     };
@@ -52,29 +53,67 @@ function AddReview({ productId }) {
         setMessage(text);
     };
 
-    return (
-        <div className="p-6 rounded-2xl h-[300px] border border-gray-200 shadow-lg bg-white w-full">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">Rate This Product</h2>
+    const isSubmitDisabled = isLoading || !!error || !message.trim();
 
-            <div className="flex mb-4">
-                <Rating size="large" value={rating} onChange={(event, newValue) => setRating(newValue)} />
+    return (
+        <div className="p-6 rounded-xl border border-gray-200 bg-white shadow-sm w-full max-w-md">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">Share Your Experience</h2>
+            
+            <div className="mb-4">
+                <label htmlFor="product-rating" className="block text-sm font-medium text-gray-700 mb-1">
+                    Your Rating
+                </label>
+                <Rating
+                    id="product-rating"
+                    size="large"
+                    value={rating}
+                    onChange={(event, newValue) => setRating(newValue)}
+                    precision={0.5}
+                    className="[&>span]:text-2xl"
+                />
             </div>
 
-            <textarea
-                placeholder="Write your review..."
-                className={`w-full border ${error ? "border-red-500" : "border-gray-300"} rounded-lg px-4 py-3 focus:ring-2 focus:outline-none resize-none h-24`}
-                value={message}
-                onChange={handleMessageChange}
-            />
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+            <div className="mb-2">
+                <label htmlFor="review-message" className="block text-sm font-medium text-gray-700 mb-1">
+                    Your Review
+                </label>
+                <textarea
+                    id="review-message"
+                    placeholder="What did you think of this product?"
+                    className={`w-full border ${error ? "border-red-500" : "border-gray-300"} rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none resize-none h-32 transition-colors`}
+                    value={message}
+                    onChange={handleMessageChange}
+                    aria-describedby="char-count"
+                />
+                <div className="flex justify-between mt-1">
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                    <p 
+                        id="char-count"
+                        className={`text-xs ml-auto ${message.length > maxChars ? 'text-red-500' : 'text-gray-500'}`}
+                    >
+                        {message.length}/{maxChars}
+                    </p>
+                </div>
+            </div>
 
             <Button
-                className={`w-full mt-4 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition ${isLoading || error ? "bg-blue-200 cursor-not-allowed" : "bg-blue-600"}`}
-                isDisabled={isLoading || !!error}
+                className={`w-full mt-2 text-white font-medium py-3 rounded-lg transition-colors ${
+                    isSubmitDisabled 
+                        ? "bg-gray-300 cursor-not-allowed" 
+                        : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800"
+                }`}
+                isDisabled={isSubmitDisabled}
                 onClick={handleSubmit}
+                aria-label="Submit review"
             >
-                Submit Review
-                {isLoading && <CircularProgress size={20} thickness={7} color="white" />}
+                {isLoading ? (
+                    <div className="flex items-center gap-2">
+                        <CircularProgress size={20} thickness={5} className="text-white" />
+                        Submitting...
+                    </div>
+                ) : (
+                    "Submit Review"
+                )}
             </Button>
         </div>
     );

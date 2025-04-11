@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Jost } from "next/font/google";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -14,6 +14,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"], // Add weights you need
+  display: "swap",
+  variable: "--font-jost",
+});
+
 export const metadata = {
   title: "E Commarce Website",
   description: "Created By Intellij Technologies",
@@ -21,10 +28,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" className={jost.variable}>
+      <body className={`font-jost antialiased`}>
         <ClientProviders>{children}</ClientProviders>{" "}
         {/* Uses the Client Component */}
       </body>

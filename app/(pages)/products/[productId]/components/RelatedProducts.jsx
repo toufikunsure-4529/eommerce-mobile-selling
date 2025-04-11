@@ -53,12 +53,11 @@ async function RelatedProducts({ categoryId }) {
 
     // const products = await getProductsByCategory({ categoryId: categoryId })
     return (
-        <div className='w-full '>
-            <div className="text-center">
-                <h2 className="text-xl font-bold text-gray-900 uppercase">Related Products</h2>
-                <div className="w-24 h-1 bg-green-500 mx-auto mt-2 rounded-full"></div>
+        <div className='max-w-8xl w-full px-8 '>
+            <div className="text-start">
+                <h2 className="md:text-2xl text-xl font-bold text-gray-900 uppercase">Related Products</h2>
             </div>
-            <div className="max-w-8xl w-full mt-10 px-8">
+            <div className=" w-full mt-10 ">
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
                     {mockProducts?.map((item) => (
                         <ProductCard product={item} key={item.id} />
