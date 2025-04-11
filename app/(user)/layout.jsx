@@ -43,7 +43,7 @@ function UserChecking({ children }) {
                     <p className="mt-2 text-gray-600">Please sign in to continue accessing this page.</p>
                     <Link
                         href="/login"
-                        className="mt-4 inline-block bg-blue-600 text-white px-5 py-2 rounded-md text-sm font-medium shadow-md hover:bg-blue-700 transition"
+                        className="mt-4 inline-block bg-red-500 text-white px-5 py-2 rounded-md text-sm font-medium shadow-md hover:bg-red-700 transition"
                     >
                         Login Now
                     </Link>

@@ -19,7 +19,7 @@ function HeroSection() {
                 <p className='text-lg md:text-xl mt-4 drop-shadow-md'>
                     Discover amazing products and deals.
                 </p>
-                <button className='mt-6 bg-[#01AF57] hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md'>
+                <button className='mt-6 bg-[#01AF57] hover:bg-red-700 text-white px-6 py-3 rounded-lg shadow-md'>
                     Shop Now
                 </button>
             </div>

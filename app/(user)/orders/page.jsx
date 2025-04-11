@@ -58,7 +58,7 @@ const OrdersPage = () => {
             case "cancelled":
                 return `${baseClasses} bg-red-100 text-red-800`;
             default:
-                return `${baseClasses} bg-blue-100 text-blue-800`;
+                return `${baseClasses} bg-red-100 text-blue-800`;
         }
     };
 

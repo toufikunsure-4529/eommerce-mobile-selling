@@ -6,7 +6,7 @@ const MissionVision = () => {
     <div className="relative bg-white overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden opacity-10">
-        <div className="absolute -right-20 -top-20 w-64 h-64 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl"></div>
+        <div className="absolute -right-20 -top-20 w-64 h-64 bg-red-300 rounded-full mix-blend-multiply filter blur-xl"></div>
         <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl"></div>
       </div>
 
@@ -69,8 +69,8 @@ const MissionVision = () => {
             </div>
 
             <div className="flex flex-wrap gap-4 mt-6">
-              <div className="bg-blue-50 px-4 py-2 rounded-full flex items-center">
-                <span className="w-2 h-2 bg-blue-600 rounded-full mr-2"></span>
+              <div className="bg-red-50 px-4 py-2 rounded-full flex items-center">
+                <span className="w-2 h-2 bg-red-600 rounded-full mr-2"></span>
                 <span className="text-sm font-medium text-blue-800">Quality Assurance</span>
               </div>
               <div className="bg-purple-50 px-4 py-2 rounded-full flex items-center">

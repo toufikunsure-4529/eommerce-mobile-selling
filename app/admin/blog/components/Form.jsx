@@ -104,7 +104,7 @@ export default function BlogForm() {
                         name="blog-image"
                         type="file"
                         accept="image/*"
-                        className="border border-gray-300 rounded-md p-2 text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        className="border border-gray-300 rounded-md p-2 text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-blue-700 hover:file:bg-red-100"
                     />
                 </div>
 
@@ -160,7 +160,7 @@ export default function BlogForm() {
                     disabled={isLoading}
                     className={`w-full py-2 px-4 rounded-md text-white font-medium ${isLoading
                         ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-blue-600 hover:bg-blue-700"
+                        : "bg-red-600 hover:bg-red-700"
                         } transition-colors`}
                 >
                     {isLoading ? "Processing..." : id ? "Update" : "Create"}

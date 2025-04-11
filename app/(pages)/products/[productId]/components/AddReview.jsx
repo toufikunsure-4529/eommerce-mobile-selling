@@ -100,7 +100,7 @@ function AddReview({ productId }) {
                 className={`w-full mt-2 text-white font-medium py-3 rounded-lg transition-colors ${
                     isSubmitDisabled 
                         ? "bg-gray-300 cursor-not-allowed" 
-                        : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800"
+                        : "bg-red-600 hover:bg-red-700 active:bg-red-800"
                 }`}
                 isDisabled={isSubmitDisabled}
                 onClick={handleSubmit}

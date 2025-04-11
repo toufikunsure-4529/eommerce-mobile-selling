@@ -103,7 +103,7 @@ function Row({ item, index }) {
 
     const statusColors = {
         pending: "bg-yellow-100 text-yellow-700",
-        shipped: "bg-blue-100 text-blue-700",
+        shipped: "bg-red-100 text-blue-700",
         pickup: "bg-purple-100 text-purple-700",
         inTransit: "bg-orange-100 text-orange-700",
         outForDelivery: "bg-indigo-100 text-indigo-700",
@@ -135,7 +135,7 @@ function Row({ item, index }) {
                 {item?.timestampCreate?.toDate()?.toLocaleString() || "N/A"}
             </td>
             <td className="border-y px-3 py-2">  <div className="flex">
-                <span className="bg-blue-100 text-blue-600 text-xs px-3 py-1 rounded-full">
+                <span className="bg-red-100 text-blue-600 text-xs px-3 py-1 rounded-full">
                     {item?.paymentMode === "cod" ? "Cash On Delivery" : item?.paymentMode}
                 </span></div>   </td>
             <td className="border-y  px-3 py-2">
@@ -145,7 +145,7 @@ function Row({ item, index }) {
             <td className="border-y px-3 py-2 rounded-r-lg border-r">
                 <div className="flex">
                     <Link href={`/admin/orders/${item?.id}`}>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white text-xs px-4 py-1 rounded">View Order</button>
+                        <button className="bg-red-500 hover:bg-red-600 text-white text-xs px-4 py-1 rounded">View Order</button>
                     </Link>
                 </div>
             </td>

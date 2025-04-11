@@ -10,7 +10,10 @@ import {
     FileImage,
     PictureInPicture,
     FileUp,
-    Newspaper
+    Newspaper,
+    Layers,
+    Factory,
+    Package
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { signOut } from "firebase/auth";
@@ -21,7 +24,9 @@ const menuList = [
     { name: "Dashboard", link: "/admin", icon: <LayoutDashboard className="h-5 w-5" /> },
     { name: "Products", link: "/admin/products", icon: <PackageOpen className="h-5 w-5" /> },
     { name: "Categories", link: "/admin/categories", icon: <Layers2 className="h-5 w-5" /> },
-    { name: "Brands", link: "/admin/brands", icon: <Cat className="h-5 w-5" /> },
+    { name: "Brands", link: "/admin/brands", icon: <Factory className="h-5 w-5" /> },
+    { name: "Series", link: "/admin/series", icon: <Layers className="h-5 w-5" /> },
+    { name: "Models", link: "/admin/models", icon: <Package className="h-5 w-5" /> },
     { name: "Orders", link: "/admin/orders", icon: <ShoppingCart className="h-5 w-5" /> },
     { name: "Customers", link: "/admin/customers", icon: <User className="h-5 w-5" /> },
     { name: "Reviews", link: "/admin/reviews", icon: <Star className="h-5 w-5" /> },
@@ -87,7 +92,7 @@ export default function Sidebar() {
                     <Link
                         key={name}
                         href={link}
-                        className={`flex items-center space-x-3 p-3 rounded-lg transition ${pathname === link ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+                        className={`flex items-center space-x-3 p-3 rounded-lg transition ${pathname === link ? "bg-red-500 text-white" : "text-gray-700 hover:bg-gray-100"}`}
                     >
                         <span>{icon}</span>
                         {isOpen && <span className="font-medium">{name}</span>}

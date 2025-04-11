@@ -318,7 +318,7 @@ export default function CategoryListHero() {
     }
 
     return (
-        <div className="max-w-8xl mx-auto md:px-12">
+        <div className="max-w-8xl w-full mx-auto md:px-12">
             {/* Desktop View */}
             <div className="hidden lg:block bg-white p-4 rounded-lg shadow-sm">
                 <NavigationMenu>

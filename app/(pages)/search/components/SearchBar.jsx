@@ -22,7 +22,7 @@ const SearchBar = ({ onSearch, initialValue = "" }) => {
             />
             <button
                 onClick={handleSearch}
-                className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700"
             >
                 Search
             </button>

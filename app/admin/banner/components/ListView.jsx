@@ -85,7 +85,7 @@ function ListView() {
                                     <td className="py-4 px-4 flex gap-2">
                                         <button
                                             onClick={() => handleEdit(item.id)}
-                                            className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                                            className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
                                         >
                                             Edit
                                         </button>

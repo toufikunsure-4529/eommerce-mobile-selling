@@ -119,7 +119,7 @@ function CategoriesForm({ categories, setCategories, editingCategory, setEditing
                 <button
                     type='submit'
                     disabled={isLoading}
-                    className='w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-md font-medium transition-all flex items-center justify-center gap-2 text-sm'
+                    className='w-full bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-md font-medium transition-all flex items-center justify-center gap-2 text-sm'
                 >
                     {isLoading ? <Loader2 className='animate-spin h-4 w-4' /> : editingCategory ? <Save className='h-4 w-4' /> : <PlusCircle className='h-4 w-4' />}
                     {editingCategory ? "Update Category" : "Create Category"}

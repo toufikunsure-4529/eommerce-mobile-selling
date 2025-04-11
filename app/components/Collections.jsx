@@ -34,7 +34,7 @@ export default function BrandListing() {
 
                 <div className="max-w-8xl mx-auto grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-8">
                     {displayedBrands.map((brand) => (
-                        <Link key={brand.id} href={`/brands/${brand.id}`} className="group">
+                        <Link key={brand.id} href={`/models/${brand.id}`} className="group">
                             <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 brand__card  ">
                                 <div className=" mb-3 flex items-center justify-center">
                                     <img

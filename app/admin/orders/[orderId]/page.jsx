@@ -50,7 +50,7 @@ function Page() {
                 </div>
 
                 <div className="flex justify-between items-center bg-gray-100 p-4 rounded-lg">
-                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-600">
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-blue-600">
                         {order?.paymentMode === "cod" ? "Cash On Delivery" : order?.paymentMode}
                     </span>
                     <span className={`text-xs px-3 py-1 rounded-full font-medium ${order?.status === "delivered" ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"}`}>

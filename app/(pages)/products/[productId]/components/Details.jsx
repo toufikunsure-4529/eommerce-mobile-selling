@@ -144,7 +144,7 @@ function Details({ product }) {
                     <div className="h-6 w-6 bg-white border border-gray-400 rounded-full"></div>
                     <div className="h-6 w-6 bg-red-500 border border-gray-400 rounded-full"></div>
                     <div className="h-6 w-6 bg-gray-900 border border-gray-400 rounded-full"></div>
-                    <div className="h-6 w-6 bg-blue-500 border border-gray-400 rounded-full"></div>
+                    <div className="h-6 w-6 bg-red-500 border border-gray-400 rounded-full"></div>
                 </div>
 
             </div>
@@ -213,7 +213,7 @@ async function Category({ categoryId }) {
 async function Brand({ brandId }) {
     const brand = await getBrand({ id: brandId });
     return (
-        <div className="flex items-center gap-2 bg-blue-100 border px-3 py-1 rounded-full">
+        <div className="flex items-center gap-2 bg-red-100 border px-3 py-1 rounded-full">
             <img className="h-3" src={brand?.imageURL || "/logo.png"} alt="Brand" />
             <h4 className="text-sm font-semibold text-gray-800">{brand?.name || 'Apple'}</h4>
         </div>
