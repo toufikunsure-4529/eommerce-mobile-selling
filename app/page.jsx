@@ -1,6 +1,6 @@
 import Image from "next/image";
 import HeroSection from "./components/HeroSection";
-import Header from "./components/Header";
+import Header from "./components/header/Header";
 import FeaturedProductSlider from "./components/Sliders";
 import { getFeaturedProducts, getProducts } from "@/lib/firestore/products/read_server";
 import Collections from "./components/Collections";
@@ -107,7 +107,7 @@ export default async function Home() {
     <>
       <main className=" h-screen overflow-x-hidden overflow-y-auto">
         <Header />
-        <CategoryListHero />
+        {/* <CategoryListHero /> */}
         <FeaturedProductSlider featuredProducts={featuredProducts} />
         <Collections collections={collections} />
         {/* <Categories categories={categories} /> */}

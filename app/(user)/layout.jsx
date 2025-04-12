@@ -1,6 +1,6 @@
 "use client"
 
-import Header from '../components/Header'
+import Header from '../components/header/Header'
 import Footer from '../components/Footer'
 import { AuthContextProvider, useAuth } from '@/context/AuthContext'
 import { CircularProgress } from '@mui/material'

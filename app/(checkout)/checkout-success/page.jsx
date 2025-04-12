@@ -1,5 +1,5 @@
 import Footer from "@/app/components/Footer";
-import Header from "@/app/components/Header";
+import Header from "@/app/components/header/Header";
 import { admin, adminDB } from "@/lib/firebase_admin";
 import Link from "next/link";
 import SuccessMessage from "./components/SuccessMessage";
