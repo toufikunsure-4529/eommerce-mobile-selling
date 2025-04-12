@@ -131,9 +131,9 @@ const Page = () => {
                                         <span className="text-lg md:text-xl font-bold">${summary.total.toFixed(2)}</span>
                                     </div>
                                     <Link href={`/checkout?type=cart`} className="block w-full mt-4">
-                                        <Button className="w-full bg-[#FF1212] hover:bg-red-600 text-white py-3 rounded-md font-medium transition-colors">
+                                        <button className="w-full bg-[#FF1212] hover:bg-red-600 text-white py-3 rounded-md font-medium transition-colors">
                                             Order Now
-                                        </Button>
+                                        </button>
                                     </Link>
                                 </div>
                             </div>
