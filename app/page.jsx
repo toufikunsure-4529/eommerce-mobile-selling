@@ -119,6 +119,7 @@ export default async function Home() {
         <ComboOffer />
         <CustomerReviews />
         {/* <Brands brands={brands} /> */}
+        {/* Footer  */}
         <Footer />
       </main>
     </>
