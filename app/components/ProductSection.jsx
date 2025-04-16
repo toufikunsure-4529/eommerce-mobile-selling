@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { ProductCard } from "./Products";
 
-function ProductSection({ title, products, seeAllLink = "/products" }) {
+function ProductSection({ title, products, seeAllLink = "/product" }) {
     return (
         <section className="w-full px-3 sm:px-6 md:px-12 lg:px-20 py-8 bg-gray-100">
             <div className="flex justify-between items-center mb-6">

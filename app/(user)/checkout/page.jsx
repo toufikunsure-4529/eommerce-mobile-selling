@@ -21,7 +21,7 @@ function page() {
 
     if (isLoading) {
         return (
-            <div className="md:h-screen w-full flex flex-col justify-center items-center bg-gray-100">
+            <div className="h-screen w-full flex flex-col justify-center items-center bg-gray-100">
                 <CircularProgress size={50} thickness={4} color="primary" />
                 <p className="mt-4 text-gray-600 font-medium">Fetching...</p>
             </div>

@@ -194,7 +194,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="flex flex-col z-50 bg-white shadow-sm sticky top-0">
+      <header className="flex flex-col z-[999] bg-white shadow-sm sticky  top-0">
         {/* Top Bar */}
         <div className="flex items-center justify-between w-full px-4 py-4 md:px-6 lg:px-8 xl:px-20 border-b border-gray-200">
           {/* Logo */}
@@ -292,8 +292,8 @@ export default function Header() {
         </div>
 
         {/* Categories Navigation - Desktop */}
-            {/* Categories Navigation - Desktop */}
-            <nav className="hidden lg:flex items-center justify-between px-4 md:px-6 lg:px-8 xl:px-20 py-2 border-b border-gray-200">
+        {/* Categories Navigation - Desktop */}
+        <nav className="hidden lg:flex items-center justify-between px-4 md:px-6 lg:px-8 xl:px-20 py-2 border-b border-gray-200">
           <Link
             href="/categories"
             className="flex items-center px-4 gap-2 text-sm font-medium py-3 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 mr-4 transition-all duration-200"

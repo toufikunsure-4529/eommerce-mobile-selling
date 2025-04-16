@@ -1,13 +1,13 @@
 "use client";
 
-import Form from "./components/Form";
-import ListView from "./components/ListView";
+import ModelForm from "./components/ModelForm";
+import ModelListView from "./components/ModelListView";
 
 export default function Page() {
   return (
     <main className="p-5 flex flex-col md:flex-row gap-5">
-      <Form />
-      <ListView />
+      <ModelForm />
+      <ModelListView />
     </main>
   );
 }

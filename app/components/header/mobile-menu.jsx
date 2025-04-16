@@ -83,7 +83,7 @@ export default function MobileMenu({
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <Link
-                      href="/account/profile"
+                      href="/profile"
                       className="py-2 px-3 text-sm text-center border border-gray-300 hover:bg-gray-50 rounded-md transition-colors"
                       onClick={closeMobileMenu}
                     >
@@ -141,6 +141,13 @@ export default function MobileMenu({
                 onClick={closeMobileMenu}
               >
                 <span className="text-sm">Support</span>
+              </Link>
+              <Link
+                href="/categories"
+                className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-md transition-colors"
+                onClick={closeMobileMenu}
+              >
+                <span className="text-sm">All Categories</span>
               </Link>
             </div>
 

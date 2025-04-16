@@ -69,7 +69,7 @@ export default function UserDropdown({ user, username, handleLogout, closeMobile
               </div>
               <div className="py-1">
                 <Link
-                  href="/account/profile"
+                  href="/profile"
                   className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
                   onClick={closeDropdown}
                 >

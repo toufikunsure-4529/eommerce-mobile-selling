@@ -26,7 +26,7 @@ export default function HeaderClientButtons() {
             </span>
           )}
         </div>
-        <span className="text-sm text-gray-700 group-hover:text-blue-600">Wishlist</span>
+        <span className="hidden md:block text-sm text-gray-700 group-hover:text-blue-600">Wishlist</span>
       </Link>
 
       {/* Cart Button */}
@@ -41,7 +41,7 @@ export default function HeaderClientButtons() {
             </span>
           )}
         </div>
-        <span className="text-sm text-gray-700 group-hover:text-blue-600">Cart</span>
+        <span className="hidden md:block text-sm text-gray-700 group-hover:text-blue-600">Cart</span>
       </Link>
     </div>
   )
