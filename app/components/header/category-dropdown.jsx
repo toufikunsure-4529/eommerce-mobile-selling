@@ -3,7 +3,11 @@
 import { useState, useRef, useEffect } from "react"
 import { Menu, ChevronDown } from "lucide-react"
 
-export default function CategoryDropdown({ selectedCategory, setSelectedCategory, categories }) {
+export default function CategoryDropdown({
+  selectedCategory,
+  setSelectedCategory,
+  categories
+}) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef(null)
 
@@ -13,7 +17,7 @@ export default function CategoryDropdown({ selectedCategory, setSelectedCategory
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category)
-    setIsOpen(false) // Close dropdown after selection
+    setIsOpen(false)
   }
 
   useEffect(() => {
@@ -32,34 +36,51 @@ export default function CategoryDropdown({ selectedCategory, setSelectedCategory
       <button
         type="button"
         onClick={toggleDropdown}
-        className="flex items-center px-4 gap-2 rounded-l-full border-r border-gray-300 h-10 hover:bg-gray-50 transition-colors"
+        className="flex items-center px-4 gap-2 rounded-l-full border-r border-gray-300 h-10 hover:bg-gray-50 transition-colors focus:outline-none"
         aria-label="Select category"
         aria-expanded={isOpen}
-        aria-haspopup="true"
+        aria-haspopup="listbox"
       >
-        <Menu size={16} />
-        <span className="text-sm whitespace-nowrap truncate max-w-[100px]">{selectedCategory}</span>
-        <ChevronDown size={16} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <Menu size={16} className="text-gray-600" />
+        <span className="text-sm whitespace-nowrap truncate max-w-[100px] text-gray-800">
+          {selectedCategory}
+        </span>
+        <ChevronDown
+          size={16}
+          className={`transition-transform text-gray-500 ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-full mt-1 z-20 bg-white shadow-md w-52 rounded-md border border-gray-200 py-1 max-h-80 overflow-y-auto">
+        <div
+          className="absolute left-0 top-full mt-1 z-20 bg-white shadow-lg w-56 rounded-md border border-gray-200 py-1 max-h-60 overflow-y-auto"
+          role="listbox"
+        >
           <button
+            type="button"
             onClick={() => handleCategorySelect("All Categories")}
-            className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${
-              selectedCategory === "All Categories" ? "bg-gray-50 font-medium" : ""
+            className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors focus:outline-none focus:bg-gray-100 ${
+              selectedCategory === "All Categories" 
+                ? "bg-gray-100 font-medium text-gray-900" 
+                : "text-gray-700"
             }`}
+            role="option"
+            aria-selected={selectedCategory === "All Categories"}
           >
             All Categories
           </button>
           {categories.map((category, idx) => (
             <button
               key={idx}
+              type="button"
               onClick={() => handleCategorySelect(category)}
-              className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${
-                selectedCategory === category ? "bg-gray-50 font-medium" : ""
+              className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors focus:outline-none focus:bg-gray-100 ${
+                selectedCategory === category 
+                  ? "bg-gray-100 font-medium text-gray-900" 
+                  : "text-gray-700"
               }`}
-              type="button" // Explicitly set button type
+              role="option"
+              aria-selected={selectedCategory === category}
             >
               {category}
             </button>

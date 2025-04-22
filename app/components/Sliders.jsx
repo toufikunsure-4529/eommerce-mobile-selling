@@ -1,9 +1,10 @@
 "use client"
 
-import React from "react"
+import React, { useState, useRef } from "react"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const heroSlides = [
     { id: 1, image: "/hero-banner.gif" },
@@ -12,8 +13,11 @@ const heroSlides = [
 ]
 
 export default function HeroSectionSlider() {
+    const [currentSlide, setCurrentSlide] = useState(0)
+    const sliderRef = useRef(null)
+
     const settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
@@ -22,63 +26,65 @@ export default function HeroSectionSlider() {
         autoplaySpeed: 5000,
         arrows: false,
         pauseOnHover: false,
+        beforeChange: (_, next) => setCurrentSlide(next),
+    }
+
+    const CustomArrow = ({ direction }) => {
+        const handleClick = () => {
+            if (!sliderRef.current) return
+            direction === "left"
+                ? sliderRef.current.slickPrev()
+                : sliderRef.current.slickNext()
+        }
+
+        return (
+            <button
+                onClick={handleClick}
+                className={`hidden sm:flex absolute top-1/2 z-20 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full shadow-md items-center justify-center transition-all duration-300 ${direction === "left" ? "left-2 sm:left-4" : "right-2 sm:right-4"
+                    }`}
+                aria-label={direction === "left" ? "Previous slide" : "Next slide"}
+            >
+                {direction === "left" ? (
+                    <ChevronLeft className="text-gray-800" size={24} />
+                ) : (
+                    <ChevronRight className="text-gray-800" size={24} />
+                )}
+            </button>
+        )
     }
 
     return (
         <div className="relative w-full overflow-hidden">
-            <Slider {...settings}>
+            <Slider ref={sliderRef} {...settings}>
                 {heroSlides.map((slide) => (
                     <div key={slide.id}>
                         <div className="relative w-full h-[160px] sm:h-[250px] md:h-[300px] lg:h-[350px] xl:h-[450px]">
-                            {/* Background Image */}
                             <div
                                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                                style={{
-                                    backgroundImage: `url(${slide.image})`,
-                                    backgroundSize: "cover", // Ensures the image covers the area
-                                    backgroundPosition: "center", // Centers the image
-                                }}
-                            >
-                                {/* Optional overlay */}
-                                {/* <div className="absolute inset-0 bg-black/40 md:bg-black/20 lg:bg-black/10"></div> */}
-                            </div>
+                                style={{ backgroundImage: `url(${slide.image})` }}
+                            />
                         </div>
                     </div>
                 ))}
             </Slider>
 
-            {/* Custom Dot Styling */}
-            <style jsx global>{`
-                .slick-dots {
-                    bottom: 20px !important;
-                    padding: 0 20px;
-                }
-                .slick-dots li {
-                    margin: 0 6px;
-                }
-                .slick-dots li button:before {
-                    color: white !important;
-                    opacity: 0.7;
-                    font-size: 10px !important;
-                    transition: all 0.3s;
-                }
-                .slick-dots li.slick-active button:before {
-                    color: #fff !important;
-                    opacity: 1;
-                    font-size: 12px !important;
-                }
-                @media (max-width: 640px) {
-                    .slick-dots {
-                        bottom: 10px !important;
-                    }
-                    .slick-dots li button:before {
-                        font-size: 8px !important;
-                    }
-                    .slick-dots li.slick-active button:before {
-                        font-size: 10px !important;
-                    }
-                }
-            `}</style>
+            {/* Custom Arrows (hidden on mobile) */}
+            <CustomArrow direction="left" />
+            <CustomArrow direction="right" />
+
+            {/* Dot Navigation */}
+            <div className="flex justify-center mt-4 gap-2">
+                {heroSlides.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => sliderRef.current?.slickGoTo(index)}
+                        className={`h-2 rounded-full transition-all duration-300 ${currentSlide === index ? "w-8 bg-red-600" : "w-2 bg-gray-300"
+                            }`}
+                        aria-label={`Go to slide ${index + 1}`}
+                    />
+                ))}
+            </div>
+
         </div>
     )
 }

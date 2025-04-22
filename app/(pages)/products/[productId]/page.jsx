@@ -29,7 +29,7 @@ export default async function Page({ params }) {
     const product = await getProduct({ id: productId });
 
     return (
-        <main className="p-5 md:px-10 w-full max-w-8xl mx-auto bg-gray-100">
+        <main className="p-1 md:px-10 w-full md:max-w-8xl mx-auto bg-gray-100">
             {/* Photo & Details Section */}
             <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Left: Product Images */}

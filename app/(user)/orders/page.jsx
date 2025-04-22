@@ -33,7 +33,6 @@ const OrdersPage = () => {
                     error: (e) => e?.message || "Failed to cancel order",
                 }
             );
-            mutate(); // Refresh orders data
         } catch (error) {
             toast.error(error?.message || "Something went wrong");
         } finally {

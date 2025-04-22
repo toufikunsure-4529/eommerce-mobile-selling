@@ -17,6 +17,7 @@ import Accessories from "./components/Accessories";
 import WhyUsSection from "./components/WhyUsSection";
 import ComboOffer from "./components/ComboOffer";
 import ProductSection from "./components/ProductSection";
+import FeaturedCategories from "./components/FeaturedCategories";
 
 export default async function Home() {
   // fetch  data from firestore 
@@ -109,6 +110,7 @@ export default async function Home() {
         <Header />
         {/* <CategoryListHero /> */}
         <FeaturedProductSlider featuredProducts={featuredProducts} />
+        <FeaturedCategories />
         <Collections collections={collections} />
         {/* <Categories categories={categories} /> */}
         <Accessories />
