@@ -56,7 +56,7 @@ const settings = {
 
 export default function CustomerReviews() {
     return (
-        <div className="py-10 px-4 md:px-20 bg-gray-100 max-w-8xl">
+        <div className="py-10 px-4 md:px-20 bg-[#FFFFF] max-w-8xl">
             <div className=" mb-6">
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
                     What our Customer says

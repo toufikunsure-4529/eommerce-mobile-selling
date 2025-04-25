@@ -71,7 +71,7 @@ const ComboOffer = () => {
     ];
 
     return (
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-4 md:px-8 lg:px-12 overflow-hidden">
+        <div className="bg-[#FFFFF] py-16 px-4 md:px-8 lg:px-12 overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-12 relative">
                     {/* Left: Text Content */}

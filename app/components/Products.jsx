@@ -13,7 +13,7 @@ export function ProductCard({ product }) {
 
     return (
         <div
-            className={`border border-gray-200 bg-gray-100 shadow-sm rounded-lg overflow-hidden min-h-[200px] md:h-auto flex flex-col transition hover:shadow-lg ${isOutOfStock ? " filter grayscale opacity-80 pointer-events-none" : ""
+            className={`border border-gray-200 bg-[#FFFFF] shadow-sm rounded-lg overflow-hidden min-h-[200px] md:h-auto flex flex-col transition hover:shadow-lg ${isOutOfStock ? " filter grayscale opacity-80 pointer-events-none" : ""
                 }`}
         >
             <div className="relative w-full ">

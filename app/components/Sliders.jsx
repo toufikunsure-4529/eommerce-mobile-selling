@@ -7,9 +7,9 @@ import "slick-carousel/slick/slick-theme.css"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const heroSlides = [
-    { id: 1, image: "/hero-banner.gif" },
-    { id: 2, image: "/hero-banner.gif" },
-    { id: 3, image: "/hero-banner.gif" },
+    { id: 1, image: "/hero-banner.svg" },
+    { id: 2, image: "/hero-banner.svg" },
+    { id: 3, image: "/hero-banner.svg" },
 ]
 
 export default function HeroSectionSlider() {
@@ -54,7 +54,7 @@ export default function HeroSectionSlider() {
     }
 
     return (
-        <div className="relative w-full overflow-hidden">
+        <div className="relative w-full overflow-hidden bg-white">
             <Slider ref={sliderRef} {...settings}>
                 {heroSlides.map((slide) => (
                     <div key={slide.id}>

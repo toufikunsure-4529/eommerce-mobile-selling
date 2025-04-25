@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import { ChevronDown, Layers, Menu, Search, X } from "lucide-react"
+import { Menu, Search, X } from "lucide-react"
 import Link from "next/link"
 import { signOut } from "firebase/auth"
 import { auth } from "@/lib/firebase"
@@ -13,7 +13,6 @@ import UserDropdown from "./user-dropdown"
 import MobileMenu from "./mobile-menu"
 import SearchResults from "./search-results"
 import CategoryDropdown from "./category-dropdown"
-import MegaMenu from "./mega-menu"
 
 export default function Header() {
   // State management
@@ -24,16 +23,11 @@ export default function Header() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filteredProducts, setFilteredProducts] = useState([])
   const [isSearchFocused, setIsSearchFocused] = useState(false)
-  const [activeCategory, setActiveCategory] = useState(null)
-  const [activeBrand, setActiveBrand] = useState(null)
-  const [activeSeries, setActiveSeries] = useState(null)
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false)
 
   // Refs
   const searchRef = useRef(null)
   const mobileMenuRef = useRef(null)
   const inputRef = useRef(null)
-  const megaMenuRef = useRef(null)
 
   // Get all products from categories for search
   const getAllProducts = useCallback(() => {
@@ -46,9 +40,9 @@ export default function Header() {
             brand: brand.name,
             series: series.name,
             slug: model.toLowerCase().replace(/\s+/g, "-"),
-          })),
-        ),
-      ),
+          }))
+        )
+      )
     )
   }, [])
 
@@ -70,10 +64,10 @@ export default function Header() {
 
       setFilteredProducts(results.slice(0, 10))
     },
-    [searchTerm, selectedCategory, getAllProducts],
+    [searchTerm, selectedCategory, getAllProducts]
   )
 
-  // Update search results when search term or category changes
+  // Debounce search updates
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       handleSearch()
@@ -85,26 +79,21 @@ export default function Header() {
   // Handle clicks outside search and mobile menu
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Handle search focus
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         if (!event.target.closest(".search-result-item")) {
           setIsSearchFocused(false)
+          setFilteredProducts([])
         }
       }
 
+      // Handle mobile menu
       if (
         mobileMenuRef.current &&
         !mobileMenuRef.current.contains(event.target) &&
         !event.target.closest(".mobile-menu-button")
       ) {
-        closeMobileMenu()
-      }
-
-      if (
-        megaMenuRef.current &&
-        !megaMenuRef.current.contains(event.target) &&
-        !event.target.closest(".category-menu-item")
-      ) {
-        closeMegaMenu()
+        setIsMobileMenuOpen(false)
       }
     }
 
@@ -132,9 +121,9 @@ export default function Header() {
     if (!confirm("Are you sure you want to logout?")) return
     try {
       await toast.promise(signOut(auth), {
-        error: (e) => e?.message,
         loading: "Logging out...",
         success: "Successfully logged out",
+        error: (e) => e?.message || "Logout failed",
       })
     } catch (error) {
       toast.error(error?.message || "Logout failed")
@@ -145,19 +134,6 @@ export default function Header() {
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev)
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
 
-  // Mega menu functions
-  const openMegaMenu = (category) => {
-    setActiveCategory(category)
-    setIsMegaMenuOpen(true)
-  }
-
-  const closeMegaMenu = () => {
-    setIsMegaMenuOpen(false)
-    setActiveCategory(null)
-    setActiveBrand(null)
-    setActiveSeries(null)
-  }
-
   // Handle search result click
   const handleSearchResultClick = () => {
     setIsSearchFocused(false)
@@ -166,35 +142,12 @@ export default function Header() {
     closeMobileMenu()
   }
 
-  // Handle category hover/click
-  const handleCategoryHover = (category) => {
-    if (window.innerWidth >= 1024) {
-      setActiveCategory(category)
-      setActiveBrand(category.brands[0])
-      setActiveSeries(category.brands[0].series[0])
-      setIsMegaMenuOpen(true)
-    }
-  }
-
-  const handleBrandHover = (brand) => {
-    if (window.innerWidth >= 1024) {
-      setActiveBrand(brand)
-      setActiveSeries(brand.series[0])
-    }
-  }
-
-  const handleSeriesHover = (series) => {
-    if (window.innerWidth >= 1024) {
-      setActiveSeries(series)
-    }
-  }
-
   const cartCount = user?.carts?.length || 0
   const wishlistCount = user?.favorites?.length || 0
 
   return (
     <>
-      <header className="flex flex-col z-[999] bg-white shadow-sm sticky  top-0">
+      <header className="flex flex-col z-[999] bg-white shadow-sm sticky top-0">
         {/* Top Bar */}
         <div className="flex items-center justify-between w-full px-4 py-4 md:px-6 lg:px-8 xl:px-20 border-b border-gray-200">
           {/* Logo */}
@@ -229,7 +182,6 @@ export default function Header() {
 
               <button
                 type="submit"
-                onClick={handleSearch}
                 className="p-2 h-10 rounded-none bg-transparent hover:bg-gray-100 transition-colors"
                 aria-label="Submit search"
               >
@@ -237,7 +189,8 @@ export default function Header() {
               </button>
             </form>
 
-            {isSearchFocused && searchTerm && (
+            {/* Show search results or "Not Found" when search is focused and term exists */}
+            {isSearchFocused && searchTerm.trim() && (
               <SearchResults filteredProducts={filteredProducts} handleSearchResultClick={handleSearchResultClick} />
             )}
           </div>
@@ -267,6 +220,12 @@ export default function Header() {
             onSubmit={handleSearch}
             className="flex w-full items-center rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all"
           >
+            <CategoryDropdown
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              categories={categoryData.map((cat) => cat.name)}
+            />
+
             <input
               type="text"
               placeholder="Search for products..."
@@ -276,9 +235,9 @@ export default function Header() {
               className="flex-1 px-4 py-2 focus:outline-none text-sm h-10"
               aria-label="Search products"
             />
+
             <button
               type="submit"
-              onClick={handleSearch}
               className="p-2 h-10 bg-transparent hover:bg-gray-100 transition-colors"
               aria-label="Submit search"
             >
@@ -286,59 +245,11 @@ export default function Header() {
             </button>
           </form>
 
-          {isSearchFocused && searchTerm && (
+          {/* Show search results or "Not Found" when search is focused and term exists */}
+          {isSearchFocused && searchTerm.trim() && (
             <SearchResults filteredProducts={filteredProducts} handleSearchResultClick={handleSearchResultClick} />
           )}
         </div>
-
-        {/* Categories Navigation - Desktop */}
-        {/* Categories Navigation - Desktop */}
-        <nav className="hidden lg:flex items-center justify-between px-4 md:px-6 lg:px-8 xl:px-20 py-2 border-b border-gray-200">
-          <Link
-            href="/categories"
-            className="flex items-center px-4 gap-2 text-sm font-medium py-3 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 mr-4 transition-all duration-200"
-          >
-            <Layers size={16} /> {/* Replaced Menu with Layers icon */}
-            Browse Categories
-          </Link>
-          {categoryData.slice(0, 11).map((category, index) => ( // Limited to 15 categories
-            <div
-              key={index}
-              className="relative category-menu-item group"
-              onMouseEnter={() => handleCategoryHover(category)}
-            >
-              <button
-                className={`text-sm font-medium transition-colors flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-gray-100 ${activeCategory?.name === category.name ? "text-blue-600 bg-blue-50" : ""
-                  }`}
-                onClick={() => openMegaMenu(category)}
-                aria-expanded={activeCategory?.name === category.name && isMegaMenuOpen}
-              >
-                {category.name}
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform duration-200 text-gray-500 ${activeCategory?.name === category.name ? "rotate-180" : ""
-                    } group-hover:rotate-180 group-hover:text-blue-600`}
-                />
-              </button>
-            </div>
-          ))}
-        </nav>
-
-        {/* Mega Menu */}
-        {isMegaMenuOpen && activeCategory && (
-          <div
-            ref={megaMenuRef}
-            className="absolute top-full left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-40 hidden lg:block"
-          >
-            <MegaMenu
-              category={activeCategory}
-              activeBrand={activeBrand}
-              activeSeries={activeSeries}
-              onBrandHover={handleBrandHover}
-              onSeriesHover={handleSeriesHover}
-              onClose={closeMegaMenu}
-            />
-          </div>
-        )}
       </header>
 
       <MobileMenu

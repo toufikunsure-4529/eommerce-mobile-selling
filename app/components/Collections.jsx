@@ -21,7 +21,7 @@ export default function BrandListing() {
     const displayedBrands = showAllBrands ? brandsData : brandsData.slice(0, 12);
 
     return (
-        <div className="px-4 md:px-10 lg:px-20 py-10 bg-[#F4F4F4]">
+        <div className="px-4 md:px-10 lg:px-20 py-10 bg-[#FFFFF]">
             <SearchProduct />
 
             <div className="max-w-8xl mx-auto">

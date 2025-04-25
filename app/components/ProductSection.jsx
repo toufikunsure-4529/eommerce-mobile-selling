@@ -4,7 +4,7 @@ import { ProductCard } from "./Products";
 
 function ProductSection({ title, products, seeAllLink = "/product" }) {
     return (
-        <section className="w-full px-3 sm:px-6 md:px-12 lg:px-20 py-8 bg-gray-100">
+        <section className="w-full px-3 sm:px-6 md:px-12 lg:px-20 py-8 bg-[#FFFFF]">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-gray-900 uppercase">{title}</h2>
                 <Link href={seeAllLink} className="text-sm text-blue-500 hover:underline">

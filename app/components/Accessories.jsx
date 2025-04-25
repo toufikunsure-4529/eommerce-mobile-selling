@@ -87,7 +87,7 @@ const AccessoriesCard = ({ category, isSlider = false }) => (
 
 export default function Accessories() {
     return (
-        <section className="w-full bg-gray-100 py-12 px-4 sm:px-6 lg:px-20">
+        <section className="w-full bg-[#FFFFF] py-12 px-4 sm:px-6 lg:px-20">
             <div className="max-w-8xl mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <h2 className="text-xl sm:text-2xl font-bold text-gray-900 uppercase tracking-tight">
