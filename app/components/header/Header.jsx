@@ -161,7 +161,7 @@ export default function Header() {
           <div className="hidden lg:flex flex-1 max-w-2xl mx-4 relative" ref={searchRef}>
             <form
               onSubmit={handleSearch}
-              className="flex w-full items-center rounded-full border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all"
+              className="flex w-full items-center rounded-full border border-gray-300  transition-all"
             >
               <CategoryDropdown
                 selectedCategory={selectedCategory}
@@ -218,7 +218,7 @@ export default function Header() {
         <div className="px-4 py-3 border-b border-gray-200 lg:hidden bg-white" ref={searchRef}>
           <form
             onSubmit={handleSearch}
-            className="flex w-full items-center rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all"
+            className="flex w-full items-center rounded-lg border border-gray-300 transition-all"
           >
             <CategoryDropdown
               selectedCategory={selectedCategory}

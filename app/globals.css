@@ -71,8 +71,6 @@
   }
 }
 
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -129,8 +127,6 @@
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
@@ -140,4 +136,30 @@
   }
 }
 
+/* nav bar */
 
+/* Sticky Header */
+.sticky-nav {
+  position: sticky; /* Use sticky for better performance */
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  animation: slideDown 0.3s ease-out forwards; /* Smooth slide-down animation */
+}
+
+/* Slide Down Animation */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Ensure header stays above content */
+header {
+  z-index: 999;
+}

@@ -28,22 +28,26 @@ const WishlistPage = () => {
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-3xl font-semibold text-center text-gray-800 mb-10">My Wishlist</h1>
 
-                <div className="hidden sm:grid grid-cols-12 font-semibold text-gray-600 pb-2">
-                    <div className="col-span-4">Product Name</div>
-                    <div className="col-span-2 text-center">Unit Price</div>
-                    <div className="col-span-2 text-center">Stock Status</div>
-                    <div className="col-span-4 text-center">Actions</div>
-                </div>
-
                 {data?.favorites?.length > 0 ? (
-                    data.favorites.map((productId) => (
-                        <WishlistItem
-                            key={productId}
-                            productId={productId}
-                            user={user}
-                            data={data}
-                        />
-                    ))
+                    <>
+                        {/* Header: Only shown when there are items in the wishlist */}
+                        <div className="hidden sm:grid grid-cols-12 font-semibold text-gray-600 pb-2">
+                            <div className="col-span-4">Product Name</div>
+                            <div className="col-span-2 text-center">Unit Price</div>
+                            <div className="col-span-2 text-center">Stock Status</div>
+                            <div className="col-span-4 text-center">Actions</div>
+                        </div>
+
+                        {/* Wishlist Items */}
+                        {data.favorites.map((productId) => (
+                            <WishlistItem
+                                key={productId}
+                                productId={productId}
+                                user={user}
+                                data={data}
+                            />
+                        ))}
+                    </>
                 ) : (
                     <div className="text-center col-span-12 mt-20">
                         <img
@@ -135,8 +139,7 @@ const WishlistItem = ({ productId, user, data }) => {
                     size="sm"
                     isDisabled={isOutOfStock || isLoading || alreadyInCart}
                     onClick={handleAddToCart}
-                    className={`px-4 rounded-lg ${alreadyInCart ? "bg-gray-500 text-white" : "bg-black text-white"
-                        }`}
+                    className={`px-4 rounded-lg ${alreadyInCart ? "bg-gray-500 text-white" : "bg-black text-white"}`}
                 >
                     {alreadyInCart ? "Already in Cart" : "Add to Cart"}
                 </Button>

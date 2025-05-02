@@ -28,20 +28,20 @@ export function ProductCard({ product }) {
                     </AuthContextProvider>
                 </div>
             </div>
-            <div className="p-4 flex flex-col flex-grow gap-2">
+            <div className="p-4 flex flex-col flex-grow gap-4">
                 <Link href={`/products/${product?.id}`}>
                     <h3 className="text-base font-semibold text-gray-900 line-clamp-2 hover:text-blue-500 transition-colors delay-100">
                         {product?.title}
                     </h3>
-                    <p className="text-xs text-gray-500 line-clamp-2">{product?.shortDescription}</p>
+                    <p className="text-[10px] md:text-;lg text-gray-500 line-clamp-2">{product?.shortDescription}</p>
 
                     <Suspense>
                         <RatingReview product={product} />
                     </Suspense>
                     <div className="flex justify-between items-center  mt-3">
                         <div className="flex gap-2 justify-center items-center">
-                            <h2 className="text-md md:text-lg font-bold text-gray-900">₹{product?.salePrice}</h2>
-                            <span className="text-[14px] md:text-sm font-semibold text-[#4E4D4D] line-through">₹{product?.price}</span>
+                            <h2 className="text-sm md:text-lg font-semibold text-gray-900">₹{product?.salePrice}</h2>
+                            <span className="text-[10px] md:text-sm font-extralight text-[#4E4D4D] line-through">₹{product?.price}</span>
                         </div>
                         {product?.salePrice < product?.price && (
                             <span className="bg-[#FFE5E5] text-[#FF0101] text-[10px] md:text-xs font-semibold px-2 py-1 rounded">

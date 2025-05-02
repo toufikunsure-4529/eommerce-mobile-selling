@@ -1,4 +1,3 @@
-"use client";
 import { ProductCard } from '@/app/components/Products';
 import React from 'react';
 

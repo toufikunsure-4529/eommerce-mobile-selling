@@ -82,7 +82,7 @@ function SearchProduct() {
     }, []);
 
     return (
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="md:max-w-4xl w-full mx-auto px-1">
             <div
                 className=" relative w-full mt-4 mb-10 gap-2 md:gap-0"
                 ref={searchRef}
@@ -124,7 +124,7 @@ function SearchProduct() {
                     </Dropdown>
 
                     <Input
-                        placeholder="Search for Model"
+                        placeholder="Search for Model..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onKeyDown={handleKeyPress}
