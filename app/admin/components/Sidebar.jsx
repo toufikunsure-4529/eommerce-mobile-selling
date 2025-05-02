@@ -22,11 +22,11 @@ import Image from "next/image";
 
 const menuList = [
     { name: "Dashboard", link: "/admin", icon: <LayoutDashboard className="h-5 w-5" /> },
-    { name: "Products", link: "/admin/products", icon: <PackageOpen className="h-5 w-5" /> },
     { name: "Categories", link: "/admin/categories", icon: <Layers2 className="h-5 w-5" /> },
     { name: "Brands", link: "/admin/brands", icon: <Factory className="h-5 w-5" /> },
     { name: "Series", link: "/admin/series", icon: <Layers className="h-5 w-5" /> },
     { name: "Models", link: "/admin/models", icon: <Package className="h-5 w-5" /> },
+    { name: "Products", link: "/admin/products", icon: <PackageOpen className="h-5 w-5" /> },
     { name: "Orders", link: "/admin/orders", icon: <ShoppingCart className="h-5 w-5" /> },
     { name: "Customers", link: "/admin/customers", icon: <User className="h-5 w-5" /> },
     { name: "Reviews", link: "/admin/reviews", icon: <Star className="h-5 w-5" /> },

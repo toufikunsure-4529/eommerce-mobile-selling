@@ -1,4 +1,3 @@
-// lib/firestore/categories/read_server.js
 import { db } from "@/lib/firebase";
 import { collection, doc, getDoc, getDocs, query, orderBy } from "firebase/firestore";
 

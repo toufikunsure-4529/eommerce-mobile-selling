@@ -32,24 +32,24 @@ export const getBrands = async () => {
     throw new Error(error.message || "Failed to fetch brands");
   }
 };
-
 export const getBrandsByCategory = async ({ categoryId }) => {
   try {
     if (!categoryId) {
       throw new Error("Category ID is required");
     }
+    console.log("Fetching brands for categoryId:", categoryId); // Debug log
+    const brandsRef = collection(db, "brands");
     const q = query(
-      collection(db, "brands"),
+      brandsRef,
       where("categoryId", "==", categoryId),
       orderBy("name", "asc")
     );
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const snapshot = await getDocs(q);
+    const brands = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    console.log("Fetched brands:", brands); // Debug log
+    return brands;
   } catch (error) {
-    console.error("Error fetching brands by category:", error);
-    throw new Error(error.message || "Failed to fetch brands by category");
+    console.error("Error fetching brands:", error);
+    throw new Error(error.message || "Failed to fetch brands");
   }
 };

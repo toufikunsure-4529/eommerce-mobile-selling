@@ -1,17 +1,17 @@
-// lib/firestore/series/write.js (updated)
+// lib/firestore/series/write.js
 import { db } from "@/lib/firebase";
 import { collection, doc, addDoc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
 
 export const createNewSeries = async ({ data }) => {
   try {
-    if (!data.seriesName || !data.categoryId || !data.brandId) {
-      throw new Error("Series name, category, and brand are required");
+    if (!data.seriesName || !data.brandId) {
+      throw new Error("Series name and brand are required");
     }
 
     const seriesData = {
       seriesName: data.seriesName.trim(),
-      categoryId: data.categoryId,
       brandId: data.brandId,
+      categoryId: data.categoryId || null,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
@@ -24,28 +24,34 @@ export const createNewSeries = async ({ data }) => {
   }
 };
 
-export const updateSeries = async ({ id, data }) => {
+export const batchCreateSeries = async (brandId, seriesNames) => {
   try {
-    if (!id) {
-      throw new Error("Series ID is required");
+    if (!brandId) {
+      throw new Error("Brand ID is required");
     }
-    if (!data.seriesName || !data.categoryId || !data.brandId) {
-      throw new Error("Series name, category, and brand are required");
+    if (!seriesNames || seriesNames.length === 0) {
+      throw new Error("At least one series name is required");
     }
 
-    const seriesData = {
-      seriesName: data.seriesName.trim(),
-      categoryId: data.categoryId,
-      brandId: data.brandId,
-      updatedAt: serverTimestamp(),
-    };
+    const batch = [];
+    const timestamp = serverTimestamp();
 
-    const docRef = doc(db, "series", id);
-    await setDoc(docRef, seriesData, { merge: true });
-    return id;
+    seriesNames.forEach(seriesName => {
+      const seriesData = {
+        seriesName: seriesName.trim(),
+        brandId,
+        categoryId: null,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      };
+      batch.push(addDoc(collection(db, "series"), seriesData));
+    });
+
+    await Promise.all(batch);
+    return seriesNames.length;
   } catch (error) {
-    console.error("Error updating series:", error);
-    throw new Error(error.message || "Failed to update series");
+    console.error("Error batch creating series:", error);
+    throw new Error(error.message || "Failed to batch create series");
   }
 };
 
@@ -56,6 +62,7 @@ export const deleteSeries = async ({ id }) => {
     }
     const docRef = doc(db, "series", id);
     await deleteDoc(docRef);
+    return id;
   } catch (error) {
     console.error("Error deleting series:", error);
     throw new Error(error.message || "Failed to delete series");

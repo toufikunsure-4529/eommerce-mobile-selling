@@ -13,39 +13,39 @@ export default function ListView() {
 
   if (isLoading) {
     return (
-      <div>
+      <div className="flex flex-col items-center justify-center py-10">
         <CircularProgress />
-        <h3>Loading....</h3>
+        <h3 className="mt-3 text-sm font-medium text-gray-600">Loading brands...</h3>
       </div>
     );
   }
+
   if (error) {
-    return <div>{error}</div>;
+    return <div className="text-red-500 text-center py-4">{error}</div>;
   }
+
   return (
-    <div className="flex-1 flex flex-col gap-3 md:pr-5 md:px-0 px-5 rounded-xl">
-      <h1 className="text-xl">Brands</h1>
-      <table className="border-separate border-spacing-y-3">
-        <thead>
-          <tr>
-            <th className="font-semibold border-y bg-white px-3 py-2 border-l rounded-l-lg">
-              SN
-            </th>
-            <th className="font-semibold border-y bg-white px-3 py-2">Image</th>
-            <th className="font-semibold border-y bg-white px-3 py-2 text-left">
-              Name
-            </th>
-            <th className="font-semibold border-y bg-white px-3 py-2 border-r rounded-r-lg text-center">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {brands?.map((item, index) => {
-            return <Row index={index} item={item} key={item?.id} />;
-          })}
-        </tbody>
-      </table>
+    <div className="flex-1 px-5 md:px-0">
+      <div className="bg-white rounded-xl shadow-md p-6">
+        <h1 className="text-2xl font-semibold mb-4 text-gray-800">Brands List</h1>
+        <div className="max-h-[500px] overflow-y-auto custom-scrollbar border rounded-lg">
+          <table className="min-w-full text-sm border-separate border-spacing-y-2">
+            <thead className="sticky top-0 bg-white z-10">
+              <tr>
+                <th className="px-4 py-3 text-left font-semibold text-gray-600">SN</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-600">Image</th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-600">Name</th>
+                <th className="px-4 py-3 text-center font-semibold text-gray-600">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {brands?.map((item, index) => (
+                <Row key={item?.id} item={item} index={index} />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
@@ -55,14 +55,14 @@ function Row({ item, index }) {
   const router = useRouter();
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure?")) return;
+    if (!confirm("Are you sure you want to delete this brand?")) return;
 
     setIsDeleting(true);
     try {
       await deleteBrand({ id: item?.id });
-      toast.success("Successfully Deleted");
+      toast.success("Brand deleted successfully!");
     } catch (error) {
-      toast.error(error?.message);
+      toast.error(error?.message || "Failed to delete");
     }
     setIsDeleting(false);
   };
@@ -72,35 +72,26 @@ function Row({ item, index }) {
   };
 
   return (
-    <tr>
-      <td className="border-y bg-white px-3 py-2 border-l rounded-l-lg text-center">
-        {index + 1}
+    <tr className="bg-white rounded-md shadow-sm">
+      <td className="px-4 py-3 text-center">{index + 1}</td>
+      <td className="px-4 py-3 text-center">
+        <img src={item?.imageURL} alt={item?.name} className="h-8 mx-auto object-contain" />
       </td>
-      <td className="border-y bg-white px-3 py-2 text-center">
-        <div className="flex justify-center">
-          <img className="h-7 object-cover" src={item?.imageURL} alt="" />
-        </div>
-      </td>
-      <td className="border-y bg-white px-3 py-2">{item?.name}</td>
-      <td className="border-y bg-white px-3 py-2 border-r rounded-r-lg">
-        <div className="flex gap-2 items-center">
-          <Button
-            onClick={handleUpdate}
-            isDisabled={isDeleting}
-            isIconOnly
-            size="sm"
-          >
-            <Edit2 size={13} />
+      <td className="px-4 py-3">{item?.name}</td>
+      <td className="px-4 py-3 text-center">
+        <div className="flex justify-center gap-2">
+          <Button onClick={handleUpdate} isIconOnly size="sm" variant="light" color="primary">
+            <Edit2 size={16} />
           </Button>
           <Button
             onClick={handleDelete}
             isLoading={isDeleting}
-            isDisabled={isDeleting}
             isIconOnly
             size="sm"
             color="danger"
+            variant="light"
           >
-            <Trash2 size={13} />
+            <Trash2 size={16} />
           </Button>
         </div>
       </td>

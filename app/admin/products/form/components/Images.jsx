@@ -61,12 +61,13 @@ export default function Images({
           )}
           {imageList?.length > 0 && (
             <div className="flex flex-wrap gap-3">
-              {imageList?.map((item) => {
+              {imageList?.map((item,index) => {
                 return (
                   <img
                     className="w-20 object-cover rounded-lg"
                     src={URL.createObjectURL(item)}
                     alt=""
+                    key={index}
                   />
                 );
               })}

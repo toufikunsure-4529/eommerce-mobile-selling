@@ -213,12 +213,14 @@ export default function Header() {
             </button>
           </div>
         </div>
-
         {/* Mobile Search */}
-        <div className="px-4 py-3 border-b border-gray-200 lg:hidden bg-white" ref={searchRef}>
+        <div
+          className="px-3 py-2 border-b border-gray-200 bg-white lg:hidden"
+          ref={searchRef}
+        >
           <form
             onSubmit={handleSearch}
-            className="flex w-full items-center rounded-lg border border-gray-300 transition-all"
+            className="flex w-full items-center gap-2 rounded-md border border-gray-300 transition-all px-2 py-1"
           >
             <CategoryDropdown
               selectedCategory={selectedCategory}
@@ -232,24 +234,28 @@ export default function Header() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
-              className="flex-1 px-4 py-2 focus:outline-none text-sm h-10"
+              className="flex-1 min-w-0 px-2 py-1 text-sm h-9 focus:outline-none"
               aria-label="Search products"
             />
 
             <button
               type="submit"
-              className="p-2 h-10 bg-transparent hover:bg-gray-100 transition-colors"
+              className="p-2 h-9 bg-transparent hover:bg-gray-100 transition-colors flex items-center justify-center"
               aria-label="Submit search"
             >
-              <Search size={20} />
+              <Search size={18} />
             </button>
           </form>
 
-          {/* Show search results or "Not Found" when search is focused and term exists */}
+          {/* Search Results */}
           {isSearchFocused && searchTerm.trim() && (
-            <SearchResults filteredProducts={filteredProducts} handleSearchResultClick={handleSearchResultClick} />
+            <SearchResults
+              filteredProducts={filteredProducts}
+              handleSearchResultClick={handleSearchResultClick}
+            />
           )}
         </div>
+
       </header>
 
       <MobileMenu

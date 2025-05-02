@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   setDoc,
   Timestamp,
   updateDoc,
@@ -15,9 +16,6 @@ export const createNewCategory = async ({ data, image }) => {
   }
   if (!data?.name) {
     throw new Error("Name is required");
-  }
-  if (!data?.slug) {
-    throw new Error("Slug is required");
   }
   const newId = doc(collection(db, `ids`)).id;
   const imageRef = ref(storage, `categories/${newId}`);
@@ -32,20 +30,24 @@ export const createNewCategory = async ({ data, image }) => {
   });
 };
 
-export const updateCategory = async ({ data, image }) => {
+export const updateCategory = async ({ id, data, image }) => {
   if (!data?.name) {
     throw new Error("Name is required");
   }
-  if (!data?.slug) {
-    throw new Error("Slug is required");
-  }
-  if (!data?.id) {
+  if (!id) {
     throw new Error("ID is required");
   }
-  const id = data?.id;
 
-  let imageURL = data?.imageURL;
+  let imageURL = null;
 
+  // First get the current image URL if it exists
+  const docRef = doc(db, `categories/${id}`);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    imageURL = docSnap.data().imageURL;
+  }
+
+  // If new image is provided, upload it
   if (image) {
     const imageRef = ref(storage, `categories/${id}`);
     await uploadBytes(imageRef, image);
