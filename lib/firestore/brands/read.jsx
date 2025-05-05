@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import useSWRSubscription from "swr/subscription";
 
 export function useBrands() {
@@ -26,3 +27,4 @@ export function useBrands() {
 
   return { data, error: error?.message, isLoading: data === undefined };
 }
+

@@ -132,3 +132,28 @@ export const searchProducts = async (searchTerm) => {
     return [];
   }
 };
+
+export function useProductsByModelId(modelId) {
+  const { data, error } = useSWRSubscription(
+    ["products-by-model", modelId],
+    ([_, modelId], { next }) => {
+      const q = query(collection(db, "products"), where("modelId", "==", modelId));
+      const unsub = onSnapshot(
+        q,
+        (snap) =>
+          next(
+            null,
+            snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+          ),
+        (err) => next(err)
+      );
+      return () => unsub();
+    }
+  );
+
+  return {
+    data,
+    error: error?.message,
+    isLoading: data === undefined,
+  };
+}

@@ -120,12 +120,12 @@ export default function BasicDetails({ data, handleData }) {
         onChange={(e) => handleData("salePrice", e.target.valueAsNumber)}
       />
 
-      {/* Is Featured */}
+      {/* Best Selling (was Featured Product) */}
       <div className="flex flex-col gap-1">
-        <label className="text-gray-500 text-sm font-medium">Featured Product</label>
+        <label className="text-gray-500 text-sm font-medium">Best Selling</label>
         <select
-          value={data?.isFeatured ? "yes" : "no"}
-          onChange={(e) => handleData("isFeatured", e.target.value === "yes")}
+          value={data?.bestSelling ? "yes" : "no"}
+          onChange={(e) => handleData("bestSelling", e.target.value === "yes")}
           className="border border-gray-300 px-4 py-2 rounded-lg w-full outline-none focus:ring-2 focus:ring-blue-500"
           required
         >
@@ -133,6 +133,21 @@ export default function BasicDetails({ data, handleData }) {
           <option value="yes">Yes</option>
         </select>
       </div>
+
+      {/* New Arrival */}
+      <div className="flex flex-col gap-1">
+        <label className="text-gray-500 text-sm font-medium">New Arrival</label>
+        <select
+          value={data?.isNewArrival ? "yes" : "no"}
+          onChange={(e) => handleData("isNewArrival", e.target.value === "yes")}
+          className="border border-gray-300 px-4 py-2 rounded-lg w-full outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        >
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+
     </section>
   );
 }

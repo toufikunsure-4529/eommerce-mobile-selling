@@ -18,9 +18,17 @@ export const getProduct = async ({ id }) => {
   }
 };
 
-export const getFeaturedProducts = async () => {
+export const getBestSellingProducts = async () => {
   const list = await getDocs(
-    query(collection(db, "products"), where("isFeatured", "==", true))
+    query(collection(db, "products"), where("bestSelling", "==", true))
+  );
+  return list.docs.map((snap) => snap.data());
+};
+
+
+export const getNewArrivalProducts = async () => {
+  const list = await getDocs(
+    query(collection(db, "products"), where("isNewArrival", "==", true))
   );
   return list.docs.map((snap) => snap.data());
 };

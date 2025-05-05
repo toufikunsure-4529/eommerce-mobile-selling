@@ -103,3 +103,31 @@ export function useModelById(modelId) {
 
   return { data, isLoading, error, refetch: fetchModel };
 }
+
+// 🔹 Get all models under a brand
+export function useModelsByBrand(brandId) {
+  const [models, setModels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchModels() {
+      setLoading(true);
+      try {
+        const q = query(collection(db, "models"), where("brandId", "==", brandId));
+        const snapshot = await getDocs(q);
+        const modelsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setModels(modelsData);
+      } catch (err) {
+        console.error("Failed to fetch models by brand:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (brandId) fetchModels();
+  }, [brandId]);
+
+  return { data: models, isLoading: loading, error };
+}

@@ -2,7 +2,7 @@ import Image from "next/image";
 import HeroSection from "./components/HeroSection";
 import Header from "./components/header/Header";
 import FeaturedProductSlider from "./components/Sliders";
-import { getFeaturedProducts, getProducts } from "@/lib/firestore/products/read_server";
+import { getBestSellingProducts, getNewArrivalProducts, getProducts } from "@/lib/firestore/products/read_server";  // Add the new method
 import Collections from "./components/Collections";
 import { getCollections } from "@/lib/firestore/collections/read_server";
 import Categories from "./components/Categories";
@@ -20,108 +20,43 @@ import ProductSection from "./components/ProductSection";
 import CategoriesNav from "./components/header/CategoriesNav";
 
 export default async function Home() {
-  // fetch  data from firestore 
-  const [featuredProducts, collections, categories, products, brands] = await Promise.all([
-    getFeaturedProducts(),
+  // Fetch data from Firestore
+  const [bestSelling, newArrivals, collections, categories, products, brands] = await Promise.all([
+    getBestSellingProducts(),
+    getNewArrivalProducts(),  // Fetch new arrivals
     getCollections(),
     getCategories(),
     getProducts(),
     getBrands(),
   ]);
 
-
-  const mockProducts = [
-    {
-      id: 1,
-      title: "Galaxy S23 Ultra",
-      price: 1199,
-      salePrice: 1099,
-      brand: "Samsung",
-      featuredImageURL: "/product-img.png",
-      shortDescription: "6.8-inch AMOLED display, 200MP camera",
-      isBestSelling: true,    // Popular brand + good discount
-      isLatest: true    // S23 series released early 2023
-    },
-    {
-      id: 2,
-      title: "iPhone 15 Pro Max",
-      price: 1299,
-      salePrice: 1249,
-      brand: "Apple",
-      featuredImageURL: "/product-img.png",
-      shortDescription: "6.7-inch Super Retina XDR, A17 Pro chip, Titanium body.",
-      isBestSelling: true,    // Apple products typically sell well
-      isLatest: true     // iPhone 15 series is newer (late 2023)
-    },
-    {
-      id: 3,
-      title: "Google Pixel 8 Pro",
-      price: 999,
-      salePrice: 949,
-      brand: "Google",
-      featuredImageURL: "/product-img2.jpg",
-      shortDescription: "6.7-inch LTPO OLED, Tensor G3 chip, 50MP triple camera.",
-      isBestSelling: true,   // Good but less mainstream than Samsung/Apple
-      isLatest: true     // Pixel 8 series is recent (late 2023)
-    },
-    {
-      id: 4,
-      title: "OnePlus 11 5G",
-      price: 799,
-      salePrice: 749,
-      brand: "OnePlus",
-      featuredImageURL: "/product-img2.jpg",
-      shortDescription: "6.7-inch AMOLED, Snapdragon 8 Gen 2, 5000mAh battery.",
-      isBestSelling: true,   // Niche brand
-      isLatest: true    // Released early 2023
-    },
-    {
-      id: 5,
-      title: "Xiaomi 13 Pro",
-      price: 899,
-      salePrice: 849,
-      brand: "Xiaomi",
-      featuredImageURL: "/product-img2.jpg",
-      shortDescription: "6.73-inch AMOLED, Snapdragon 8 Gen 2, Leica cameras.",
-      isBestSelling: true,   // Less known in some markets
-      isLatest: true    // Released early 2023
-    },
-    {
-      id: 6,
-      title: "Xiaomi 13 Pro",
-      price: 899,
-      salePrice: 849,
-      brand: "Xiaomi",
-      featuredImageURL: "/product-img2.jpg",
-      shortDescription: "6.73-inch AMOLED, Snapdragon 8 Gen 2, Leica cameras.",
-      isBestSelling: true,   // Less known in some markets
-      isLatest: true    // Released early 2023
-    },
-  ];
-
-
-  // Example: Filter products for Best Selling and Latest Arrival
-  const bestSellingProducts = mockProducts.filter((product) => product.isBestSelling); // Add this flag in your data
-  const latestArrivalProducts = mockProducts.filter((product) => product.isLatest); // Add this flag in your data
+  // Example: Use real Firestore data instead of mock data
+  const bestSellingProducts = bestSelling;  // Now using the fetched best-selling products
+  const newArrivalProducts = newArrivals;   // Using the fetched new arrival products
 
   return (
     <>
-      <main className=" h-screen overflow-x-hidden overflow-y-auto">
+      <main className="h-screen overflow-x-hidden overflow-y-auto">
         <Header />
         <CategoriesNav />
         {/* <CategoryListHero /> */}
-        <FeaturedProductSlider featuredProducts={featuredProducts} />
+        <FeaturedProductSlider />
         <Collections collections={collections} />
         {/* <Categories categories={categories} /> */}
         <Accessories />
         <WhyUsSection />
+        
+        {/* Display Best Selling Products */}
         <ProductSection title="Best Selling" products={bestSellingProducts} />
-        <ProductSection title="Latest Arrival" products={latestArrivalProducts} />
+
+        {/* Display New Arrivals */}
+        <ProductSection title="New Arrival" products={newArrivalProducts} />
+
         {/* <ProductsGridView products={products} /> */}
         <ComboOffer />
         <CustomerReviews />
         {/* <Brands brands={brands} /> */}
-        {/* Footer  */}
+        {/* Footer */}
         <Footer />
       </main>
     </>

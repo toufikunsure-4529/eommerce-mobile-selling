@@ -1,147 +1,133 @@
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import { ChevronRight, AlertCircle } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useBrands } from "@/lib/firestore/brands/read";
+import { useSeriesByBrand } from "@/lib/firestore/series/read";
+import { useModelsByBrand } from "@/lib/firestore/models/read";
 
-// Mock data for series by brand
-const seriesByBrand = {
-    samsung: [
-        { id: "galaxy-a", name: "Galaxy A Series" },
-        { id: "galaxy-j", name: "Galaxy J Series" },
-        { id: "galaxy-note", name: "Galaxy Note Series" },
-        { id: "galaxy-on", name: "Galaxy On Series" },
-        { id: "galaxy-s", name: "Galaxy S Series" },
-        { id: "galaxy-c", name: "Galaxy C Series" },
-        { id: "galaxy-m", name: "Galaxy M Series" },
-        { id: "galaxy-fold", name: "Galaxy Fold Series" },
-        { id: "galaxy-z-flip", name: "Galaxy Z Flip Series" },
-        { id: "galaxy-f", name: "Galaxy F Series" },
-    ],
-    xiaomi: [
-        { id: "galaxy-a", name: "Galaxy A Series" },
-        { id: "galaxy-j", name: "Galaxy J Series" },
-        { id: "galaxy-note", name: "Galaxy Note Series" },
-        { id: "galaxy-on", name: "Galaxy On Series" },
-        { id: "galaxy-s", name: "Galaxy S Series" },
-        { id: "galaxy-c", name: "Galaxy C Series" },
-        { id: "galaxy-m", name: "Galaxy M Series" },
-        { id: "galaxy-fold", name: "Galaxy Fold Series" },
-        { id: "galaxy-z-flip", name: "Galaxy Z Flip Series" },
-        { id: "galaxy-f", name: "Galaxy F Series" },
-    ],
-    oneplus: [
-        { id: "galaxy-a", name: "Galaxy A Series" },
-        { id: "galaxy-j", name: "Galaxy J Series" },
-        { id: "galaxy-note", name: "Galaxy Note Series" },
-        { id: "galaxy-on", name: "Galaxy On Series" },
-        { id: "galaxy-s", name: "Galaxy S Series" },
-        { id: "galaxy-c", name: "Galaxy C Series" },
-        { id: "galaxy-m", name: "Galaxy M Series" },
-        { id: "galaxy-fold", name: "Galaxy Fold Series" },
-        { id: "galaxy-z-flip", name: "Galaxy Z Flip Series" },
-        { id: "galaxy-f", name: "Galaxy F Series" },
-    ],
-    apple: [
-        { id: "iphone", name: "iPhone" },
-        { id: "ipad", name: "iPad" },
-    ],
-    // Add more brands as needed
-};
-
-// Brand names mapping
-const brandNames = {
-    samsung: "Samsung",
-    apple: "Apple",
-    xiaomi: "Xiaomi",
-    oppo: "Oppo",
-    vivo: "Vivo",
-    realme: "Realme",
-    oneplus: "OnePlus",
-    nokia: "Nokia",
-};
-
-// Series Not Found Component
-const SeriesNotFound = ({ brandName }) => {
+function SeriesNotFound({ brandName }) {
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
+        <div className="min-h-[60vh] flex items-center justify-center px-4 py-8">
             <div className="text-center max-w-md mx-auto">
-                {/* Lucide Icon */}
                 <AlertCircle className="mx-auto h-16 w-16 text-gray-500 mb-4 animate-pulse" />
-                
-                {/* Main Message */}
-                <h1 className="text-3xl font-bold text-gray-800 mb-2">Series Not Found</h1>
+                <h1 className="text-2xl font-bold mb-2">Series Not Found</h1>
                 <p className="text-gray-600 mb-6">
-                    Sorry, we couldn't find any series for {brandName}. Please check back later or try another brand.
+                    Sorry, we couldn't find any series for {brandName}.
                 </p>
-
-                {/* Call to Action */}
                 <Link
                     href="/"
-                    className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+                    className="inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
                 >
                     Back to Home
                 </Link>
             </div>
         </div>
     );
-};
+}
 
-export default function BrandPage({ params }) {
-    const { brandId } = params;
-    const series = seriesByBrand[brandId] || [];
-    const brandName = brandNames[brandId] || brandId;
+export default function BrandSeriesPage() {
+    const params = useParams();
+    const brandId = params.brandId;
 
-    // Render SeriesNotFound if no series are found
-    if (series.length === 0) {
-        return <SeriesNotFound brandName={brandName} />;
-    }
+    const [selectedSeriesId, setSelectedSeriesId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    // Fetch series, brand name, and all models for the brand
+    const { data: series, isLoading, error } = useSeriesByBrand(brandId);
+    const { data: brands } = useBrands();
+    const { data: allModels, isLoading: loadingModels } = useModelsByBrand(brandId);
+
+    const brand = brands?.find((b) => b.id === brandId);
+    const brandName = brand?.name || brandId;
+
+    // Filter models by selected series and search query
+    const filteredModels = allModels
+        ?.filter((model) =>
+            selectedSeriesId ? model.seriesId === selectedSeriesId : true
+        )
+        .filter((model) =>
+            model.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+    // Loading and error handling
+    if (isLoading) return <p className="text-center py-20 text-gray-500">Loading series...</p>;
+    if (error) return <p className="text-center text-red-500 py-20">Failed to load series: {error}</p>;
+    if (!series || series.length === 0) return <SeriesNotFound brandName={brandName} />;
 
     return (
-        <main className="max-w-8xl mx-auto px-8 md:px-20 py-8">
+        <main className="max-w-7xl mx-auto px-6 py-10">
             {/* Breadcrumb */}
-            <div className="flex items-center mb-6 text-sm">
-                <Link href="/" className="text-gray-500 hover:text-gray-700">
-                    Home
-                </Link>
-                <ChevronRight className="h-4 w-4 mx-1 text-gray-400" />
-                <span className="font-medium">{brandName}</span>
+            <div className="flex items-center text-sm text-gray-500 mb-6">
+                <Link href="/" className="hover:underline">Home</Link>
+                <ChevronRight className="h-4 w-4 mx-1" />
+                <span className="font-medium text-gray-800">{brandName}</span>
             </div>
 
-            <h1 className="text-2xl font-bold mb-6">Select Series</h1>
+            <h1 className="text-2xl font-bold mb-6">Select {brandName} Series</h1>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+            {/* Series Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
                 {series.map((item) => (
-                    <Link
-                        href={`/brand/${brandId}/series/${item.id}`}
+                    <div
                         key={item.id}
-                        className="p-4 border rounded-lg hover:shadow-md transition-shadow text-center"
+                        onClick={() => setSelectedSeriesId(item.id)}
+                        className={`cursor-pointer p-4 border rounded-md shadow text-center transition hover:shadow-md ${selectedSeriesId === item.id ? "border-blue-600" : ""
+                            }`}
                     >
-                        <span className="font-medium">{item.name}</span>
-                    </Link>
+                        <p className="font-medium">{item.seriesName}</p>
+                    </div>
                 ))}
             </div>
 
-            {/* Search bar */}
-            <div className="relative max-w-md mx-auto mb-8">
+            {/* Clear Filter Button */}
+            {selectedSeriesId && (
+                <div className="text-center mb-6">
+                    <button
+                        onClick={() => setSelectedSeriesId(null)}
+                        className="text-sm text-blue-600 underline hover:text-blue-800"
+                    >
+                        Clear Filter
+                    </button>
+                </div>
+            )}
+
+            {/* Search Input */}
+            <div className="max-w-md mx-auto mb-6">
                 <input
                     type="text"
-                    placeholder="Search your Phone Model"
-                    className="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300"
+                    placeholder="Search your phone model..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
-                <button className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                    <svg
-                        className="w-5 h-5 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        ></path>
-                    </svg>
-                </button>
+            </div>
+
+            {/* Models List */}
+            <div>
+                <h2 className="text-xl font-semibold mb-4">
+                    {selectedSeriesId ? "Filtered Models" : "All Models"}
+                </h2>
+
+                {loadingModels ? (
+                    <p className="text-gray-500">Loading models...</p>
+                ) : filteredModels && filteredModels.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        {filteredModels.map((model) => (
+                            <Link href={`/models/${model.id}`} key={model.id} className=" ">
+                                <div className="p-4 border rounded-md shadow hover:shadow-md transition text-center cursor-pointer flex justify-center items-center flex-col">
+                                    <img src={model.imageURL} alt={model.name} />
+                                    <p className="font-medium mt-2">{model.name}</p>
+                                </div>
+                            </Link>
+
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-gray-500">No models found.</p>
+                )}
             </div>
         </main>
     );

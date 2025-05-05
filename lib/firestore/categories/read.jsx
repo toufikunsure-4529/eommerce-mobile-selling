@@ -1,3 +1,4 @@
+// lib/firestore/categories/read.js
 "use client";
 
 import { db } from "@/lib/firebase";
@@ -11,18 +12,22 @@ export function useCategories() {
       const ref = collection(db, path);
       const unsub = onSnapshot(
         ref,
-        (snapshot) =>
-          next(
-            null,
-            snapshot.docs.length === 0
-              ? null
-              : snapshot.docs.map((snap) => snap.data())
-          ),
+        (snapshot) => {
+          const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          const map = new Map(list.map((cat) => [cat.id, cat]));
+          next(null, { list, map });
+        },
         (err) => next(err, null)
       );
       return () => unsub();
     }
   );
 
-  return { data, error: error?.message, isLoading: data === undefined };
+  return {
+    data: data?.list ?? [],
+    categoriesList: data?.list ?? [],
+    categoriesMap: data?.map ?? new Map(),
+    isLoading: data === undefined,
+    error: error?.message,
+  };
 }
