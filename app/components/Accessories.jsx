@@ -102,14 +102,14 @@ export default function Accessories() {
                 </div>
 
                 {/* Desktop Grid */}
-                <div className="hidden xl:grid grid-cols-4 gap-6 ">
+                <div className="hidden md:grid grid-cols-4 gap-6 ">
                     {categoriesSlides.map((category) => (
                         <AccessoriesCard key={category.id} category={category} />
                     ))}
                 </div>
 
                 {/* Mobile/Tablet Slider */}
-                <div className="xl:hidden">
+                <div className="md:hidden">
                     <Slider {...sliderSettings}>
                         {categoriesSlides.map((category) => (
                             <AccessoriesCard
