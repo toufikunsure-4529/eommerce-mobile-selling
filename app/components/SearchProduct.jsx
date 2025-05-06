@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Input } from "@nextui-org/react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Input, Spinner } from "@nextui-org/react";
 import {
     Dropdown,
     DropdownTrigger,
@@ -12,56 +12,102 @@ import {
 import { ChevronDown, Menu, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
-function SearchProduct() {
+function SearchModels() {
     const router = useRouter();
     const searchRef = useRef(null);
     const [selectedBrand, setSelectedBrand] = useState("All Brands");
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [filteredModels, setFilteredModels] = useState([]);
     const [isSearchFocused, setIsSearchFocused] = useState(false);
-
-    // Get all unique brands
-    const brands = Array.from(
-        new Set(categoryData.flatMap(category => category.brands.map(brand => brand.name)))
-    );
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    
+    // Fetch all brands
+    const [brands, setBrands] = useState([]);
+    useEffect(() => {
+        async function fetchBrands() {
+            try {
+                const brandsSnapshot = await getDocs(collection(db, "brands"));
+                const brandsData = brandsSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    name: doc.data().name
+                }));
+                setBrands([{ id: "all", name: "All Brands" }, ...brandsData]);
+            } catch (err) {
+                console.error("Failed to fetch brands:", err);
+                setError("Failed to load brands");
+            }
+        }
+        fetchBrands();
+    }, []);
 
     // Handle search
-    const handleSearch = () => {
+    const handleSearch = useCallback(async () => {
         if (!searchTerm.trim()) {
-            setFilteredProducts([]);
+            setFilteredModels([]);
             return;
         }
 
-        const results = [];
+        setIsLoading(true);
+        setError(null);
 
-        categoryData.forEach(category => {
-            category.brands.forEach(brand => {
-                if (selectedBrand !== "All Brands" && brand.name !== selectedBrand) return;
+        try {
+            const modelsCollection = collection(db, "models");
+            let q = query(modelsCollection);
+            
+            if (selectedBrand !== "All Brands") {
+                const selectedBrandId = brands.find(b => b.name === selectedBrand)?.id;
+                if (selectedBrandId) {
+                    q = query(q, where("brandId", "==", selectedBrandId));
+                }
+            }
 
-                brand.series.forEach(series => {
-                    series.models.forEach(model => {
-                        if (model.toLowerCase().includes(searchTerm.trim().toLowerCase())) {
-                            results.push({
-                                name: model,
-                                category: category.name,
-                                brand: brand.name,
-                                series: series.name,
-                                slug: model.toLowerCase().replace(/\s+/g, '-')
-                            });
-                        }
-                    });
-                });
-            });
-        });
+            const modelsSnapshot = await getDocs(q);
+            const models = modelsSnapshot.docs
+                .map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }))
+                .filter(model => 
+                    model.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
+                );
 
-        setFilteredProducts(results);
-    };
+            const enrichedModels = await Promise.all(models.map(async model => {
+                const seriesSnapshot = await getDocs(
+                    query(collection(db, "series"), where("id", "==", model.seriesId))
+                );
+                const brandSnapshot = await getDocs(
+                    query(collection(db, "brands"), where("id", "==", model.brandId))
+                );
+                
+                return {
+                    ...model,
+                    series: seriesSnapshot.docs[0]?.data().name || "Unknown Series",
+                    brand: brandSnapshot.docs[0]?.data().name || "Unknown Brand",
+                    category: model.category || "Unknown Category"
+                };
+            }));
+
+            setFilteredModels(enrichedModels);
+        } catch (err) {
+            console.error("Search error:", err);
+            setError("Failed to search models. Please try again.");
+            setFilteredModels([]);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [searchTerm, selectedBrand, brands]);
 
     // Trigger search when filters change
     useEffect(() => {
-        handleSearch();
-    }, [searchTerm, selectedBrand]);
+        const debounceSearch = setTimeout(() => {
+            handleSearch();
+        }, 300);
+        return () => clearTimeout(debounceSearch);
+    }, [handleSearch]);
 
     // Handle key press (Enter key)
     const handleKeyPress = (e) => {
@@ -82,93 +128,96 @@ function SearchProduct() {
     }, []);
 
     return (
-        <div className="md:max-w-4xl w-full mx-auto px-1">
-            <div
-                className=" relative w-full mt-4 mb-10 gap-2 md:gap-0"
-                ref={searchRef}
-            >
+        <div className="max-w-4xl w-full mx-auto px-4">
+            <div className="relative w-full mt-6 mb-12" ref={searchRef}>
                 {/* Search Bar */}
-                <div className="flex w-full py-1 items-center rounded-full border border-gray-300 overflow-hidden">
+                <div className="flex w-full items-center rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                     <Dropdown>
                         <DropdownTrigger>
                             <Button
                                 variant="light"
-                                className="flex items-center px-4 py-2 gap-2 rounded-none"
+                                className="flex items-center px-4 py-2 gap-2 rounded-l-full border-r border-gray-200"
+                                disabled={isLoading}
                             >
                                 <Menu size={16} />
-                                <span className="text-sm">{selectedBrand}</span>
+                                <span className="text-sm font-medium">{selectedBrand}</span>
                                 <ChevronDown size={16} />
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu
                             aria-label="Brands"
-                            className="bg-white shadow-md w-52 rounded-md"
+                            className="bg-white shadow-lg rounded-lg max-h-96 overflow-y-auto"
                         >
-                            <DropdownItem
-                                key="all"
-                                onClick={() => setSelectedBrand("All Brands")}
-                                className="text-sm"
-                            >
-                                All Brands
-                            </DropdownItem>
-                            {brands.map((brand, idx) => (
+                            {brands.map(brand => (
                                 <DropdownItem
-                                    key={idx}
-                                    onClick={() => setSelectedBrand(brand)}
-                                    className="text-sm"
+                                    key={brand.id}
+                                    onClick={() => setSelectedBrand(brand.name)}
+                                    className="text-sm py-2"
                                 >
-                                    {brand}
+                                    {brand.name}
                                 </DropdownItem>
                             ))}
                         </DropdownMenu>
                     </Dropdown>
 
                     <Input
-                        placeholder="Search for Model..."
+                        placeholder="Search for model..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onKeyDown={handleKeyPress}
                         onFocus={() => setIsSearchFocused(true)}
-                        className="flex-1 rounded-none border-l border-gray-300"
+                        className="flex-1 border-none"
                         classNames={{
-                            inputWrapper:
-                                "border-none shadow-none focus-within:ring-0 focus-within:border-none h-10",
-                            input: "px-3 py-2 focus:outline-none text-sm",
+                            inputWrapper: "border-none shadow-none h-12 bg-transparent",
+                            input: "px-4 py-2 text-sm placeholder-gray-400",
                         }}
+                        isDisabled={isLoading}
                     />
 
                     <Button
                         isIconOnly
-                        className="rounded-none bg-transparent"
+                        className="rounded-r-full bg-transparent hover:bg-gray-100"
                         onClick={handleSearch}
+                        isDisabled={isLoading}
                     >
-                        <Search size={16} />
+                        {isLoading ? <Spinner size="sm" /> : <Search size={16} />}
                     </Button>
                 </div>
 
-                {/* Search Results - Now in natural flow */}
+                {/* Error Message */}
+                {error && (
+                    <div className="mt-2 text-red-500 text-sm text-center">
+                        {error}
+                    </div>
+                )}
+
+                {/* Search Results */}
                 {isSearchFocused && searchTerm && (
-                    <div className="absolute top-full left-0 right-0 z-10 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 max-h-96 overflow-y-auto">                        {filteredProducts.length > 0 ? (
-                        <ul className="divide-y divide-gray-100">
-                            {filteredProducts.map((product, index) => (
-                                <li key={index}>
-                                    <Link
-                                        href={`/products/${product.slug}`}
-                                        className="block p-4 hover:bg-gray-50 transition-colors"
-                                    >
-                                        <div className="font-medium text-gray-900 text-sm">{product.name}</div>
-                                        <div className="text-xs text-gray-500 mt-1">
-                                            {product.brand} • {product.series} • {product.category}
-                                        </div>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <div className="p-4 text-center text-gray-500 text-sm">
-                            No products found. Try a different search term.
-                        </div>
-                    )}
+                    <div className="absolute top-full left-0 right-0 z-20 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 max-h-96 overflow-y-auto">
+                        {filteredModels.length > 0 ? (
+                            <ul className="divide-y divide-gray-100">
+                                {filteredModels.map((model) => (
+                                    <li key={model.id}>
+                                        <Link
+                                            href={`/models/${model.id}`}
+                                            className="block p-4 hover:bg-gray-50 transition-colors"
+                                            onClick={() => setIsSearchFocused(false)}
+                                        >
+                                            <div className="font-medium text-gray-900 text-sm">
+                                                {model.name}
+                                            </div>
+                                            <div className="text-xs text-gray-500 mt-1">
+                                                {model.brand} • {model.series} • {model.category}
+                                            </div>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <div className="p-4 text-center text-gray-500 text-sm">
+                                {isLoading ? "Searching..." : "No models found. Try a different search term."}
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
@@ -176,38 +225,4 @@ function SearchProduct() {
     );
 }
 
-export default SearchProduct;
-
-const categoryData = [
-    {
-        name: "Battery",
-        brands: [
-            { name: "Samsung", series: [{ name: "Galaxy S Series", models: ["S23 Battery", "S22 Battery", "S21 Battery"] }] },
-            { name: "Apple", series: [{ name: "iPhone Series", models: ["iPhone 15 Battery", "iPhone 14 Battery"] }] },
-            {
-                name: "Xiaomi",
-                series: [
-                    { name: "Redmi Series", models: ["Redmi Note 12 Battery", "Redmi 11 Battery"] },
-                    { name: "Mi Series", models: ["Mi 12 Battery", "Mi 11 Battery"] },
-                ],
-            },
-        ],
-    },
-    {
-        name: "Sim Tray",
-        brands: [
-            { name: "Samsung", series: [{ name: "Galaxy S Series", models: ["S23 Sim Tray", "S22 Sim Tray"] }] },
-            { name: "Apple", series: [{ name: "iPhone Series", models: ["iPhone 15 Sim Tray", "iPhone 14 Sim Tray"] }] },
-        ],
-    },
-    {
-        name: "Charging Port",
-        brands: [
-            { name: "Samsung", series: [{ name: "Galaxy A Series", models: ["A55 Charging Port", "A53 Charging Port"] }] },
-            {
-                name: "Google",
-                series: [{ name: "Pixel Series", models: ["Pixel 8 Charging Port", "Pixel 7 Charging Port"] }],
-            },
-        ],
-    },
-];
+export default SearchModels;

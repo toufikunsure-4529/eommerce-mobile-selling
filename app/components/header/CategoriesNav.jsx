@@ -102,7 +102,7 @@ export default function CategoriesNav() {
   )
 
   return (
-    <div className="relative z-50">
+    <div className="relative">
       {/* Categories Navigation - Desktop */}
       <nav
         ref={navRef}

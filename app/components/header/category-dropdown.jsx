@@ -41,7 +41,7 @@ export default function CategoryDropdown({
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
-        <Menu size={12} className="text-gray-600 hidden md:block " />
+        <Menu size={12} className="text-gray-600 hidden md:block" />
         <span className="md:text-sm text-xs whitespace-nowrap truncate max-w-[100px] text-gray-800">
           {selectedCategory}
         </span>
@@ -56,27 +56,16 @@ export default function CategoryDropdown({
           className="absolute left-0 top-full mt-1 z-20 bg-white shadow-lg w-56 rounded-md border border-gray-200 py-1 max-h-60 overflow-y-auto"
           role="listbox"
         >
-          <button
-            type="button"
-            onClick={() => handleCategorySelect("All Categories")}
-            className={`w-full text-left px-4 py-2 text-xs md:text-sm hover:bg-gray-100 transition-colors focus:outline-none focus:bg-gray-100 ${selectedCategory === "All Categories"
-                ? "bg-gray-100 font-medium text-gray-900"
-                : "text-gray-700"
-              }`}
-            role="option"
-            aria-selected={selectedCategory === "All Categories"}
-          >
-            All Categories
-          </button>
           {categories.map((category, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => handleCategorySelect(category)}
-              className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors focus:outline-none focus:bg-gray-100 ${selectedCategory === category
+              className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors focus:outline-none focus:bg-gray-100 ${
+                selectedCategory === category
                   ? "bg-gray-100 font-medium text-gray-900"
                   : "text-gray-700"
-                }`}
+              }`}
               role="option"
               aria-selected={selectedCategory === category}
             >

@@ -77,34 +77,34 @@ export function useProductsByIds({ idsList }) {
 }
 
 export const searchProducts = async (searchTerm) => {
-  if (!searchTerm.trim()) return []
-
-  const ref = collection(db, "products")
-
-  const queries = [
-    query(ref, where("title", ">=", searchTerm), where("title", "<=", searchTerm + "\uf8ff")),
-    query(ref, where("shortDescription", ">=", searchTerm), where("shortDescription", "<=", searchTerm + "\uf8ff")),
-    query(ref, where("description", ">=", searchTerm), where("description", "<=", searchTerm + "\uf8ff")),
-    query(ref, where("featureImageURL", ">=", searchTerm), where("featureImageURL", "<=", searchTerm + "\uf8ff")),
-  ]
+  if (!searchTerm.trim()) return [];
 
   try {
-    const results = await Promise.all(queries.map(getDocs))
+    const ref = collection(db, "products");
+    const lowerSearchTerm = searchTerm.trim().toLowerCase();
 
-    const products = new Map()
-    results.forEach((snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        products.set(doc.id, { id: doc.id, ...doc.data() })
-      })
-    })
+    // Search across multiple fields using a single query
+    const q = query(ref); // We'll fetch all products and filter client-side for simplicity
+    const snapshot = await getDocs(q);
 
-    return Array.from(products.values())
+    const products = snapshot.docs
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
+      .filter((product) =>
+        [
+          product.title?.toLowerCase(),
+          product.shortDescription?.toLowerCase(),
+          product.description?.toLowerCase(),
+          product.brand?.toLowerCase(),
+          product.series?.toLowerCase(),
+        ].some((field) => field?.includes(lowerSearchTerm))
+      );
+
+    return products.slice(0, 10); // Limit to 10 results
   } catch (error) {
-    console.error("Error searching products:", error)
-    return []
+    console.error("Error searching products:", error);
+    return [];
   }
-}
-
+};
 export function useProductsByModelId(modelId) {
   const { data, error } = useSWRSubscription(["products-by-model", modelId], ([_, modelId], { next }) => {
     const q = query(collection(db, "products"), where("modelId", "==", modelId))

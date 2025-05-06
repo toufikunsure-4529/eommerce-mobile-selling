@@ -19,7 +19,7 @@ export function ProductCard({ product }) {
                 <img
                     src={product?.featureImageURL}
                     alt={product?.title}
-                    className="w-full h-48 object-cover object-center"
+                    className="w-full h-auto max-h-60 object-cover object-center"
                 />
                 {/* Favorite Button */}
                 <div className="absolute top-1 right-1">
