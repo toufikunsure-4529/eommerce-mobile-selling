@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, Suspense } from "react"
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { useProducts } from "@/lib/firestore/products/read"
 import { useCategories } from "@/lib/firestore/categories/read"
@@ -10,18 +10,8 @@ import SortMenu from "./components/SortMenu"
 import { Filter, ArrowUpDown } from "lucide-react"
 import ProductSkeleton from "./components/ProductSkeleton"
 
-const ProductsPage = () => {
-    const { data: products, isLoading, error } = useProducts({ pageLimit: 20 })
-    const { categoriesList } = useCategories()
-    const { data: brands } = useBrands()
-
-    const searchParams = useSearchParams()
-    const router = useRouter()
-    const pathname = usePathname()
-
-    const initialBrandIds = searchParams.get("brandId")?.split(",").filter(Boolean) || []
-    const initialCategoryIds = searchParams.get("categoryId")?.split(",").filter(Boolean) || []
-
+// Filter logic extracted into a reusable hook
+const useProductFilters = (products, categoriesList, brands, initialCategoryIds, initialBrandIds) => {
     const [filters, setFilters] = useState({
         category: [],
         brand: [],
@@ -29,7 +19,6 @@ const ProductsPage = () => {
     })
     const [isInitialized, setIsInitialized] = useState(false)
 
-    // Initialize filters from query parameters only on first load
     useEffect(() => {
         if (!categoriesList || !brands || isInitialized) return
 
@@ -48,10 +37,6 @@ const ProductsPage = () => {
         setIsInitialized(true)
     }, [categoriesList, brands, initialCategoryIds, initialBrandIds, isInitialized])
 
-    const [sortOption, setSortOption] = useState("popularity")
-    const [isFilterOpen, setIsFilterOpen] = useState(false)
-    const [isSortOpen, setIsSortOpen] = useState(false)
-
     const processedCategories = useMemo(() => {
         return (
             categoriesList?.map((category) => ({
@@ -63,8 +48,6 @@ const ProductsPage = () => {
 
     const processedBrands = useMemo(() => {
         return (
-
-
             brands?.map((brand) => ({
                 name: brand.name,
                 count: products?.filter((product) => product.brandId === brand.id).length || 0,
@@ -77,7 +60,6 @@ const ProductsPage = () => {
 
         let updatedProducts = [...products]
 
-        // Apply category filter
         if (filters.category.length > 0) {
             const categoryIds = categoriesList
                 .filter((cat) => filters.category.includes(cat.name))
@@ -89,7 +71,6 @@ const ProductsPage = () => {
             }
         }
 
-        // Apply brand filter
         if (filters.brand.length > 0) {
             const brandIds = brands
                 .filter((brand) => filters.brand.includes(brand.name))
@@ -101,37 +82,69 @@ const ProductsPage = () => {
             }
         }
 
-        // Apply price filter
         if (filters.price < 2000) {
             updatedProducts = updatedProducts.filter(
                 (product) => (product.salePrice || product.price) <= Number(filters.price)
             )
         }
 
-        // Apply sorting
+        return updatedProducts
+    }, [filters, products, categoriesList, brands])
+
+    return { filters, setFilters, processedCategories, processedBrands, filteredProducts }
+}
+
+// Sorting logic extracted into a reusable hook
+const useProductSorting = (filteredProducts) => {
+    const [sortOption, setSortOption] = useState("popularity")
+
+    const sortedProducts = useMemo(() => {
+        const products = [...filteredProducts]
         switch (sortOption) {
             case "priceLowToHigh":
-                updatedProducts.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price))
-                break
+                return products.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price))
             case "priceHighToLow":
-                updatedProducts.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || b.price))
-                break
+                return products.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price))
             case "newest":
-                updatedProducts.sort((a, b) => {
+                return products.sort((a, b) => {
                     const aTime = a.timestampCreate?.seconds || 0
                     const bTime = b.timestampCreate?.seconds || 0
                     return bTime - aTime
                 })
-                break
             case "rating":
             case "popularity":
             default:
-                updatedProducts.sort((a, b) => (a.bestSelling === b.bestSelling ? 0 : a.bestSelling ? -1 : 1))
-                break
+                return products.sort((a, b) => (a.bestSelling === b.bestSelling ? 0 : a.bestSelling ? -1 : 1))
         }
+    }, [sortOption, filteredProducts])
 
-        return updatedProducts
-    }, [filters, sortOption, products, categoriesList, brands])
+    return { sortOption, setSortOption, sortedProducts }
+}
+
+// Main component with Suspense boundary
+const ProductsPageContent = () => {
+    const { data: products, isLoading, error } = useProducts({ pageLimit: 20 })
+    const { categoriesList } = useCategories()
+    const { data: brands } = useBrands()
+
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const pathname = usePathname()
+
+    const initialBrandIds = searchParams.get("brandId")?.split(",").filter(Boolean) || []
+    const initialCategoryIds = searchParams.get("categoryId")?.split(",").filter(Boolean) || []
+
+    const { filters, setFilters, processedCategories, processedBrands, filteredProducts } = useProductFilters(
+        products,
+        categoriesList,
+        brands,
+        initialCategoryIds,
+        initialBrandIds
+    )
+    const { sortOption, setSortOption, sortedProducts } = useProductSorting(filteredProducts)
+
+    const [isFilterOpen, setIsFilterOpen] = useState(false)
+    const [isSortOpen, setIsSortOpen] = useState(false)
 
     const handleFilterChange = (filterType, value) => {
         setFilters((prev) => ({
@@ -146,7 +159,6 @@ const ProductsPage = () => {
             brand: [],
             price: 2000,
         })
-        // Clear query parameters
         router.push(pathname)
     }
 
@@ -199,7 +211,7 @@ const ProductsPage = () => {
                         <h2 className="text-lg sm:text-xl font-semibold">
                             {isLoading
                                 ? ""
-                                : `Showing ${filteredProducts.length} Results from total ${products?.length || 0}`}
+                                : `Showing ${sortedProducts.length} Results from total ${products?.length || 0}`}
                         </h2>
                         <div className="relative">
                             <select
@@ -222,7 +234,7 @@ const ProductsPage = () => {
                         <h2 className="text-sm font-medium">
                             {isLoading
                                 ? ""
-                                : `Showing ${filteredProducts.length} Results from total ${products?.length || 0}`}
+                                : `Showing ${sortedProducts.length} Results from total ${products?.length || 0}`}
                         </h2>
                     </div>
 
@@ -243,7 +255,7 @@ const ProductsPage = () => {
                             </button>
                         </div>
                     ) : (
-                        <ProductGrid products={filteredProducts} />
+                        <ProductGrid products={sortedProducts} />
                     )}
                 </div>
             </div>
@@ -255,6 +267,15 @@ const ProductsPage = () => {
                 currentSort={sortOption}
             />
         </div>
+    )
+}
+
+// Wrap the component in Suspense
+const ProductsPage = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ProductsPageContent />
+        </Suspense>
     )
 }
 

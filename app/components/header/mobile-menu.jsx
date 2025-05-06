@@ -151,44 +151,9 @@ export default function MobileMenu({
               </Link>
             </div>
 
-            {/* Categories */}
-            <div className="p-4">
-              <h4 className="font-medium text-sm mb-2">Categories</h4>
-              <div className="space-y-1">
-                {categories.map((category, idx) => (
-                  <div key={idx} className="border-b border-gray-100 last:border-b-0">
-                    <button
-                      onClick={() => toggleCategory(category.name)}
-                      className="flex items-center justify-between w-full p-3 hover:bg-gray-50 rounded-md transition-colors"
-                    >
-                      <span className="text-sm">{category.name}</span>
-                      <ChevronDown
-                        size={16}
-                        className={`transform transition-transform ${
-                          expandedCategories[category.name] ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-
-                    {expandedCategories[category.name] && (
-                      <div className="pl-4 pr-2 pb-2">
-                        {category.brands.map((brand, brandIdx) => (
-                          <Link
-                            key={brandIdx}
-                            href={`/category/${category.name.toLowerCase().replace(/\s+/g, "-")}/${brand.name.toLowerCase().replace(/\s+/g, "-")}`}
-                            className="block p-2 text-sm hover:bg-gray-50 rounded-md transition-colors"
-                            onClick={closeMobileMenu}
-                          >
-                            {brand.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+       
+          </div>       
+    
 
           {/* Footer with logout button for logged-in users */}
           {user && (
