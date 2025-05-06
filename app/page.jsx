@@ -30,6 +30,7 @@ export default async function Home() {
     getBrands(),
   ]);
 
+
   // Example: Use real Firestore data instead of mock data
   const bestSellingProducts = bestSelling;  // Now using the fetched best-selling products
   const newArrivalProducts = newArrivals;   // Using the fetched new arrival products

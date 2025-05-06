@@ -5,11 +5,12 @@ import React, { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ArrowRight, ChevronRight, Tag, Clock, Star } from 'lucide-react';
-
+import { useRouter } from "next/navigation";
 const Slider = dynamic(() => import("react-slick"), { ssr: false });
 
 const ComboOffer = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const router = useRouter();
 
     const settings = {
         dots: false,
@@ -79,39 +80,38 @@ const ComboOffer = () => {
                         <div className="inline-flex items-center px-3 py-1 rounded-full bg-red-100 text-red-600 text-sm font-medium mb-2 w-fit">
                             <Tag size={14} className="mr-1" /> Special Offers
                         </div>
-                        
+
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
                             Exclusive Combo <span className="text-red-600">Deals</span>
                         </h2>
-                        
+
                         <p className="text-gray-600 text-lg max-w-md">
                             Get professional repair kits at unbeatable prices. Limited time offers with premium quality tools.
                         </p>
-                        
+
                         <div className="flex items-center gap-2 text-sm text-gray-500">
                             <Clock size={16} />
                             <span>Offer ends in 3 days</span>
                         </div>
-                        
+
                         <div className="flex flex-wrap gap-4 mt-2">
-                            <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full text-base font-medium flex items-center gap-2 shadow-lg shadow-red-200 transition-all duration-300 transform hover:translate-y-[-2px]">
+                            <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full text-base font-medium flex items-center gap-2 shadow-lg shadow-red-200 transition-all duration-300 transform hover:translate-y-[-2px]"   onClick={() => router.push('/product')}>
                                 Shop Now <ArrowRight size={18} />
                             </button>
-                            
-                            <button className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 px-6 py-3 rounded-full text-base font-medium flex items-center gap-2 transition-all duration-300">
+
+                            <button className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 px-6 py-3 rounded-full text-base font-medium flex items-center gap-2 transition-all duration-300"   onClick={() => router.push('/product')}>
                                 View All Offers
                             </button>
                         </div>
-                        
+
                         {/* Slide indicators */}
                         <div className="flex items-center gap-2 mt-4">
                             {offers.map((_, index) => (
-                                <button 
+                                <button
                                     key={index}
                                     onClick={() => setCurrentSlide(index)}
-                                    className={`h-2 rounded-full transition-all duration-300 ${
-                                        currentSlide === index ? "w-8 bg-red-600" : "w-2 bg-gray-300"
-                                    }`}
+                                    className={`h-2 rounded-full transition-all duration-300 ${currentSlide === index ? "w-8 bg-red-600" : "w-2 bg-gray-300"
+                                        }`}
                                     aria-label={`Go to slide ${index + 1}`}
                                 />
                             ))}
@@ -140,19 +140,19 @@ const ComboOffer = () => {
                                                     className="object-contain w-full h-full"
                                                 />
                                             </div>
-                                            
+
                                             <div className="w-full md:w-1/2 flex flex-col gap-3">
                                                 <h3 className="text-xl md:text-2xl font-bold text-gray-900">{offer.title}</h3>
-                                                
+
                                                 <p className="text-gray-600">{offer.description}</p>
-                                                
+
                                                 <div className="flex items-center gap-2 mt-1">
                                                     <div className="flex">
                                                         {[...Array(5)].map((_, i) => (
-                                                            <Star 
-                                                                key={i} 
-                                                                size={16} 
-                                                                className={`${i < Math.floor(offer.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`} 
+                                                            <Star
+                                                                key={i}
+                                                                size={16}
+                                                                className={`${i < Math.floor(offer.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
                                                             />
                                                         ))}
                                                     </div>
@@ -160,7 +160,7 @@ const ComboOffer = () => {
                                                         {offer.rating} ({offer.reviews} reviews)
                                                     </span>
                                                 </div>
-                                                
+
                                                 <div className="flex items-baseline gap-3 mt-2">
                                                     <span className="text-3xl font-bold text-red-600">
                                                         ${offer.discountPrice.toFixed(2)}
@@ -169,9 +169,13 @@ const ComboOffer = () => {
                                                         ${offer.originalPrice.toFixed(2)}
                                                     </span>
                                                 </div>
-                                                
-                                                <button className="mt-4 bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-full text-base font-medium flex items-center justify-center gap-2 transition-all duration-300">
-                                                    Add to Cart <ChevronRight size={18} />
+
+                                                <button
+                                                    className="mt-4 bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-full text-base font-medium flex items-center justify-center gap-2 transition-all duration-300"
+                       onClick={() => router.push('/product')}
+
+                                                >
+                                                    View More <ChevronRight size={18} />
                                                 </button>
                                             </div>
                                         </div>
@@ -179,14 +183,14 @@ const ComboOffer = () => {
                                 ))}
                             </Slider>
                         </div>
-                        
+
                         {/* Decorative elements */}
                         <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-red-100 rounded-full opacity-70 blur-2xl"></div>
                         <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-100 rounded-full opacity-70 blur-2xl"></div>
                     </div>
                 </div>
             </div>
-            
+
             <style jsx global>{`
                 .slick-prev, .slick-next {
                     z-index: 10;

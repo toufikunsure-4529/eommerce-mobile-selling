@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 const companyLinks = [
-    { label: "Home Page", href: "#" },
-    { label: "Collection", href: "#" },
-    { label: "Categories", href: "#" },
+    { label: "Home Page", href: "/" },
+    { label: "Collection", href: "" },
+    { label: "Categories", href: "/categories" },
     { label: "About us", href: "/about" },
 ];
 
@@ -28,7 +28,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
                 {/* Logo & Description */}
                 <div>
-                    <Image src="/logo.png" alt="Logo" width={120} height={60} />
+                    <Image src="/footer-logo.svg" alt="Logo" width={120} height={60} />
                     <p className="text-sm text-gray-400 mt-4">
                         This is your one-stop destination for high-quality mobile phone spare parts. <br />
                         We offer genuine and affordable components to keep your devices running smoothly.

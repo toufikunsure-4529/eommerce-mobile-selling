@@ -1,128 +1,137 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
+import { useProducts } from "@/lib/firestore/products/read"
+import { useCategories } from "@/lib/firestore/categories/read"
+import { useBrands } from "@/lib/firestore/brands/read"
 import ProductFilters from "./components/ProductFilters"
 import ProductGrid from "./components/ProductGrid"
 import SortMenu from "./components/SortMenu"
 import { Filter, ArrowUpDown } from "lucide-react"
+import ProductSkeleton from "./components/ProductSkeleton"
 
-const Page = () => {
+const ProductsPage = () => {
+    const { data: products, isLoading, error } = useProducts({ pageLimit: 20 })
+    const { categoriesList } = useCategories()
+    const { data: brands } = useBrands()
 
-    const mockProducts = [
-        {
-            id: 1,
-            title: "Galaxy S23 Ultra",
-            price: 1199,
-            salePrice: 1099,
-            brand: "Samsung",
-            featuredImageURL: "/product-img.png",
-            shortDescription: "6.8-inch AMOLED display, 200MP camera",
-            isBestSelling: true,    // Popular brand + good discount
-            isLatest: true    // S23 series released early 2023
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const pathname = usePathname()
 
-        },
-        {
-            id: 2,
-            title: "iPhone 15 Pro Max",
-            price: 1299,
-            salePrice: 1249,
-            brand: "Apple",
-            featuredImageURL: "/product-img.png",
-            shortDescription: "6.7-inch Super Retina XDR, A17 Pro chip, Titanium body.",
-            isBestSelling: true,    // Apple products typically sell well
-            isLatest: true     // iPhone 15 series is newer (late 2023)
-        },
-        {
-            id: 3,
-            title: "Google Pixel 8 Pro",
-            price: 999,
-            salePrice: 949,
-            brand: "Google",
-            featuredImageURL: "/product-img2.jpg",
-            shortDescription: "6.7-inch LTPO OLED, Tensor G3 chip, 50MP triple camera.",
-            isBestSelling: true,   // Good but less mainstream than Samsung/Apple
-            isLatest: true     // Pixel 8 series is recent (late 2023)
-        },
-        {
-            id: 4,
-            title: "OnePlus 11 5G",
-            price: 799,
-            salePrice: 749,
-            brand: "OnePlus",
-            featuredImageURL: "/product-img2.jpg",
-            shortDescription: "6.7-inch AMOLED, Snapdragon 8 Gen 2, 5000mAh battery.",
-            isBestSelling: true,   // Niche brand
-            isLatest: true    // Released early 2023
-        },
-        {
-            id: 5,
-            title: "Xiaomi 13 Pro",
-            price: 899,
-            salePrice: 849,
-            brand: "Xiaomi",
-            featuredImageURL: "/product-img2.jpg",
-            shortDescription: "6.73-inch AMOLED, Snapdragon 8 Gen 2, Leica cameras.",
-            isBestSelling: true,   // Less known in some markets
-            isLatest: true    // Released early 2023
-        },
-        {
-            id: 6,
-            title: "Xiaomi 13 Pro",
-            price: 899,
-            salePrice: 849,
-            brand: "Xiaomi",
-            featuredImageURL: "/product-img2.jpg",
-            shortDescription: "6.73-inch AMOLED, Snapdragon 8 Gen 2, Leica cameras.",
-            isBestSelling: true,   // Less known in some markets
-            isLatest: true    // Released early 2023
-        },
-    ];
+    const initialBrandIds = searchParams.get("brandId")?.split(",").filter(Boolean) || []
+    const initialCategoryIds = searchParams.get("categoryId")?.split(",").filter(Boolean) || []
 
-
-    const [filteredProducts, setFilteredProducts] = useState(mockProducts)
     const [filters, setFilters] = useState({
-        category: "",
-        brand: "",
-        price: 200,
+        category: [],
+        brand: [],
+        price: 2000,
     })
+    const [isInitialized, setIsInitialized] = useState(false)
+
+    // Initialize filters from query parameters only on first load
+    useEffect(() => {
+        if (!categoriesList || !brands || isInitialized) return
+
+        const selectedCategories = categoriesList
+            .filter((cat) => initialCategoryIds.includes(cat.id))
+            .map((cat) => cat.name)
+        const selectedBrands = brands
+            .filter((brand) => initialBrandIds.includes(brand.id))
+            .map((brand) => brand.name)
+
+        setFilters({
+            category: selectedCategories,
+            brand: selectedBrands,
+            price: 2000,
+        })
+        setIsInitialized(true)
+    }, [categoriesList, brands, initialCategoryIds, initialBrandIds, isInitialized])
+
     const [sortOption, setSortOption] = useState("popularity")
     const [isFilterOpen, setIsFilterOpen] = useState(false)
     const [isSortOpen, setIsSortOpen] = useState(false)
 
-    useEffect(() => {
-        let updatedProducts = [...mockProducts]
+    const processedCategories = useMemo(() => {
+        return (
+            categoriesList?.map((category) => ({
+                name: category.name,
+                count: products?.filter((product) => product.categoryId === category.id).length || 0,
+            })) || []
+        )
+    }, [categoriesList, products])
 
-        // Apply filters
-        if (filters.category) {
-            updatedProducts = updatedProducts.filter((product) =>
-                product.shortDescription.toLowerCase().includes(filters.category.toLowerCase()),
+    const processedBrands = useMemo(() => {
+        return (
+
+
+            brands?.map((brand) => ({
+                name: brand.name,
+                count: products?.filter((product) => product.brandId === brand.id).length || 0,
+            })) || []
+        )
+    }, [brands, products])
+
+    const filteredProducts = useMemo(() => {
+        if (!products) return []
+
+        let updatedProducts = [...products]
+
+        // Apply category filter
+        if (filters.category.length > 0) {
+            const categoryIds = categoriesList
+                .filter((cat) => filters.category.includes(cat.name))
+                .map((cat) => cat.id)
+            if (categoryIds.length > 0) {
+                updatedProducts = updatedProducts.filter((product) =>
+                    categoryIds.includes(product.categoryId)
+                )
+            }
+        }
+
+        // Apply brand filter
+        if (filters.brand.length > 0) {
+            const brandIds = brands
+                .filter((brand) => filters.brand.includes(brand.name))
+                .map((brand) => brand.id)
+            if (brandIds.length > 0) {
+                updatedProducts = updatedProducts.filter((product) =>
+                    brandIds.includes(product.brandId)
+                )
+            }
+        }
+
+        // Apply price filter
+        if (filters.price < 2000) {
+            updatedProducts = updatedProducts.filter(
+                (product) => (product.salePrice || product.price) <= Number(filters.price)
             )
-        }
-        if (filters.brand) {
-            updatedProducts = updatedProducts.filter((product) => product.brand.toLowerCase() === filters.brand.toLowerCase())
-        }
-        if (filters.price < 200) {
-            updatedProducts = updatedProducts.filter((product) => product.salePrice <= filters.price)
         }
 
         // Apply sorting
         switch (sortOption) {
             case "priceLowToHigh":
-                updatedProducts.sort((a, b) => a.salePrice - b.salePrice)
+                updatedProducts.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price))
                 break
             case "priceHighToLow":
-                updatedProducts.sort((a, b) => b.salePrice - a.salePrice)
+                updatedProducts.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || b.price))
                 break
             case "newest":
-                updatedProducts.sort((a, b) => (a.isLatest === b.isLatest ? 0 : a.isLatest ? -1 : 1))
+                updatedProducts.sort((a, b) => {
+                    const aTime = a.timestampCreate?.seconds || 0
+                    const bTime = b.timestampCreate?.seconds || 0
+                    return bTime - aTime
+                })
                 break
+            case "rating":
             case "popularity":
             default:
-                updatedProducts.sort((a, b) => (a.isBestSelling === b.isBestSelling ? 0 : a.isBestSelling ? -1 : 1))
+                updatedProducts.sort((a, b) => (a.bestSelling === b.bestSelling ? 0 : a.bestSelling ? -1 : 1))
                 break
         }
 
-        setFilteredProducts(updatedProducts)
-    }, [filters, sortOption])
+        return updatedProducts
+    }, [filters, sortOption, products, categoriesList, brands])
 
     const handleFilterChange = (filterType, value) => {
         setFilters((prev) => ({
@@ -131,13 +140,23 @@ const Page = () => {
         }))
     }
 
+    const handleClearFilters = () => {
+        setFilters({
+            category: [],
+            brand: [],
+            price: 2000,
+        })
+        // Clear query parameters
+        router.push(pathname)
+    }
+
     const handleSortChange = (option) => {
         setSortOption(option)
+        setIsSortOpen(false)
     }
 
     return (
         <div className="bg-gray-50 min-h-screen">
-            {/* Mobile Filter/Sort Bar */}
             <div className="sticky top-0 z-10 md:hidden bg-white shadow-md">
                 <div className="flex items-center justify-between p-3">
                     <div className="flex-1">
@@ -150,7 +169,10 @@ const Page = () => {
                         </button>
                     </div>
                     <div className="flex-1">
-                        <button onClick={() => setIsSortOpen(true)} className="flex items-center justify-center w-full py-2">
+                        <button
+                            onClick={() => setIsSortOpen(true)}
+                            className="flex items-center justify-center w-full py-2"
+                        >
                             <ArrowUpDown size={16} className="mr-2" />
                             <span>Sort</span>
                         </button>
@@ -158,21 +180,26 @@ const Page = () => {
                 </div>
             </div>
 
-            <div className="container mx-auto p-4 px-4 sm:px-6 lg:px-8 py-6 lg:py-10 flex flex-col md:flex-row">
-                {/* Desktop Filters */}
+            <div className="container mx-auto px-1 sm:px-2 lg:px-8 py-6 lg:py-10 flex flex-col md:flex-row">
                 <div className="w-full md:w-1/5 mb-6 md:mb-0 md:mr-6">
                     <ProductFilters
+                        categories={processedCategories}
+                        brands={processedBrands}
                         onFilterChange={handleFilterChange}
+                        onClearFilters={handleClearFilters}
                         isOpen={isFilterOpen}
                         onClose={() => setIsFilterOpen(false)}
+                        isLoading={isLoading}
+                        filters={filters}
                     />
                 </div>
 
-                {/* Product Grid */}
-                <div className="w-full md:w-4/5">
+                <div className="w-full md:w-4/5 ml-0 md:ml-5 lg:ml-0">
                     <div className="hidden md:flex justify-between items-center mb-4">
                         <h2 className="text-lg sm:text-xl font-semibold">
-                            Showing {filteredProducts.length} Results from total {mockProducts.length}
+                            {isLoading
+                                ? ""
+                                : `Showing ${filteredProducts.length} Results from total ${products?.length || 0}`}
                         </h2>
                         <div className="relative">
                             <select
@@ -184,7 +211,6 @@ const Page = () => {
                                 <option value="priceLowToHigh">Price: Low to High</option>
                                 <option value="priceHighToLow">Price: High to Low</option>
                                 <option value="newest">Newest First</option>
-                                <option value="rating">Rating</option>
                             </select>
                             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                 <ArrowUpDown size={16} />
@@ -193,14 +219,35 @@ const Page = () => {
                     </div>
 
                     <div className="md:hidden mb-4">
-                        <h2 className="text-sm font-medium">Showing {filteredProducts.length} Results from total {mockProducts.length}</h2>
+                        <h2 className="text-sm font-medium">
+                            {isLoading
+                                ? ""
+                                : `Showing ${filteredProducts.length} Results from total ${products?.length || 0}`}
+                        </h2>
                     </div>
 
-                    <ProductGrid products={filteredProducts} />
+                    {isLoading ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
+                            {[...Array(8)].map((_, index) => (
+                                <ProductSkeleton key={index} />
+                            ))}
+                        </div>
+                    ) : error ? (
+                        <div className="text-center py-10">
+                            <p className="text-red-500">Error loading products: {error}</p>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
+                            >
+                                Try Again
+                            </button>
+                        </div>
+                    ) : (
+                        <ProductGrid products={filteredProducts} />
+                    )}
                 </div>
             </div>
 
-            {/* Mobile Sort Menu */}
             <SortMenu
                 isOpen={isSortOpen}
                 onClose={() => setIsSortOpen(false)}
@@ -211,4 +258,4 @@ const Page = () => {
     )
 }
 
-export default Page
+export default ProductsPage
