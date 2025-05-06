@@ -1,17 +1,12 @@
 // app/choose-brand/page.jsx
-"use client";
-
-import { useSearchParams } from "next/navigation";
-import BrandListing from "./components/BrandListing";
+import { Suspense } from "react";
+import ChooseBrandClient from "./components/ChooseBrandClient";
 
 const ChooseBrandPage = () => {
-  const searchParams = useSearchParams();
-  const categoryId = searchParams.get("categoryId");
-
   return (
-    <main>
-      <BrandListing categoryId={categoryId} />
-    </main>
+    <Suspense fallback={<div>Loading...</div>}>
+      <ChooseBrandClient />
+    </Suspense>
   );
 };
 
