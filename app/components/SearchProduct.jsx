@@ -24,7 +24,7 @@ function SearchModels() {
     const [isSearchFocused, setIsSearchFocused] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    
+
     // Fetch all brands
     const [brands, setBrands] = useState([]);
     useEffect(() => {
@@ -57,7 +57,7 @@ function SearchModels() {
         try {
             const modelsCollection = collection(db, "models");
             let q = query(modelsCollection);
-            
+
             if (selectedBrand !== "All Brands") {
                 const selectedBrandId = brands.find(b => b.name === selectedBrand)?.id;
                 if (selectedBrandId) {
@@ -71,7 +71,7 @@ function SearchModels() {
                     id: doc.id,
                     ...doc.data()
                 }))
-                .filter(model => 
+                .filter(model =>
                     model.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
                 );
 
@@ -82,7 +82,7 @@ function SearchModels() {
                 const brandSnapshot = await getDocs(
                     query(collection(db, "brands"), where("id", "==", model.brandId))
                 );
-                
+
                 return {
                     ...model,
                     series: seriesSnapshot.docs[0]?.data().name || "Unknown Series",
@@ -207,7 +207,7 @@ function SearchModels() {
                                                 {model.name}
                                             </div>
                                             <div className="text-xs text-gray-500 mt-1">
-                                                {model.brand} • {model.series} • {model.category}
+                                                {model.brand}
                                             </div>
                                         </Link>
                                     </li>

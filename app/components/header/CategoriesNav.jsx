@@ -1,77 +1,79 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect, useCallback } from "react"
-import { ChevronDown, Layers } from "lucide-react"
-import Link from "next/link"
-import MegaMenu from "./mega-menu"
-import { categoryData } from "./category-data"
+import { useState, useRef, useEffect, useCallback } from "react";
+import { ChevronDown, Layers } from "lucide-react";
+import Link from "next/link";
+import { useCategories } from "@/lib/firestore/categories/read";
+import { useBrands } from "@/lib/firestore/brands/read";
+import { useSeriesByBrand } from "@/lib/firestore/series/read";
+import { useModelsByBrand } from "@/lib/firestore/models/read";
 
 export default function CategoriesNav() {
-  const [activeCategory, setActiveCategory] = useState(null)
-  const [activeBrand, setActiveBrand] = useState(null)
-  const [activeSeries, setActiveSeries] = useState(null)
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false)
-  const megaMenuRef = useRef(null)
-  const navRef = useRef(null)
-  const timeoutRef = useRef(null)
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [activeBrand, setActiveBrand] = useState(null);
+  const [activeSeries, setActiveSeries] = useState(null);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const megaMenuRef = useRef(null);
+  const navRef = useRef(null);
+  const timeoutRef = useRef(null);
 
-  // Debounce utility to prevent rapid state changes
+  const { data: categories, isLoading: categoriesLoading } = useCategories();
+  const { data: brands, isLoading: brandsLoading } = useBrands();
+  const { data: series, isLoading: seriesLoading } = useSeriesByBrand(activeBrand?.id);
+  const { data: models, isLoading: modelsLoading } = useModelsByBrand(activeBrand?.id);
+
+  // Debounce utility
   const debounce = (func, delay) => {
     return (...args) => {
-      clearTimeout(timeoutRef.current)
-      timeoutRef.current = setTimeout(() => func(...args), delay)
-    }
-  }
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => func(...args), delay);
+    };
+  };
 
-  // Open mega menu with category data
+  // Open mega menu
   const openMegaMenu = useCallback((category) => {
-    clearTimeout(timeoutRef.current)
-    setActiveCategory(category)
-    setActiveBrand(category.brands[0])
-    setActiveSeries(category.brands[0].series[0])
-    setIsMegaMenuOpen(true)
-  }, [])
+    clearTimeout(timeoutRef.current);
+    setActiveCategory(category);
+    setActiveBrand(brands[0] || null);
+    setActiveSeries(series[0] || null);
+    setIsMegaMenuOpen(true);
+  }, [brands, series]);
 
   // Close mega menu
   const closeMegaMenu = useCallback(() => {
-    clearTimeout(timeoutRef.current)
-    setIsMegaMenuOpen(false)
-    setActiveCategory(null)
-    setActiveBrand(null)
-    setActiveSeries(null)
-  }, [])
+    clearTimeout(timeoutRef.current);
+    setIsMegaMenuOpen(false);
+    setActiveCategory(null);
+    setActiveBrand(null);
+    setActiveSeries(null);
+  }, []);
 
-  // Handle category hover with debounce
+  // Handle category hover
   const handleCategoryHover = useCallback(
     debounce((category) => {
       if (window.innerWidth >= 1024) {
-        openMegaMenu(category)
+        openMegaMenu(category);
       }
     }, 100),
     [openMegaMenu]
-  )
+  );
 
-  // Handle brand and series hover
-  const handleBrandHover = useCallback(
-    (brand) => {
-      if (window.innerWidth >= 1024) {
-        setActiveBrand(brand)
-        setActiveSeries(brand.series[0])
-      }
-    },
-    []
-  )
+  // Handle brand hover
+  const handleBrandHover = useCallback((brand) => {
+    if (window.innerWidth >= 1024) {
+      setActiveBrand(brand);
+      setActiveSeries(series[0] || null);
+    }
+  }, [series]);
 
-  const handleSeriesHover = useCallback(
-    (series) => {
-      if (window.innerWidth >= 1024) {
-        setActiveSeries(series)
-      }
-    },
-    []
-  )
+  // Handle series hover
+  const handleSeriesHover = useCallback((series) => {
+    if (window.innerWidth >= 1024) {
+      setActiveSeries(series);
+    }
+  }, []);
 
-  // Handle clicks outside mega menu
+  // Handle click outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -80,26 +82,28 @@ export default function CategoriesNav() {
         navRef.current &&
         !navRef.current.contains(event.target)
       ) {
-        closeMegaMenu()
+        closeMegaMenu();
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
+
+
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-      clearTimeout(timeoutRef.current)
-    }
-  }, [closeMegaMenu])
+      document.removeEventListener("mousedown", handleClickOutside);
+      clearTimeout(timeoutRef.current);
+    };
+  }, [closeMegaMenu]);
 
-  // Handle mouse leave with debounce
+  // Handle mouse leave
   const handleMouseLeave = useCallback(
     debounce(() => {
       if (window.innerWidth >= 1024) {
-        closeMegaMenu()
+        closeMegaMenu();
       }
     }, 300),
     [closeMegaMenu]
-  )
+  );
 
   return (
     <div className="relative">
@@ -116,29 +120,29 @@ export default function CategoriesNav() {
           Browse Categories
         </Link>
 
-        {categoryData.slice(0, 6).map((category, index) => (
+        {categories.slice(0, 6).map((category) => (
           <div
-            key={index}
+            key={category.id}
             className="relative category-menu-item group flex"
             onMouseEnter={() => handleCategoryHover(category)}
             onMouseLeave={handleMouseLeave}
           >
             <button
               className={`flex items-center gap-3 text-sm font-medium transition-colors py-2 px-3 rounded-lg hover:bg-gray-50 ${
-                activeCategory?.name === category.name ? "text-blue-600" : "text-gray-700"
+                activeCategory?.id === category.id ? "text-blue-600" : "text-gray-700"
               }`}
               onClick={() => {
-                if (activeCategory?.name === category.name && isMegaMenuOpen) {
-                  closeMegaMenu()
+                if (activeCategory?.id === category.id && isMegaMenuOpen) {
+                  closeMegaMenu();
                 } else {
-                  openMegaMenu(category)
+                  openMegaMenu(category);
                 }
               }}
-              aria-expanded={activeCategory?.name === category.name && isMegaMenuOpen}
+              aria-expanded={activeCategory?.id === category.id && isMegaMenuOpen}
             >
               <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1">
                 <img
-                  src={category.icon}
+                  src={category.imageURL || "/placeholder.png"}
                   alt={category.name}
                   className="w-7 h-7 object-contain rounded-md"
                 />
@@ -146,7 +150,7 @@ export default function CategoriesNav() {
               <span className="mt-1">{category.name}</span>
               <ChevronDown
                 className={`h-4 w-4 mt-1 transition-transform duration-200 ${
-                  activeCategory?.name === category.name ? "rotate-180 text-blue-600" : "text-gray-500"
+                  activeCategory?.id === category.id ? "rotate-180 text-blue-600" : "text-gray-500"
                 }`}
               />
             </button>
@@ -162,16 +166,66 @@ export default function CategoriesNav() {
           onMouseEnter={() => clearTimeout(timeoutRef.current)}
           onMouseLeave={handleMouseLeave}
         >
-          <MegaMenu
-            category={activeCategory}
-            activeBrand={activeBrand}
-            activeSeries={activeSeries}
-            onBrandHover={handleBrandHover}
-            onSeriesHover={handleSeriesHover}
-            onClose={closeMegaMenu}
-          />
+          <div className="max-w-7xl mx-auto px-8 py-6 grid grid-cols-4 gap-8">
+            {/* Brands Section */}
+            <div className="col-span-1">
+              <h3 className="text-lg font-semibold mb-4">Brands</h3>
+              {brands.map((brand) => (
+                <Link
+                  key={brand.id}
+                  href={`/product?brandId=${brand.id}&categoryId=${activeCategory.id}`}
+                  className={`block py-2 px-3 text-sm rounded-md hover:bg-gray-100 ${
+                    activeBrand?.id === brand.id ? "bg-gray-100 text-blue-600" : "text-gray-700"
+                  }`}
+                  onMouseEnter={() => handleBrandHover(brand)}
+                >
+                  {brand.name}
+                </Link>
+              ))}
+            </div>
+
+            {/* Series Section */}
+            <div className="col-span-1">
+              <h3 className="text-lg font-semibold mb-4">Series</h3>
+              {series.map((seriesItem) => (
+                <Link
+                  key={seriesItem.id}
+                  href={`/product?brandId=${activeBrand?.id}&categoryId=${activeCategory.id}&seriesId=${seriesItem.id}`}
+                  className={`block py-2 px-3 text-sm rounded-md hover:bg-gray-100 ${
+                    activeSeries?.id === seriesItem.id ? "bg-gray-100 text-blue-600" : "text-gray-700"
+                  }`}
+                  onMouseEnter={() => handleSeriesHover(seriesItem)}
+                >
+                  {seriesItem.seriesName}
+                </Link>
+              ))}
+            </div>
+
+            {/* Models Section */}
+            <div className="col-span-2">
+              <h3 className="text-lg font-semibold mb-4">Models</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {models.map((model) => (
+                  <Link
+                    key={model.id}
+                    href={`/product?brandId=${activeBrand?.id}&categoryId=${activeCategory.id}&modelId=${model.id}`}
+                    className="block p-3 rounded-md hover:bg-gray-100"
+                  >
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={model.imageURL || "/placeholder.png"}
+                        alt={model.name}
+                        className="w-12 h-12 object-contain rounded-md"
+                      />
+                      <span className="text-sm text-gray-700">{model.name}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
-  )
+  );
 }
