@@ -142,12 +142,12 @@ function Photos({ imageList = [] }) {
     }
 
     return (
-        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white">
+        <div className="w-full max-w-8xl  mx-auto px-4 sm:px-6 lg:px-10 py-6 bg-white">
             {/* Fullscreen View */}
             {showFullscreen && (
                 <div className="fixed inset-0 top-16 bg-black z-50 flex items-center justify-center" onClick={toggleFullscreen}>
                     <button
-                        className="absolute top-24 right-4 z-50 w-10 h-10 bg-white text-black p-2 rounded-full"
+                        className="absolute top-4 right-4 z-50 w-10 h-10 bg-white text-black p-2 rounded-full"
                         onClick={(e) => {
                             e.stopPropagation()
                             toggleFullscreen()
@@ -167,7 +167,7 @@ function Photos({ imageList = [] }) {
             <div className="flex flex-col space-y-4">
                 {/* Main Image Carousel */}
                 <div
-                    className="relative w-full h-[280px] sm:h-[360px] md:h-[450px] lg:h-[550px] overflow-hidden rounded-xl bg-black  cursor-zoom-in"
+                    className="relative w-full h-[280px] sm:h-[360px] md:h-[450px] lg:h-[480px] overflow-hidden rounded-xl   cursor-zoom-in"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => {
                         setIsPaused(false)
@@ -178,14 +178,14 @@ function Photos({ imageList = [] }) {
                         {images.map((img, index) => (
                             <div key={index} className="relative w-full h-full">
                                 <div
-                                    className="relative w-full h-[280px] sm:h-[360px] md:h-[450px] lg:h-[550px] flex justify-center items-center bg-black overflow-hidden"
+                                    className="relative w-full h-[280px] sm:h-[360px] md:h-[450px] lg:h-[480px] flex justify-center items-center  overflow-hidden"
                                     onMouseMove={handleMouseMove}
                                     onMouseEnter={() => setIsZoomed(true)}
                                     onMouseLeave={() => setIsZoomed(false)}
                                     onClick={toggleFullscreen}
                                 >
                                     <button
-                                        className="absolute top-3 right-3 z-10 bg-black/70 text-white p-2 rounded-full"
+                                        className="absolute top-0 right-3 z-10 bg-black/70 text-white p-2 rounded-full"
                                         onClick={(e) => {
                                             e.stopPropagation()
                                             toggleFullscreen()
@@ -195,11 +195,11 @@ function Photos({ imageList = [] }) {
                                     </button>
 
                                     <div
-                                        className={`transition-all duration-300 w-full h-full ${isZoomed ? "scale-150" : "scale-100"}`}
+                                        className={`transition-all duration-75 w-full h-full ${isZoomed ? "scale-[2]" : "scale-100"}`}
                                         style={
                                             isZoomed
                                                 ? {
-                                                    transformOrigin: `${zoomPosition.x * 100}% ${zoomPosition.y * 100}%`,
+                                                    transformOrigin: `${zoomPosition.x * 200}% ${zoomPosition.y * 200}%`,
                                                 }
                                                 : {}
                                         }

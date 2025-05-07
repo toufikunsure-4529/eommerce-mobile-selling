@@ -6,6 +6,7 @@ import { AuthContextProvider } from "@/context/AuthContext";
 import { getBrand } from "@/lib/firestore/brands/read_server";
 import { getCategory } from "@/lib/firestore/categories/read_server";
 import { getProductReviewCounts } from "@/lib/firestore/products/count/read";
+import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -89,7 +90,7 @@ function Details({ product }) {
                     <AddToCartButton productId={product?.id} type="large" />
                 </AuthContextProvider>
                 <Link href={`/checkout?type=buynow&productId=${product?.id}`} className="flex-1">
-                    <button className="w-full text-sm sm:text-base py-2 sm:py-2 px-3 sm:px-6 text-red-500 font-normal border border-red-500 rounded-lg shadow hover:bg-red-500 hover:text-white transition duration-300">
+                    <button className=" text-sm sm:text-base py-2 sm:py-2 px-3 sm:px-6 text-red-500 font-normal border border-red-500 rounded-lg shadow hover:bg-red-500 hover:text-white transition duration-300">
                         Buy Now
                     </button>
                 </Link>

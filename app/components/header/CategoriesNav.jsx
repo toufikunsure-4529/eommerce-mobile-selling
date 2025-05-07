@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ChevronDown, Layers } from "lucide-react";
+import { ChevronDown, Layers, X } from "lucide-react";
 import Link from "next/link";
 import { useCategories } from "@/lib/firestore/categories/read";
 import { useBrands } from "@/lib/firestore/brands/read";
@@ -34,10 +34,10 @@ export default function CategoriesNav() {
   const openMegaMenu = useCallback((category) => {
     clearTimeout(timeoutRef.current);
     setActiveCategory(category);
-    setActiveBrand(brands[0] || null);
-    setActiveSeries(series[0] || null);
+    setActiveBrand(null);
+    setActiveSeries(null);
     setIsMegaMenuOpen(true);
-  }, [brands, series]);
+  }, []);
 
   // Close mega menu
   const closeMegaMenu = useCallback(() => {
@@ -54,7 +54,7 @@ export default function CategoriesNav() {
       if (window.innerWidth >= 1024) {
         openMegaMenu(category);
       }
-    }, 100),
+    }, 150),
     [openMegaMenu]
   );
 
@@ -62,9 +62,9 @@ export default function CategoriesNav() {
   const handleBrandHover = useCallback((brand) => {
     if (window.innerWidth >= 1024) {
       setActiveBrand(brand);
-      setActiveSeries(series[0] || null);
+      setActiveSeries(null);
     }
-  }, [series]);
+  }, []);
 
   // Handle series hover
   const handleSeriesHover = useCallback((series) => {
@@ -86,8 +86,6 @@ export default function CategoriesNav() {
       }
     };
 
-
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -98,39 +96,41 @@ export default function CategoriesNav() {
   // Handle mouse leave
   const handleMouseLeave = useCallback(
     debounce(() => {
-      if (window.innerWidth >= 1024) {
+      if (window.innerWidth >= 1024 && isMegaMenuOpen) {
         closeMegaMenu();
       }
-    }, 300),
-    [closeMegaMenu]
+    }, 200),
+    [closeMegaMenu, isMegaMenuOpen]
   );
 
   return (
-    <div className="relative">
+    <div className="relative bg-white">
       {/* Categories Navigation - Desktop */}
       <nav
         ref={navRef}
-        className="hidden lg:flex items-center justify-between px-4 md:px-6 lg:px-8 xl:px-20 py-2 border-b border-gray-200 bg-white"
+        className="hidden lg:flex max-w-8xl items-center justify-between px-16 py-3 border-b border-gray-200"
       >
         <Link
           href="/categories"
-          className="flex items-center px-4 gap-2 text-sm font-medium py-3 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 mr-4 transition-all duration-200"
+          className="flex items-center px-4 gap-2 text-sm font-medium py-2.5 text-white rounded-md bg-red-500 hover:bg-red-600 mr-4 transition-colors duration-200"
         >
           <Layers size={16} />
           Browse Categories
         </Link>
 
-        {categories.slice(0, 6).map((category) => (
+
+        {categories?.slice(0, 6).map((category) => (
           <div
             key={category.id}
-            className="relative category-menu-item group flex"
+            className="relative"
             onMouseEnter={() => handleCategoryHover(category)}
             onMouseLeave={handleMouseLeave}
           >
             <button
-              className={`flex items-center gap-3 text-sm font-medium transition-colors py-2 px-3 rounded-lg hover:bg-gray-50 ${
-                activeCategory?.id === category.id ? "text-blue-600" : "text-gray-700"
-              }`}
+              className={`flex items-center gap-3 text-sm font-medium py-2 px-3 rounded-md transition-colors ${activeCategory?.id === category.id
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-700 hover:bg-gray-50"
+                }`}
               onClick={() => {
                 if (activeCategory?.id === category.id && isMegaMenuOpen) {
                   closeMegaMenu();
@@ -138,20 +138,19 @@ export default function CategoriesNav() {
                   openMegaMenu(category);
                 }
               }}
-              aria-expanded={activeCategory?.id === category.id && isMegaMenuOpen}
             >
-              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-1">
+              <span className="flex-shrink-0  bg-gray-100 h-10 w-10 flex items-center justify-center rounded-full">
                 <img
-                  src={category.imageURL || "/placeholder.png"}
+                  src={category.imageURL || "/placeholder-category.png"}
                   alt={category.name}
-                  className="w-7 h-7 object-contain rounded-md"
+                  className="w-8 h-8 object-contain rounded-full"
                 />
-              </div>
-              <span className="mt-1">{category.name}</span>
+              </span>
+              <span>{category.name}</span>
               <ChevronDown
-                className={`h-4 w-4 mt-1 transition-transform duration-200 ${
-                  activeCategory?.id === category.id ? "rotate-180 text-blue-600" : "text-gray-500"
-                }`}
+                size={16}
+                className={`flex-shrink-0 transition-transform ${activeCategory?.id === category.id ? "rotate-180" : ""
+                  }`}
               />
             </button>
           </div>
@@ -166,61 +165,126 @@ export default function CategoriesNav() {
           onMouseEnter={() => clearTimeout(timeoutRef.current)}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="max-w-7xl mx-auto px-8 py-6 grid grid-cols-4 gap-8">
-            {/* Brands Section */}
-            <div className="col-span-1">
-              <h3 className="text-lg font-semibold mb-4">Brands</h3>
-              {brands.map((brand) => (
-                <Link
-                  key={brand.id}
-                  href={`/product?brandId=${brand.id}&categoryId=${activeCategory.id}`}
-                  className={`block py-2 px-3 text-sm rounded-md hover:bg-gray-100 ${
-                    activeBrand?.id === brand.id ? "bg-gray-100 text-blue-600" : "text-gray-700"
-                  }`}
-                  onMouseEnter={() => handleBrandHover(brand)}
-                >
-                  {brand.name}
-                </Link>
-              ))}
+          <div className="max-w-7xl mx-auto px-6 py-5">
+            <div className="flex justify-between items-center mb-4 border-b pb-3">
+              <h2 className="text-lg font-semibold text-gray-800">
+                {activeCategory.name}
+              </h2>
+              <button
+                onClick={closeMegaMenu}
+                className="p-1 rounded-full hover:bg-gray-100"
+                aria-label="Close menu"
+              >
+                <X size={18} className="text-gray-500" />
+              </button>
             </div>
 
-            {/* Series Section */}
-            <div className="col-span-1">
-              <h3 className="text-lg font-semibold mb-4">Series</h3>
-              {series.map((seriesItem) => (
-                <Link
-                  key={seriesItem.id}
-                  href={`/product?brandId=${activeBrand?.id}&categoryId=${activeCategory.id}&seriesId=${seriesItem.id}`}
-                  className={`block py-2 px-3 text-sm rounded-md hover:bg-gray-100 ${
-                    activeSeries?.id === seriesItem.id ? "bg-gray-100 text-blue-600" : "text-gray-700"
-                  }`}
-                  onMouseEnter={() => handleSeriesHover(seriesItem)}
-                >
-                  {seriesItem.seriesName}
-                </Link>
-              ))}
-            </div>
+            <div className="grid grid-cols-12 gap-6">
+              {/* Brands Column */}
+              <div className="col-span-3">
+                <h3 className="text-sm font-medium text-gray-500 uppercase mb-3">Brands</h3>
+                <div className="max-h-[400px] overflow-y-auto pr-2">
+                  {brands?.map((brand) => (
+                    <button
+                      key={brand.id}
+                      className={`w-full text-left px-3 py-2 text-sm rounded-md mb-1 transition-colors ${activeBrand?.id === brand.id
+                          ? "bg-blue-50 text-blue-600 font-medium"
+                          : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                      onMouseEnter={() => handleBrandHover(brand)}
+                    >
+                      {brand.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-            {/* Models Section */}
-            <div className="col-span-2">
-              <h3 className="text-lg font-semibold mb-4">Models</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {models.map((model) => (
-                  <Link
-                    key={model.id}
-                    href={`/product?brandId=${activeBrand?.id}&categoryId=${activeCategory.id}&modelId=${model.id}`}
-                    className="block p-3 rounded-md hover:bg-gray-100"
-                  >
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={model.imageURL || "/placeholder.png"}
-                        alt={model.name}
-                        className="w-12 h-12 object-contain rounded-md"
-                      />
-                      <span className="text-sm text-gray-700">{model.name}</span>
+              {/* Series Column */}
+              <div className="col-span-3 border-l border-gray-200 pl-6">
+                {activeBrand ? (
+                  <>
+                    <h3 className="text-sm font-medium text-gray-500 uppercase mb-3">
+                      {activeBrand.name} Series
+                    </h3>
+                    <div className="max-h-[400px] overflow-y-auto pr-2">
+                      {series?.length > 0 ? (
+                        series.map((seriesItem) => (
+                          <button
+                            key={seriesItem.id}
+                            className={`w-full text-left px-3 py-2 text-sm rounded-md mb-1 transition-colors ${activeSeries?.id === seriesItem.id
+                                ? "bg-blue-50 text-blue-600 font-medium"
+                                : "text-gray-700 hover:bg-gray-50"
+                              }`}
+                            onMouseEnter={() => handleSeriesHover(seriesItem)}
+                          >
+                            {seriesItem.seriesName}
+                          </button>
+                        ))
+                      ) : (
+                        <p className="text-sm text-gray-500 px-3 py-2">
+                          No series available
+                        </p>
+                      )}
                     </div>
-                  </Link>
-                ))}
+                  </>
+                ) : (
+                  <div className="text-sm text-gray-500 h-full flex items-center">
+                    Select a brand to view series
+                  </div>
+                )}
+              </div>
+
+              {/* Models Column */}
+              <div className="col-span-6 border-l border-gray-200 pl-6">
+                {activeSeries ? (
+                  <>
+                    <h3 className="text-sm font-medium text-gray-500 uppercase mb-3">
+                      {activeSeries.seriesName} Models
+                    </h3>
+                    <div className="max-h-[400px] overflow-y-auto pr-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        {models
+                          ?.filter(model => model.seriesId === activeSeries.id)
+                          .map((model) => (
+                            <Link
+                              key={model.id}
+                              href={`/product?brandId=${activeBrand.id}&categoryId=${activeCategory.id}&seriesId=${activeSeries.id}&modelId=${model.id}`}
+                              className="block px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors border border-gray-100"
+                              onClick={closeMegaMenu}
+                            >
+                              {model.name}
+                            </Link>
+                          ))}
+                      </div>
+                    </div>
+                  </>
+                ) : activeBrand ? (
+                  <>
+                    <h3 className="text-sm font-medium text-gray-500 uppercase mb-3">
+                      {activeBrand.name} Models
+                    </h3>
+                    <div className="max-h-[400px] overflow-y-auto pr-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        {models?.map((model) => (
+                          <Link
+                            key={model.id}
+                            href={`/product?brandId=${activeBrand.id}&categoryId=${activeCategory.id}&modelId=${model.id}`}
+                            className="block px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors border border-gray-100"
+                            onClick={closeMegaMenu}
+                          >
+                            {model.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-sm text-gray-500 h-full flex items-center">
+                    {activeBrand
+                      ? "Select a series to view models"
+                      : "Select a brand to view models"}
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ async function RelatedProducts({ categoryId }) {
     const products = await getProductsByCategory({ categoryId });
 
     return (
-        <div className='max-w-8xl w-full px-8'>
+        <div className='md:max-w-8xl w-full px-0 md:px-8'>
             <div className="text-start">
                 <h2 className="md:text-2xl text-xl font-bold text-gray-900 uppercase">Related Products</h2>
             </div>

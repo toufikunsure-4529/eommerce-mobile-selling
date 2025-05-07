@@ -38,7 +38,7 @@ export default async function Page({ params }) {
     if (!product) return notFound(); // Handle case where product is not found
 
     return (
-        <main className="p-4 md:px-10 w-full max-w-7xl mx-auto bg-gray-100">
+        <main className="p-4 md:px-10 w-full max-w-8xl mx-auto bg-gray-100">
             {/* ✅ Product Main Section */}
             <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
                 {/* Images */}
