@@ -1,7 +1,14 @@
 [
   {
-    "origin": ["*"],
-    "method": ["GET", "POST", "PUT", "DELETE"],
+    "origin": [
+      "https://mobiledisplay.vercel.app"
+    ],
+    "method": [
+      "GET",
+      "POST",
+      "PUT",
+      "DELETE"
+    ],
     "maxAgeSeconds": 3600
   }
 ]
