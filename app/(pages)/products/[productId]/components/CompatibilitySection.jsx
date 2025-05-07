@@ -1,9 +1,9 @@
 import React from 'react';
 
-const InTheBoxSection = ({ product }) => {
+const CompatibilitySection = ({ product }) => {
     return (
         <div className="container mx-auto p-4">
-            {/* In The Box Section */}
+            {/* Compatibility Section */}
             <div className="overflow-x-auto">
                 <table className="w-full border-collapse border border-gray-300 bg-white shadow-md">
                     {/* Header */}
@@ -13,16 +13,16 @@ const InTheBoxSection = ({ product }) => {
                                 colSpan="2"
                                 className="p-2 text-center text-md md:text-lg font-semibold text-gray-800 border-b border-gray-300"
                             >
-                                IN THE BOX
+                                COMPATIBILITY
                             </th>
                         </tr>
                     </thead>
                     {/* Body */}
                     <tbody
                         dangerouslySetInnerHTML={{
-                            __html: product?.inTheBox
+                            __html: product?.compatibility
                                 ? `
-                  ${product.inTheBox
+                  ${product.compatibility
                                     .split('<br>')
                                     .filter(item => item.trim())
                                     .map((item, index, array) => {
@@ -60,4 +60,4 @@ const InTheBoxSection = ({ product }) => {
     );
 };
 
-export default InTheBoxSection;
+export default CompatibilitySection;

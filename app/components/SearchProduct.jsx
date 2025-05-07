@@ -128,7 +128,7 @@ function SearchModels() {
     }, []);
 
     return (
-        <div className="max-w-4xl w-full mx-auto px-4">
+        <div className="max-w-4xl w-full mx-auto md:px-4 px-0">
             <div className="relative w-full mt-6 mb-12" ref={searchRef}>
                 {/* Search Bar */}
                 <div className="flex w-full items-center rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow">

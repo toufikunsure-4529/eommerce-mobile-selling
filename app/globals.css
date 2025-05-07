@@ -164,3 +164,18 @@ header {
   z-index: 999;
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
+  background-size: 200% 100%;
+}
+
+

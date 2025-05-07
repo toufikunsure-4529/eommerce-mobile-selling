@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import BasicDetails from "./components/BasicDetails";
 import Images from "./components/Images";
 import Description from "./components/Description";
+import KeyFeature from "./components/KeyFeature";
+import InTheBox from "./components/InTheBox";
+import Compatibility from "./components/Compatibility";
 import { Button } from "@nextui-org/react";
 import toast from "react-hot-toast";
 import { createNewProduct, updateProduct } from "@/lib/firestore/products/write";
@@ -46,7 +49,6 @@ export default function Page() {
     }));
   };
 
-  //handle submit product form
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
@@ -75,21 +77,17 @@ export default function Page() {
       }}
       className="flex flex-col gap-6 p-6 w-full max-w-6xl mx-auto bg-white shadow-md rounded-lg"
     >
-      {/* Header */}
       <div className="flex items-center justify-between w-full border-b pb-4">
         <h1 className="text-xl font-semibold">
           {id ? "Update Product" : "Create New Product"}
         </h1>
       </div>
 
-      {/* Form Content */}
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Left Column */}
         <div className="flex-1">
           <BasicDetails data={data} handleData={handleData} />
         </div>
 
-        {/* Right Column */}
         <div className="flex-1 flex flex-col gap-6">
           <Images
             data={data}
@@ -99,10 +97,12 @@ export default function Page() {
             setImageList={setImageList}
           />
           <Description data={data} handleData={handleData} />
+          <KeyFeature data={data} handleData={handleData} />
+          <InTheBox data={data} handleData={handleData} />
+          <Compatibility data={data} handleData={handleData} />
         </div>
       </div>
 
-      {/* Submit Button */}
       <div className="flex justify-end">
         <Button
           isLoading={isLoading}

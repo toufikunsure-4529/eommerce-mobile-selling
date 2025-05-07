@@ -8,6 +8,7 @@ import AddReview from './components/AddReview';
 import { AuthContextProvider } from '@/context/AuthContext';
 import InTheBoxSection from './components/InTheBoxSection';
 import { notFound } from 'next/navigation';
+import CompatibilitySection from './components/CompatibilitySection';
 
 // Using server-side async functions properly
 export async function generateMetadata({ params }) {
@@ -61,7 +62,11 @@ export default async function Page({ params }) {
 
             {/* ✅ What's in the Box */}
             <section className="mb-10">
-                <InTheBoxSection />
+                <InTheBoxSection product={product} />
+            </section>
+            {/* ✅ What's in the Box */}
+            <section className="mb-10">
+                <CompatibilitySection product={product} />
             </section>
 
             {/* ✅ Review Section */}

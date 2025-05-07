@@ -1,4 +1,3 @@
-
 import AddToCartButton from "@/app/components/AddToCartButton";
 import FavoriteButton from "@/app/components/FavoriteButton";
 import MyRating from "@/app/components/MyRating";
@@ -66,12 +65,10 @@ function Details({ product }) {
             {/* Key Features */}
             <div className="w-full mt-8">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Key Features</h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
-                    <li>Performs as Original</li>
-                    <li>Reliable and Efficient</li>
-                    <li>Seamless User Experience</li>
-                    <li>Responsive Design</li>
-                </ul>
+                <div
+                    className="text-gray-700 space-y-2 jodit-wysiwyg"
+                    dangerouslySetInnerHTML={{ __html: product?.keyFeatures || "<p>No key features available</p>" }}
+                />
             </div>
 
             {/* Color Selection (Static for now) */}
@@ -90,7 +87,7 @@ function Details({ product }) {
                     <AddToCartButton productId={product?.id} type="large" />
                 </AuthContextProvider>
                 <Link href={`/checkout?type=buynow&productId=${product?.id}`} className="flex-1">
-                    <button className=" text-sm sm:text-base py-2 sm:py-2 px-3 sm:px-6 text-red-500 font-normal border border-red-500 rounded-lg shadow hover:bg-red-500 hover:text-white transition duration-300">
+                    <button className="text-sm sm:text-base py-2 sm:py-2 px-3 sm:px-6 text-red-500 font-normal border border-red-500 rounded-lg shadow hover:bg-red-500 hover:text-white transition duration-300">
                         Buy Now
                     </button>
                 </Link>
