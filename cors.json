@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["http://localhost:3000","https://mobiledisplay.vercel.app"],
+    "origin": ["*"],
     "method": ["GET", "POST", "PUT", "DELETE"],
     "maxAgeSeconds": 3600
   }
