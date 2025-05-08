@@ -22,17 +22,6 @@ const processOrder = async ({ checkout }) => {
   }
   const uid = checkout?.metadata?.uid;
 
-  // Extract product list with selectedColor
-  const productList = checkout?.line_items?.map((item, index) => {
-    return {
-      key: item.id,
-      productId: item?.price_data?.product_data?.metadata?.productId,
-      quantity: item?.quantity,
-      selectedColor: item?.price_data?.product_data?.metadata?.selectedColor, // Assuming selectedColor is in metadata
-    };
-  });
-
-  // Save order with selectedColor
   await adminDB.doc(`orders/${checkout?.id}`).set({
     checkout: checkout,
     payment: {
@@ -44,24 +33,30 @@ const processOrder = async ({ checkout }) => {
     id: checkout?.id,
     paymentMode: "cod",
     timestampCreate: admin.firestore.Timestamp.now(),
-    products: productList, // Store product list with selectedColor
   });
+
+  const productList = checkout?.line_items?.map((item, index) => {
+    return {
+      key: item.id,
+      productId: item?.price_data?.product_data?.metadata?.productId,
+      quantity: item?.quantity,
+      selectedColor: item?.price_data?.product_data?.metadata?.selectedColor || null,
+      selectedSize: item?.price_data?.product_data?.metadata?.selectedSize || null,
+    };
+  });
+
+  console.log("product lis",productList)
+  console.log("checkout",checkout.line_items)
+  
+
+  const user = await adminDB.doc(`users/${uid}`).get();
 
   const productIdsList = productList?.map((item) => item?.productId);
 
-  // Fetch user and filter cart considering selectedColor
-  const user = await adminDB.doc(`users/${uid}`).get();
   const newCartList = (user?.data()?.carts ?? []).filter(
-    (cartItem) =>
-      !productIdsList.includes(cartItem?.id) ||
-      !productList.some(
-        (product) =>
-          product.productId === cartItem.id &&
-          product.selectedColor === cartItem.selectedColor
-      )
+    (cartItem) => !productIdsList.includes(cartItem?.id)
   );
 
-  // Update user's cart
   await adminDB.doc(`users/${uid}`).set(
     {
       carts: newCartList,
@@ -69,8 +64,8 @@ const processOrder = async ({ checkout }) => {
     { merge: true }
   );
 
-  // Update product orders count
   const batch = adminDB.batch();
+
   productList?.forEach((item) => {
     batch.update(adminDB.doc(`products/${item?.productId}`), {
       orders: admin.firestore.FieldValue.increment(item?.quantity),

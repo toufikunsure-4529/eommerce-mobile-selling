@@ -11,11 +11,12 @@ export default function BasicDetails({ data, handleData }) {
   const { data: categories } = useCategories();
   const [selectedBrand, setSelectedBrand] = useState(data?.brandId ?? "");
   const [selectedSeries, setSelectedSeries] = useState(data?.seriesId ?? "");
+  const [hasQualityOptions, setHasQualityOptions] = useState(data?.hasQualityOptions ? "yes" : "no");
+  const [newQuality, setNewQuality] = useState("");
 
   const { data: series } = useSeriesByBrand(selectedBrand);
   const { data: models } = useModelsBySeries(selectedBrand, selectedSeries);
 
-  // Predefined color options
   const colorOptions = [
     { id: "red", name: "Red" },
     { id: "white", name: "White" },
@@ -24,10 +25,19 @@ export default function BasicDetails({ data, handleData }) {
     { id: "green", name: "Green" },
   ];
 
+  const qualityOptions = [
+    { id: "amoled", name: "AMOLED" },
+    { id: "incell", name: "Incell" },
+    { id: "oled", name: "OLED" },
+    { id: "lcd", name: "LCD" },
+    { id: "super_amoled", name: "Super AMOLED" },
+  ];
+
   useEffect(() => {
     setSelectedBrand(data?.brandId ?? "");
     setSelectedSeries(data?.seriesId ?? "");
-  }, [data?.brandId, data?.seriesId]);
+    setHasQualityOptions(data?.hasQualityOptions ? "yes" : "no");
+  }, [data?.brandId, data?.seriesId, data?.hasQualityOptions]);
 
   useEffect(() => {
     if (selectedBrand && selectedBrand !== data?.brandId) {
@@ -36,14 +46,14 @@ export default function BasicDetails({ data, handleData }) {
       handleData("modelId", "");
       setSelectedSeries("");
     }
-  }, [selectedBrand]);
+  }, [selectedBrand, data?.brandId, handleData]);
 
   useEffect(() => {
     if (selectedSeries && selectedSeries !== data?.seriesId) {
       handleData("seriesId", selectedSeries);
       handleData("modelId", "");
     }
-  }, [selectedSeries]);
+  }, [selectedSeries, data?.seriesId, handleData]);
 
   const handleColorToggle = (colorId) => {
     const currentColors = data?.colors ?? [];
@@ -53,11 +63,21 @@ export default function BasicDetails({ data, handleData }) {
     handleData("colors", newColors);
   };
 
+  const handleAddQuality = () => {
+    if (newQuality && !data?.qualities?.includes(newQuality)) {
+      handleData("qualities", [...(data?.qualities ?? []), newQuality]);
+      setNewQuality("");
+    }
+  };
+
+  const handleRemoveQuality = (qualityId) => {
+    handleData("qualities", data?.qualities?.filter((id) => id !== qualityId) ?? []);
+  };
+
   return (
     <section className="flex-1 flex flex-col gap-4 bg-white rounded-xl p-5 border shadow-sm">
       <h1 className="text-lg font-semibold text-gray-800">Basic Details</h1>
 
-      {/* Product Name */}
       <InputField
         label="Product Name"
         value={data?.title ?? ""}
@@ -65,7 +85,6 @@ export default function BasicDetails({ data, handleData }) {
         required
       />
 
-      {/* Short Description */}
       <InputField
         label="Short Description"
         value={data?.shortDescription ?? ""}
@@ -73,7 +92,6 @@ export default function BasicDetails({ data, handleData }) {
         required
       />
 
-      {/* Brand */}
       <SelectField
         label="Brand"
         value={selectedBrand}
@@ -82,7 +100,6 @@ export default function BasicDetails({ data, handleData }) {
         required
       />
 
-      {/* Series */}
       <SelectField
         label="Series"
         value={selectedSeries}
@@ -92,7 +109,6 @@ export default function BasicDetails({ data, handleData }) {
         disabled={!selectedBrand}
       />
 
-      {/* Model */}
       <SelectField
         label="Model"
         value={data?.modelId ?? ""}
@@ -102,7 +118,6 @@ export default function BasicDetails({ data, handleData }) {
         disabled={!selectedSeries}
       />
 
-      {/* Category */}
       <SelectField
         label="Category"
         value={data?.categoryId ?? ""}
@@ -111,7 +126,6 @@ export default function BasicDetails({ data, handleData }) {
         required
       />
 
-      {/* Is Variable Product */}
       <div className="flex flex-col gap-1">
         <label className="text-gray-500 text-sm font-medium">Variable Product</label>
         <select
@@ -125,7 +139,6 @@ export default function BasicDetails({ data, handleData }) {
         </select>
       </div>
 
-      {/* Colors (for variable products) */}
       {data?.isVariable && (
         <div className="flex flex-col gap-2">
           <label className="text-gray-500 text-sm font-medium">
@@ -147,7 +160,68 @@ export default function BasicDetails({ data, handleData }) {
         </div>
       )}
 
-      {/* Stock */}
+      <div className="flex flex-col gap-1">
+        <label className="text-gray-500 text-sm font-medium">Has Quality Options</label>
+        <select
+          value={hasQualityOptions}
+          onChange={(e) => {
+            setHasQualityOptions(e.target.value);
+            handleData("hasQualityOptions", e.target.value === "yes");
+            if (e.target.value === "no") handleData("qualities", []);
+          }}
+          className="border border-gray-300 px-4 py-2 rounded-lg w-full outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        >
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+
+      {hasQualityOptions === "yes" && (
+        <div className="flex flex-col gap-2">
+          <label className="text-gray-500 text-sm font-medium">
+            Qualities <span className="text-red-500">*</span>
+          </label>
+          <div className="flex gap-2 items-center">
+            <select
+              value={newQuality}
+              onChange={(e) => setNewQuality(e.target.value)}
+              className="border border-gray-300 px-4 py-2 rounded-lg w-full outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select Quality</option>
+              {qualityOptions.map((quality) => (
+                <option key={quality.id} value={quality.id}>
+                  {quality.name}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={handleAddQuality}
+              disabled={!newQuality}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg disabled:bg-gray-300"
+            >
+              +
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {data?.qualities?.map((qualityId) => {
+              const quality = qualityOptions.find((q) => q.id === qualityId);
+              return (
+                <div key={qualityId} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full">
+                  <span className="text-gray-700">{quality?.name || qualityId}</span>
+                  <button
+                    onClick={() => handleRemoveQuality(qualityId)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    ×
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       <InputField
         label="Stock"
         type="number"
@@ -156,7 +230,6 @@ export default function BasicDetails({ data, handleData }) {
         required
       />
 
-      {/* Price */}
       <InputField
         label="Price"
         type="number"
@@ -165,7 +238,6 @@ export default function BasicDetails({ data, handleData }) {
         required
       />
 
-      {/* Sale Price */}
       <InputField
         label="Sale Price"
         type="number"
@@ -173,7 +245,6 @@ export default function BasicDetails({ data, handleData }) {
         onChange={(e) => handleData("salePrice", e.target.valueAsNumber)}
       />
 
-      {/* Best Selling */}
       <div className="flex flex-col gap-1">
         <label className="text-gray-500 text-sm font-medium">Best Selling</label>
         <select
@@ -187,7 +258,6 @@ export default function BasicDetails({ data, handleData }) {
         </select>
       </div>
 
-      {/* New Arrival */}
       <div className="flex flex-col gap-1">
         <label className="text-gray-500 text-sm font-medium">New Arrival</label>
         <select

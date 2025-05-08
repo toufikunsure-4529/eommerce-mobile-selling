@@ -1,30 +1,19 @@
 import { db, storage } from "@/lib/firebase";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  setDoc,
-  Timestamp,
-} from "firebase/firestore";
+import { collection, deleteDoc, doc, setDoc, Timestamp } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const createNewProduct = async ({ data, featureImage, imageList, variantImages }) => {
-  if (!data?.title) {
-    throw new Error("Title is required");
-  }
-  if (!featureImage) {
-    throw new Error("Feature Image is required");
-  }
-  if (data?.isVariable && (!data?.colors || data?.colors.length === 0)) {
+  if (!data?.title) throw new Error("Title is required");
+  if (!featureImage) throw new Error("Feature Image is required");
+  if (data?.isVariable && (!data?.colors || data?.colors.length === 0))
     throw new Error("At least one color is required for variable products");
-  }
+  if (data?.hasQualityOptions && (!data?.qualities || data?.qualities.length === 0))
+    throw new Error("At least one quality is required for products with quality options");
 
-  // Handle feature image
   const featureImageRef = ref(storage, `products/${featureImage?.name}`);
   await uploadBytes(featureImageRef, featureImage);
   const featureImageURL = await getDownloadURL(featureImageRef);
 
-  // Handle image list
   let imageURLList = [];
   for (let i = 0; i < imageList?.length; i++) {
     const image = imageList[i];
@@ -34,7 +23,6 @@ export const createNewProduct = async ({ data, featureImage, imageList, variantI
     imageURLList.push(url);
   }
 
-  // Handle variant images
   let variantImagesURLs = {};
   if (data?.isVariable) {
     for (const color of data?.colors) {
@@ -58,21 +46,19 @@ export const createNewProduct = async ({ data, featureImage, imageList, variantI
     featureImageURL,
     imageList: imageURLList,
     variantImages: data?.isVariable ? variantImagesURLs : {},
+    qualities: data?.qualities || [],
     id: newId,
     timestampCreate: Timestamp.now(),
   });
 };
 
 export const updateProduct = async ({ data, featureImage, imageList, variantImages }) => {
-  if (!data?.title) {
-    throw new Error("Title is required");
-  }
-  if (!data?.id) {
-    throw new Error("ID is required");
-  }
-  if (data?.isVariable && (!data?.colors || data?.colors.length === 0)) {
+  if (!data?.title) throw new Error("Title is required");
+  if (!data?.id) throw new Error("ID is required");
+  if (data?.isVariable && (!data?.colors || data?.colors.length === 0))
     throw new Error("At least one color is required for variable products");
-  }
+  if (data?.hasQualityOptions && (!data?.qualities || data?.qualities.length === 0))
+    throw new Error("At least one quality is required for products with quality options");
 
   let featureImageURL = data?.featureImageURL ?? "";
   if (featureImage) {
@@ -117,13 +103,12 @@ export const updateProduct = async ({ data, featureImage, imageList, variantImag
     featureImageURL,
     imageList: imageURLList,
     variantImages: variantImagesURLs,
+    qualities: data?.qualities || [],
     timestampUpdate: Timestamp.now(),
   });
 };
 
 export const deleteProduct = async ({ id }) => {
-  if (!id) {
-    throw new Error("ID is required");
-  }
+  if (!id) throw new Error("ID is required");
   await deleteDoc(doc(db, `products/${id}`));
 };

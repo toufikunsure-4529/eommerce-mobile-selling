@@ -22,7 +22,8 @@ export function useProducts({ pageLimit, lastSnapDoc }) {
             list: snapshot.docs.length === 0 ? null : snapshot.docs.map((snap) => ({
               id: snap.id,
               ...snap.data(),
-              variantImages: snap.data().variantImages || {}, // Ensure variantImages is included
+              variantImages: snap.data().variantImages || {},
+              qualities: snap.data().qualities || [],
             })),
             lastSnapDoc: snapshot.docs.length === 0 ? null : snapshot.docs[snapshot.docs.length - 1],
           }),
@@ -51,7 +52,8 @@ export function useProduct({ productId }) {
         (snapshot) => next(null, {
           id: snapshot.id,
           ...snapshot.data(),
-          variantImages: snapshot.data()?.variantImages || {}, // Ensure variantImages is included
+          variantImages: snapshot.data()?.variantImages || {},
+          qualities: snapshot.data()?.qualities || [],
         }),
         (err) => next(err, null),
       );
@@ -83,7 +85,8 @@ export function useProductsByIds({ idsList }) {
               : snapshot.docs.map((snap) => ({
                   id: snap.id,
                   ...snap.data(),
-                  variantImages: snap.data().variantImages || {}, // Ensure variantImages is included
+                  variantImages: snap.data().variantImages || {},
+                  qualities: snap.data().qualities || [],
                 })),
           ),
         (err) => next(err, null),
@@ -113,7 +116,8 @@ export const searchProducts = async (searchTerm) => {
       .map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        variantImages: doc.data().variantImages || {}, // Ensure variantImages is included
+        variantImages: doc.data().variantImages || {},
+        qualities: doc.data().qualities || [],
       }))
       .filter((product) =>
         [
@@ -122,7 +126,8 @@ export const searchProducts = async (searchTerm) => {
           product.description?.toLowerCase(),
           product.brand?.toLowerCase(),
           product.series?.toLowerCase(),
-          ...(product.colors || []).map((color) => color.toLowerCase()), // Include colors in search
+          ...(product.colors || []).map((color) => color.toLowerCase()),
+          ...(product.qualities || []).map((quality) => quality.toLowerCase()),
         ].some((field) => field?.includes(lowerSearchTerm)),
       );
 
@@ -146,10 +151,11 @@ export function useProductsByModelId(modelId) {
             snap.docs.map((doc) => ({
               id: doc.id,
               ...doc.data(),
-              variantImages: doc.data().variantImages || {}, // Ensure variantImages is included
+              variantImages: doc.data().variantImages || {},
+              qualities: doc.data().qualities || [],
             })),
           ),
-        (err) => next(err),
+        (err) => next(err, null),
       );
       return () => unsub();
     },

@@ -51,7 +51,6 @@ export default function ContactUs() {
                             </span>
                         </li>
                     </ul>
-
                 </div>
 
                 {/* Right */}
@@ -154,7 +153,9 @@ export default function ContactUs() {
                     </div>
                 </form>
             </div>
-            <div className="max-w-7xl mx-auto h-[500px]  rounded-lg overflow-hidden shadow-lg">
+
+            {/* Map */}
+            <div className="max-w-7xl mx-auto h-[500px] rounded-lg overflow-hidden shadow-lg">
                 <iframe
                     width="100%"
                     height="100%"

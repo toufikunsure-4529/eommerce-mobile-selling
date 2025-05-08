@@ -7,8 +7,10 @@ import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import ColorSelector from "./ColorSelector";
+import QualitySelector from "./QualitySelector";
+import ActionButtons from "./ActionButtons";
 
-function Details({ product, selectedColor }) {
+async function Details({ product, selectedColor, selectedQuality }) {
     const discount = product?.price && product?.salePrice
         ? Math.round(((product.price - product.salePrice) / product.price) * 100)
         : 0;
@@ -89,28 +91,24 @@ function Details({ product, selectedColor }) {
                 </div>
             )}
 
-            {/* Action Buttons */}
-            <div className="flex gap-4 mt-6">
-                <AuthContextProvider>
-                    <AddToCartButton
-                        productId={product?.id}
-                        type="large"
-                        selectedColor={selectedColor}
-                        isVariable={product?.isVariable && product?.colors?.length > 0}
+            {/* Quality Selection */}
+            {product?.hasQualityOptions && product?.qualities?.length > 0 && (
+                <div>
+                    <h3 className="text-lg font-semibold text-gray-800 mt-6 mb-4">Select Quality</h3>
+                    <QualitySelector
+                        qualities={product.qualities}
+                        selectedQuality={selectedQuality}
+                        productId={product.id}
                     />
-                </AuthContextProvider>
-                <Link
-                    href={`/checkout?type=buynow&productId=${product?.id}${product?.isVariable && selectedColor ? `&color=${encodeURIComponent(selectedColor)}` : ""}`}
-                    className="flex-1"
-                >
-                    <button className="text-sm sm:text-base py-2 sm:py-2 px-3 sm:px-6 text-red-500 font-normal border border-red-500 rounded-lg shadow hover:bg-red-500 hover:text-white transition duration-300">
-                        Buy Now
-                    </button>
-                </Link>
-                <AuthContextProvider>
-                    <FavoriteButton productId={product?.id} />
-                </AuthContextProvider>
-            </div>
+                </div>
+            )}
+
+            {/* Action Buttons */}
+            <ActionButtons
+                product={product}
+                selectedColor={selectedColor}
+                selectedQuality={selectedQuality}
+            />
 
             {/* Stock Info */}
             {product?.stock <= (product?.orders ?? 0) && (

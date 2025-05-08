@@ -55,7 +55,7 @@ const sliderSettings = {
 
 // Reusable Category Card Component
 const AccessoriesCard = ({ category, isSlider = false }) => (
-    <Link href={`/categories/${category.id}`} className="block h-full">
+    <Link href={`/product`} className="block h-full">
         <div className={`
       flex flex-col h-full
     
@@ -94,7 +94,7 @@ export default function Accessories() {
                         Other Accessories
                     </h2>
                     <Link
-                        href="/categories"
+                        href="/product"
                         className="text-sm sm:text-base text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 hover:underline"
                     >
                         View All

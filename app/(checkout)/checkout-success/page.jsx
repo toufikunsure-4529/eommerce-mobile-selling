@@ -87,7 +87,7 @@ export default async function Page({ searchParams }) {
   return (
     <main>
       <Header />
-      <SuccessMessage />
+      {/* <SuccessMessage /> */}
       <section className="min-h-screen flex flex-col gap-3 justify-center items-center">
         <div className="flex justify-center w-full">
           <img src="/svgs/Mobile payments-rafiki.svg" className="h-48" alt="" />

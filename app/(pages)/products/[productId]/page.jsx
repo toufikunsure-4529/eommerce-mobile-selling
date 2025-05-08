@@ -31,7 +31,7 @@ export async function generateMetadata({ params, searchParams }) {
 
 export default async function Page({ params, searchParams }) {
     const { productId } = await params;
-    const { color } = await searchParams;
+    const { color, quality } = await searchParams;
     const rawProduct = await getProduct({ id: productId });
 
     if (!rawProduct) return notFound();
@@ -54,7 +54,7 @@ export default async function Page({ params, searchParams }) {
 
                 {/* Product Details */}
                 <div>
-                    <Details product={product} selectedColor={color} />
+                    <Details product={product} selectedColor={color} selectedQuality={quality} />
                 </div>
             </section>
 

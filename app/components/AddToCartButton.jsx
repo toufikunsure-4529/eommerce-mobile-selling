@@ -10,15 +10,18 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useRouter } from "next/navigation";
 
-function AddToCartButton({ productId, type, selectedColor, isVariable }) {
+function AddToCartButton({ productId, type, selectedColor, selectedQuality, isVariable, hasQualityOptions }) {
     const { user } = useAuth();
     const { data } = useUser({ uid: user?.uid });
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
-    // Check if the product with the specific color is already in the cart
+    // Check if the product with the specific color and quality is already in the cart
     const isAdded = data?.carts?.find(
-        (item) => item?.id === productId && (!isVariable || item?.selectedColor === selectedColor)
+        (item) =>
+            item?.id === productId &&
+            (!isVariable || item?.selectedColor === selectedColor) &&
+            (!hasQualityOptions || item?.selectedQuality === selectedQuality)
     );
 
     const handleClick = async () => {
@@ -29,24 +32,39 @@ function AddToCartButton({ productId, type, selectedColor, isVariable }) {
                 throw new Error("Please log in first!");
             }
 
-            // Check if selectedColor is provided for variable products when adding to cart
+            // Validate selectedColor for variable products
             if (isVariable && !selectedColor && !isAdded) {
                 throw new Error("Please select a color!");
+            }
+
+            // Validate selectedQuality for products with quality options
+            if (hasQualityOptions && !selectedQuality && !isAdded) {
+                throw new Error("Please select a quality!");
             }
 
             if (isAdded) {
                 // Remove item from cart if already added
                 const newList = data?.carts?.filter(
-                    (item) => !(item?.id === productId && (!isVariable || item?.selectedColor === selectedColor))
+                    (item) =>
+                        !(
+                            item?.id === productId &&
+                            (!isVariable || item?.selectedColor === selectedColor) &&
+                            (!hasQualityOptions || item?.selectedQuality === selectedQuality)
+                        )
                 );
                 await updateCarts({ list: newList, uid: user?.uid });
                 toast.success("Item removed from cart");
             } else {
-                // Add item to cart (with selectedColor for variable products)
+                // Add item to cart (with selectedColor and selectedQuality if applicable)
                 await updateCarts({
                     list: [
                         ...(data?.carts ?? []),
-                        { id: productId, quantity: 1, ...(isVariable && { selectedColor }) },
+                        {
+                            id: productId,
+                            quantity: 1,
+                            ...(isVariable && { selectedColor }),
+                            ...(hasQualityOptions && { selectedQuality }),
+                        },
                     ],
                     uid: user?.uid,
                 });
@@ -78,14 +96,13 @@ function AddToCartButton({ productId, type, selectedColor, isVariable }) {
 
     return (
         <Button
-            className={`h-8 w-8 ${isAdded ? "text-gray-900" : "text-gray-600"} bg-gray-100 border border-gray-100 p-4 rounded shadow-md hover:bg-red-500 hover:text-white перепроверить
+            className={`h-8 w-8 ${isAdded ? "text-gray-900" : "text-gray-600"} bg-gray-100 border border-gray-100 p-4 rounded shadow-md hover:bg-red-500 hover:text-white transition-all duration-200`}
             isIconOnly
             size="sm"
             variant="light"
             onClick={handleClick}
             isLoading={isLoading}
             isDisabled={isLoading}
-            `}
         >
             {!isAdded && <AddShoppingCartIcon fontSize="small" />}
             {isAdded && <ShoppingCartIcon fontSize="small" />}
