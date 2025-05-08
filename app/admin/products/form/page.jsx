@@ -17,6 +17,7 @@ export default function Page() {
   const [data, setData] = useState(null);
   const [featureImage, setFeatureImage] = useState(null);
   const [imageList, setImageList] = useState([]);
+  const [variantImages, setVariantImages] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
@@ -53,11 +54,12 @@ export default function Page() {
     setIsLoading(true);
     try {
       const action = id ? updateProduct : createNewProduct;
-      await action({ data, featureImage, imageList });
+      await action({ data, featureImage, imageList, variantImages });
 
       setData({});
       setFeatureImage(null);
       setImageList([]);
+      setVariantImages({});
 
       toast.success(`Product is successfully ${id ? "Updated" : "Created"}!`);
       if (id) router.push(`/admin/products`);
@@ -95,6 +97,8 @@ export default function Page() {
             setFeatureImage={setFeatureImage}
             imageList={imageList}
             setImageList={setImageList}
+            variantImages={variantImages}
+            setVariantImages={setVariantImages}
           />
           <Description data={data} handleData={handleData} />
           <KeyFeature data={data} handleData={handleData} />

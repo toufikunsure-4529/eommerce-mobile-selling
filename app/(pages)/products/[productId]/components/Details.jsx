@@ -2,14 +2,13 @@ import AddToCartButton from "@/app/components/AddToCartButton";
 import FavoriteButton from "@/app/components/FavoriteButton";
 import MyRating from "@/app/components/MyRating";
 import { AuthContextProvider } from "@/context/AuthContext";
-import { getBrand } from "@/lib/firestore/brands/read_server";
-import { getCategory } from "@/lib/firestore/categories/read_server";
 import { getProductReviewCounts } from "@/lib/firestore/products/count/read";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
+import ColorSelector from "./ColorSelector";
 
-function Details({ product }) {
+function Details({ product, selectedColor }) {
     const discount = product?.price && product?.salePrice
         ? Math.round(((product.price - product.salePrice) / product.price) * 100)
         : 0;
@@ -42,12 +41,19 @@ function Details({ product }) {
                 {product?.title || "Product Title"}
             </h1>
 
+            {/* Short Description */}
+            {product?.shortDescription && (
+                <p className="text-gray-700 text-sm mb-4">
+                    {product.shortDescription}
+                </p>
+            )}
+
             {/* Rating & Review */}
             <Suspense fallback={<p>Loading ratings...</p>}>
                 <RatingReview product={product} />
             </Suspense>
 
-            {/* Price */}
+            {/* Price Section */}
             <div className="flex items-center gap-3 mt-4">
                 <h2 className="text-2xl font-bold text-gray-900">
                     ₹{product?.salePrice}
@@ -71,22 +77,32 @@ function Details({ product }) {
                 />
             </div>
 
-            {/* Color Selection (Static for now) */}
-            <div>
-                <h3 className="text-lg font-semibold text-gray-800 mt-6 mb-4">Select Color</h3>
-                <div className="flex gap-2">
-                    <div className="h-6 w-6 bg-white border border-gray-400 rounded-full"></div>
-                    <div className="h-6 w-6 bg-red-500 border border-gray-400 rounded-full"></div>
-                    <div className="h-6 w-6 bg-gray-900 border border-gray-400 rounded-full"></div>
+            {/* Color Selection */}
+            {product?.isVariable && product?.colors?.length > 0 && (
+                <div>
+                    <h3 className="text-lg font-semibold text-gray-800 mt-6 mb-4">Select Color</h3>
+                    <ColorSelector
+                        colors={product.colors}
+                        selectedColor={selectedColor}
+                        productId={product.id}
+                    />
                 </div>
-            </div>
+            )}
 
-            {/* Actions */}
+            {/* Action Buttons */}
             <div className="flex gap-4 mt-6">
                 <AuthContextProvider>
-                    <AddToCartButton productId={product?.id} type="large" />
+                    <AddToCartButton
+                        productId={product?.id}
+                        type="large"
+                        selectedColor={selectedColor}
+                        isVariable={product?.isVariable && product?.colors?.length > 0}
+                    />
                 </AuthContextProvider>
-                <Link href={`/checkout?type=buynow&productId=${product?.id}`} className="flex-1">
+                <Link
+                    href={`/checkout?type=buynow&productId=${product?.id}${product?.isVariable && selectedColor ? `&color=${encodeURIComponent(selectedColor)}` : ""}`}
+                    className="flex-1"
+                >
                     <button className="text-sm sm:text-base py-2 sm:py-2 px-3 sm:px-6 text-red-500 font-normal border border-red-500 rounded-lg shadow hover:bg-red-500 hover:text-white transition duration-300">
                         Buy Now
                     </button>
@@ -96,7 +112,7 @@ function Details({ product }) {
                 </AuthContextProvider>
             </div>
 
-            {/* Stock info */}
+            {/* Stock Info */}
             {product?.stock <= (product?.orders ?? 0) && (
                 <div className="mt-3">
                     <h3 className="text-red-500 bg-red-50 py-1 px-2 rounded-lg text-sm">
@@ -128,8 +144,7 @@ function Details({ product }) {
     );
 }
 
-export default Details;
-
+// Rating & Review Component
 async function RatingReview({ product }) {
     const counts = await getProductReviewCounts({ productId: product?.id });
 
@@ -142,3 +157,5 @@ async function RatingReview({ product }) {
         </div>
     );
 }
+
+export default Details;

@@ -3,9 +3,7 @@ const nextConfig = {
   images: {
     domains: ["firebasestorage.googleapis.com"],
   },
-  experimental: {
-    appDir: true,
-  },
+
   webpack: true,
 };
 

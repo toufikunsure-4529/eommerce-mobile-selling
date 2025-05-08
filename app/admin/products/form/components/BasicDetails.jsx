@@ -15,6 +15,15 @@ export default function BasicDetails({ data, handleData }) {
   const { data: series } = useSeriesByBrand(selectedBrand);
   const { data: models } = useModelsBySeries(selectedBrand, selectedSeries);
 
+  // Predefined color options
+  const colorOptions = [
+    { id: "red", name: "Red" },
+    { id: "white", name: "White" },
+    { id: "black", name: "Black" },
+    { id: "blue", name: "Blue" },
+    { id: "green", name: "Green" },
+  ];
+
   useEffect(() => {
     setSelectedBrand(data?.brandId ?? "");
     setSelectedSeries(data?.seriesId ?? "");
@@ -35,6 +44,14 @@ export default function BasicDetails({ data, handleData }) {
       handleData("modelId", "");
     }
   }, [selectedSeries]);
+
+  const handleColorToggle = (colorId) => {
+    const currentColors = data?.colors ?? [];
+    const newColors = currentColors.includes(colorId)
+      ? currentColors.filter((id) => id !== colorId)
+      : [...currentColors, colorId];
+    handleData("colors", newColors);
+  };
 
   return (
     <section className="flex-1 flex flex-col gap-4 bg-white rounded-xl p-5 border shadow-sm">
@@ -94,6 +111,42 @@ export default function BasicDetails({ data, handleData }) {
         required
       />
 
+      {/* Is Variable Product */}
+      <div className="flex flex-col gap-1">
+        <label className="text-gray-500 text-sm font-medium">Variable Product</label>
+        <select
+          value={data?.isVariable ? "yes" : "no"}
+          onChange={(e) => handleData("isVariable", e.target.value === "yes")}
+          className="border border-gray-300 px-4 py-2 rounded-lg w-full outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        >
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+
+      {/* Colors (for variable products) */}
+      {data?.isVariable && (
+        <div className="flex flex-col gap-2">
+          <label className="text-gray-500 text-sm font-medium">
+            Colors <span className="text-red-500">*</span>
+          </label>
+          <div className="flex flex-wrap gap-4">
+            {colorOptions.map((color) => (
+              <label key={color.id} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={data?.colors?.includes(color.id) ?? false}
+                  onChange={() => handleColorToggle(color.id)}
+                  className="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <span className="text-gray-700">{color.name}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Stock */}
       <InputField
         label="Stock"
@@ -120,7 +173,7 @@ export default function BasicDetails({ data, handleData }) {
         onChange={(e) => handleData("salePrice", e.target.valueAsNumber)}
       />
 
-      {/* Best Selling (was Featured Product) */}
+      {/* Best Selling */}
       <div className="flex flex-col gap-1">
         <label className="text-gray-500 text-sm font-medium">Best Selling</label>
         <select
@@ -147,7 +200,6 @@ export default function BasicDetails({ data, handleData }) {
           <option value="yes">Yes</option>
         </select>
       </div>
-
     </section>
   );
 }
