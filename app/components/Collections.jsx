@@ -49,9 +49,9 @@ export default function BrandListing() {
                       <Image
                         src={brand.imageURL}
                         alt={brand.name}
-                        width={64}
-                        height={64}
-                        className="object-contain w-14 h-14 sm:w-16 sm:h-16"
+                        width={100}
+                        height={100}
+                        className="object-contain w-20 h-20"
                       />
                     </div>
                   </div>
