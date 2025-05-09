@@ -67,12 +67,7 @@ export function ProductCard({ product }) {
                     </div>
                 )}
 
-                {/* Add to Cart Button */}
-                {/* <div className="flex justify-between gap-3 mt-auto">
-                    <AuthContextProvider>
-                        <AddToCartButton productId={product?.id} />
-                    </AuthContextProvider>
-                </div> */}
+
             </div>
         </div>
     );

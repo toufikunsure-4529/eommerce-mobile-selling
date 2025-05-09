@@ -31,6 +31,8 @@
     "html-react-parser": "^5.2.3",
     "jodit-react": "^5.2.19",
     "jquery": "^3.7.1",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "lucide-react": "^0.475.0",
     "next": "^15.3.0",
     "quill": "^2.0.3",
@@ -46,7 +48,8 @@
     "slick-carousel": "^1.8.1",
     "swr": "^2.3.2",
     "tailwind-merge": "^3.2.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
