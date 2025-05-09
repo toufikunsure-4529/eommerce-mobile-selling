@@ -38,9 +38,9 @@ export function ProductCard({ product }) {
                     <p className="text-[10px] md:text-sm text-gray-500 line-clamp-2">{product?.shortDescription}</p>
 
                     {/* Rating and Reviews */}
-                    <Suspense>
+                    {/* <Suspense>
                         <RatingReview product={product} />
-                    </Suspense>
+                    </Suspense> */}
 
                     <div className="flex justify-between items-center mt-3">
                         {/* Price Section */}
